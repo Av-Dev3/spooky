@@ -19,6 +19,7 @@
         setupLinksPage();
         setupGallery();
         setupClickTracking();
+        setupMobileSplash();
         
         console.log('Main JavaScript initialized');
     }
@@ -458,6 +459,16 @@
             }
         }
     };
+
+    // Setup mobile splash video playback rate
+    function setupMobileSplash() {
+        const mobileVideo = document.getElementById('mobileSplashVideo');
+        if (mobileVideo) {
+            // Set playback rate to 0.5 (half speed) to make it about 7 seconds
+            mobileVideo.playbackRate = 0.5;
+            console.log('Mobile splash video playback rate set to 0.5x');
+        }
+    }
 
     // Initialize interactive decorations
     setupInteractiveDecorations();
