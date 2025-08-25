@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Spoookysnsfww</title>
+    <meta name="description" content="Preview gallery of Spoookysnsfww content">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+                    <div class="header-title">
+            <h1 class="header-text">SPOOOKYSNSFWW</h1>
+        </div>
+            <nav class="nav">
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="links.html" class="nav-link">Links</a></li>
+                    <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                    <li><a href="shop.html" class="nav-link">Shop</a></li>
+                    <li><a href="customs.html" class="nav-link">Customs</a></li>
+                    <li><a href="faq.html" class="nav-link">FAQ</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <section class="page-header">
+            <h1>Gallery</h1>
+            <p>Preview of my content - click to enlarge</p>
+        </section>
+
+        <section class="gallery-section">
+            <!-- Spooky decorations for gallery page -->
+            <div class="bat-decoration" style="top: 40%; left: 12%; animation-delay: 0.3s; animation-duration: 6s;">
+                <img src="assets/bat.png" alt="Bat decoration">
+            </div>
+            <div class="ghost-decoration" style="top: 50%; right: 18%; animation-delay: 1.7s; animation-duration: 8s;">
+                <img src="assets/ghost.png" alt="Ghost decoration">
+            </div>
+            <div class="bat-decoration" style="top: 60%; left: 25%; animation-delay: 2.1s; animation-duration: 7s;">
+                <img src="assets/bat.png" alt="Bat decoration">
+            </div>
+            <div class="ghost-decoration" style="top: 70%; right: 22%; animation-delay: 0.9s; animation-duration: 5s;">
+                <img src="assets/ghost.png" alt="Ghost decoration">
+            </div>
+            
+            <div class="gallery-grid">
+                <!-- Sample gallery items - in production these would be loaded dynamically -->
+                <div class="gallery-item locked" data-image="assets/logo.png">
+                    <div class="gallery-image">
+                        <img src="assets/logo.png" alt="Teaser 1" loading="lazy">
+                        <div class="lock-overlay">
+                            <svg class="lock-icon" viewBox="0 0 24 24">
+                                <path d="M12 1C9.24 1 7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm6 10v10H6V10h12zm-9-2V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Teaser 1</h3>
+                        <p>Click to preview</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item locked" data-image="assets/logo.png">
+                    <div class="gallery-image">
+                        <img src="assets/logo.png" alt="Teaser 2" loading="lazy">
+                        <div class="lock-overlay">
+                            <svg class="lock-icon" viewBox="0 0 24 24">
+                                <path d="M12 1C9.24 1 7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm6 10v10H6V10h12zm-9-2V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Teaser 2</h3>
+                        <p>Click to preview</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item locked" data-image="assets/logo.png">
+                    <div class="gallery-image">
+                        <img src="assets/logo.png" alt="Teaser 3" loading="lazy">
+                        <div class="lock-overlay">
+                            <svg class="lock-icon" viewBox="0 0 24 24">
+                                <path d="M12 1C9.24 1 7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm6 10v10H6V10h12zm-9-2V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Teaser 3</h3>
+                        <p>Click to preview</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+            <img id="lightboxImage" src="" alt="Gallery image">
+            <div class="lightbox-caption">
+                <h3 id="lightboxTitle"></h3>
+                <p id="lightboxDescription"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <p>&copy; <span id="currentYear"></span> Spoookysnsfww. All rights reserved.</p>
+                <div class="age-badge-footer">18+ Adults Only</div>
+            </div>
+            <div class="footer-links">
+                <a href="legal/terms.html">Terms</a>
+                <a href="legal/privacy.html">Privacy</a>
+                <a href="legal/dmca.html">DMCA</a>
+                <a href="legal/2257.html">2257</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/color.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
