@@ -29,6 +29,15 @@
 
     // Hide splash screen
     function hideSplash() {
+        // Check if we're on mobile and if mobile video is still playing
+        const isMobile = window.innerWidth <= 768;
+        const mobileVideo = document.getElementById('mobileSplashVideo');
+        
+        if (isMobile && mobileVideo && !mobileVideo.ended && mobileVideo.currentTime > 0) {
+            console.log('Preventing splash hide - mobile video still playing');
+            return; // Don't hide if mobile video is still playing
+        }
+        
         splashScreen.classList.add('hidden');
         splashScreen.style.display = 'none';
         document.body.style.overflow = 'hidden'; // Keep body locked for age gate
@@ -100,6 +109,23 @@
 
             mobileSplashVideo.addEventListener('loadedmetadata', function() {
                 console.log('Mobile splash video metadata loaded - duration:', mobileSplashVideo.duration);
+            });
+
+            // Add timeupdate event to track progress
+            mobileSplashVideo.addEventListener('timeupdate', function() {
+                if (mobileSplashVideo.currentTime > 0) {
+                    console.log('Mobile video playing:', Math.round(mobileSplashVideo.currentTime), 'seconds');
+                }
+            });
+
+            // Add waiting event to detect buffering
+            mobileSplashVideo.addEventListener('waiting', function() {
+                console.log('Mobile video buffering...');
+            });
+
+            // Add playing event to confirm playback
+            mobileSplashVideo.addEventListener('playing', function() {
+                console.log('Mobile video is now playing');
             });
         }
     }

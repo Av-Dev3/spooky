@@ -317,6 +317,7 @@
                     <button class="btn btn-warning" onclick="clearLocalChanges()">🗑️ Clear Local Changes</button>
                     <button class="btn btn-danger" onclick="debugData()">🐛 Debug Data</button>
                     <button class="btn btn-warning" onclick="resetToOriginalData()">🔄 Reset to Original</button>
+                    <button class="btn btn-success" onclick="quickUpdateFiles()">⚡ Quick Update Files</button>
                 </div>
                 
                 <div class="admin-nav">
@@ -1434,6 +1435,62 @@
                     showStatus('Error resetting data: ' + error.message, 'error');
                     console.error('Error resetting data:', error);
                 }
+            }
+        }
+        
+        // Quick update files with current LocalStorage data
+        function quickUpdateFiles() {
+            try {
+                // Create updated JSON content
+                const shopData = JSON.stringify(currentData.shop, null, 2);
+                const galleryData = JSON.stringify(currentData.gallery, null, 2);
+                const linksData = JSON.stringify(currentData.links, null, 2);
+                
+                // Create download links for all three files
+                const shopBlob = new Blob([shopData], { type: 'application/json' });
+                const galleryBlob = new Blob([galleryData], { type: 'application/json' });
+                const linksBlob = new Blob([linksData], { type: 'application/json' });
+                
+                // Download shop.json
+                const shopUrl = URL.createObjectURL(shopBlob);
+                const shopLink = document.createElement('a');
+                shopLink.href = shopUrl;
+                shopLink.download = 'shop.json';
+                shopLink.click();
+                URL.revokeObjectURL(shopUrl);
+                
+                // Download gallery.json
+                const galleryUrl = URL.createObjectURL(galleryBlob);
+                const galleryLink = document.createElement('a');
+                galleryLink.href = galleryUrl;
+                galleryLink.download = 'gallery.json';
+                galleryLink.click();
+                URL.revokeObjectURL(galleryUrl);
+                
+                // Download links.json
+                const linksUrl = URL.createObjectURL(linksBlob);
+                const linksLink = document.createElement('a');
+                linksLink.href = linksUrl;
+                linksLink.download = 'links.json';
+                linksLink.click();
+                URL.revokeObjectURL(linksUrl);
+                
+                showStatus('All files downloaded! Replace your data/*.json files with these to update your live site.', 'success');
+                
+                // Show instructions
+                setTimeout(() => {
+                    alert('📁 Files Downloaded Successfully!\n\n' +
+                          'To update your live site:\n\n' +
+                          '1. Replace data/shop.json with the downloaded shop.json\n' +
+                          '2. Replace data/gallery.json with the downloaded gallery.json\n' +
+                          '3. Replace data/links.json with the downloaded links.json\n' +
+                          '4. Commit and push to GitHub\n\n' +
+                          'Your deletions will then appear on the live pages!');
+                }, 1000);
+                
+            } catch (error) {
+                showStatus('Error updating files: ' + error.message, 'error');
+                console.error('Error updating files:', error);
             }
         }
         

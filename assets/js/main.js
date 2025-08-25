@@ -466,9 +466,9 @@
         console.log('Looking for mobile splash video:', mobileVideo);
         
         if (mobileVideo) {
-            // Set playback rate to 0.5 (half speed) to make it about 7 seconds
-            mobileVideo.playbackRate = 0.5;
-            console.log('Mobile splash video playback rate set to 0.5x');
+            // Set playback rate to 0.7 (slightly faster than 0.5) for better pacing
+            mobileVideo.playbackRate = 0.7;
+            console.log('Mobile splash video playback rate set to 0.7x');
             
             // Add error handling
             mobileVideo.addEventListener('error', function(e) {
