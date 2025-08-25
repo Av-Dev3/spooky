@@ -842,11 +842,12 @@ img:not(.logo-large) {
 /* Mobile optimizations for splash screen */
 @media (max-width: 768px) {
     .splash-video {
-        width: 85%;
-        height: 35%;
+        width: auto;
+        height: auto;
+        max-width: 95vw;
+        max-height: 60vh;
+        object-fit: contain;
         border-radius: 10px;
-        max-width: 90vw;
-        max-height: 40vh;
     }
     
     .splash-screen {
@@ -869,11 +870,12 @@ img:not(.logo-large) {
 /* Small mobile devices */
 @media (max-width: 480px) {
     .splash-video {
-        width: 90%;
-        height: 30%;
+        width: auto;
+        height: auto;
+        max-width: 98vw;
+        max-height: 50vh;
+        object-fit: contain;
         border-radius: 8px;
-        max-width: 85vw;
-        max-height: 35vh;
     }
     
     .splash-screen {
