@@ -793,8 +793,6 @@ img:not(.logo-large) {
 /* Mobile splash video - hidden by default */
 .mobile-splash {
     display: none;
-    /* Debug: temporary border to see the element */
-    border: 2px solid red !important;
 }
 
 .splash-video:hover {
@@ -868,6 +866,7 @@ img:not(.logo-large) {
         transform: none;
         box-shadow: none;
         z-index: 1;
+        filter: brightness(1.4) contrast(1.1);
     }
     
     .splash-video-container {
@@ -915,6 +914,7 @@ img:not(.logo-large) {
         transform: none;
         box-shadow: none;
         z-index: 1;
+        filter: brightness(1.4) contrast(1.1);
     }
     
     .splash-video-container {

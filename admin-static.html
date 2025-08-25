@@ -240,6 +240,16 @@
             color: var(--accent1);
         }
         
+        .count-badge {
+            background: var(--accent1);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
         #filePreview .content-card {
             text-align: center;
         }
@@ -328,7 +338,7 @@
             <!-- Shop Products Section -->
             <section id="shopSection" class="admin-section active">
                 <h2>Shop Products Management</h2>
-                <p>Add, edit, or remove products from your shop.</p>
+                <p>Add, edit, or remove products from your shop. <span id="shopCount" class="count-badge">0</span> products</p>
                 
                 <button class="btn btn-success" onclick="showAddProductForm()">+ Add New Product</button>
                 
@@ -381,7 +391,7 @@
             <!-- Gallery Section -->
             <section id="gallerySection" class="admin-section">
                 <h2>Gallery Management</h2>
-                <p>Manage your gallery images and captions.</p>
+                <p>Manage your gallery images and captions. <span id="galleryCount" class="count-badge">0</span> items</p>
                 
                 <button class="btn btn-success" onclick="showAddGalleryForm()">+ Add New Gallery Item</button>
                 
@@ -424,7 +434,7 @@
             <!-- Links Section -->
             <section id="linksSection" class="admin-section">
                 <h2>Links Management</h2>
-                <p>Manage your social media and external links.</p>
+                <p>Manage your social media and external links. <span id="linksCount" class="count-badge">0</span> links</p>
                 
                 <button class="btn btn-success" onclick="showAddLinkForm()">+ Add New Link</button>
                 
@@ -724,6 +734,12 @@
             
             console.log('Rendering shop products:', currentData.shop.length);
             
+            // Update count badge
+            const shopCount = document.getElementById('shopCount');
+            if (shopCount) {
+                shopCount.textContent = currentData.shop.length;
+            }
+            
             if (currentData.shop.length === 0) {
                 container.innerHTML = '<div class="content-card"><p>No shop products found. Add your first product above!</p></div>';
                 return;
@@ -758,6 +774,12 @@
             
             console.log('Rendering gallery items:', currentData.gallery.length);
             
+            // Update count badge
+            const galleryCount = document.getElementById('galleryCount');
+            if (galleryCount) {
+                galleryCount.textContent = currentData.gallery.length;
+            }
+            
             if (currentData.gallery.length === 0) {
                 container.innerHTML = '<div class="content-card"><p>No gallery items found. Add your first item above!</p></div>';
                 return;
@@ -784,6 +806,12 @@
         function renderLinks() {
             const container = document.getElementById('linksList');
             if (!container) return;
+            
+            // Update count badge
+            const linksCount = document.getElementById('linksCount');
+            if (linksCount) {
+                linksCount.textContent = currentData.links.length;
+            }
             
             if (currentData.links.length === 0) {
                 container.innerHTML = '<div class="content-card"><p>No links found. Add your first link above!</p></div>';
@@ -957,10 +985,21 @@
                 // Save to localStorage
                 saveToLocalStorage('shop');
                 
-                // Re-render the list
-                renderShopProducts();
+                // Add visual feedback
+                const deletedElement = document.querySelector(`[data-id="${id}"]`);
+                if (deletedElement) {
+                    deletedElement.style.opacity = '0.5';
+                    deletedElement.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        // Re-render the list
+                        renderShopProducts();
+                    }, 300);
+                } else {
+                    // Re-render immediately if element not found
+                    renderShopProducts();
+                }
                 
-                showStatus('Product deleted successfully!', 'success');
+                showStatus(`Product deleted successfully! ${currentData.shop.length} products remaining.`, 'success');
                 
                 // Log for debugging
                 console.log('Product deleted:', id, 'Remaining products:', currentData.shop.length);
@@ -975,10 +1014,21 @@
                 // Save to localStorage
                 saveToLocalStorage('gallery');
                 
-                // Re-render the list
-                renderGalleryItems();
+                // Add visual feedback
+                const deletedElement = document.querySelector(`[data-id="${id}"]`);
+                if (deletedElement) {
+                    deletedElement.style.opacity = '0.5';
+                    deletedElement.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        // Re-render the list
+                        renderGalleryItems();
+                    }, 300);
+                } else {
+                    // Re-render immediately if element not found
+                    renderGalleryItems();
+                }
                 
-                showStatus('Gallery item deleted successfully!', 'success');
+                showStatus(`Gallery item deleted successfully! ${currentData.gallery.length} items remaining.`, 'success');
                 
                 // Log for debugging
                 console.log('Gallery item deleted:', id, 'Remaining items:', currentData.gallery.length);
