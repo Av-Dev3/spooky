@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Update Admin Panel - Spoookysnsfww</title>
+    <meta name="description" content="Admin panel that automatically updates your live site">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <style>
+        /* Admin Panel Specific Styles */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--bg);
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .admin-header h1 {
+            color: var(--accent1);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .admin-header p {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .admin-nav-btn {
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .admin-nav-btn:hover,
+        .admin-nav-btn.active {
+            background: var(--accent1);
+            color: white;
+            border-color: var(--accent1);
+        }
+        
+        .admin-section {
+            display: none;
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            margin-bottom: 30px;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-section h2 {
+            color: var(--accent1);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .btn {
+            background: var(--accent1);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: var(--accent2);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #059669;
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+        }
+        
+        .btn-warning {
+            background: #d97706;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+        }
+        
+        .btn-info {
+            background: #0891b2;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .content-card {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .content-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .content-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .content-card h3 {
+            color: var(--accent1);
+            margin-bottom: 10px;
+        }
+        
+        .content-card p {
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: var(--text);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .status-message.success {
+            background: #059669;
+            color: white;
+        }
+        
+        .status-message.error {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .status-message.warning {
+            background: #d97706;
+            color: white;
+        }
+        
+        .count-badge {
+            background: var(--accent1);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-menu li a {
+            color: var(--accent1);
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu li a:hover {
+            background: var(--accent1);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-nav {
+                flex-direction: column;
+            }
+            
+            .admin-nav-btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <h1 class="header-text">SPOOOKYSNSFWW - AUTO-ADMIN</h1>
+            </div>
+            <nav class="nav">
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">🏠 Homepage</a></li>
+                    <li><a href="shop.html" class="nav-link">🛍️ Shop</a></li>
+                    <li><a href="gallery.html" class="nav-link">🖼️ Gallery</a></li>
+                    <li><a href="links.html" class="nav-link">🔗 Links</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>🚀 Auto-Update Admin Panel</h1>
+                <p>Changes you make here automatically update your live site! No manual file replacement needed.</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <button class="btn btn-success" onclick="refreshData()">🔄 Refresh Data</button>
+                    <button class="btn btn-info" onclick="showStatus('This admin panel automatically updates your live pages when you make changes!', 'success')">ℹ️ How It Works</button>
+                </div>
+                
+                <div class="admin-nav">
+                    <button class="admin-nav-btn active" data-section="shop">Shop Products</button>
+                    <button class="admin-nav-btn" data-section="gallery">Gallery</button>
+                    <button class="admin-nav-btn" data-section="links">Links</button>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="statusMessage" class="status-message"></div>
+
+            <!-- Shop Products Section -->
+            <section id="shopSection" class="admin-section active">
+                <h2>Shop Products Management <span id="shopCount" class="count-badge">0</span></h2>
+                <p>Add, edit, or remove products. Changes appear immediately on your live shop page!</p>
+                
+                <button class="btn btn-success" onclick="showAddProductForm()">+ Add New Product</button>
+                
+                <div id="addProductForm" style="display: none;" class="content-card">
+                    <h3>Add New Product</h3>
+                    <form id="productForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productTitle">Product Title</label>
+                                <input type="text" id="productTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Price ($)</label>
+                                <input type="number" id="productPrice" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productDescription">Description</label>
+                            <textarea id="productDescription" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productImage">Image URL</label>
+                            <input type="url" id="productImage" placeholder="https://example.com/image.jpg" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productTags">Tags (comma separated)</label>
+                            <input type="text" id="productTags" placeholder="photos, spooky, fantasy">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productProcessorUrl">Processor URL</label>
+                            <input type="url" id="productProcessorUrl" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Save Product</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideAddProductForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="productsList" class="content-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Gallery Section -->
+            <section id="gallerySection" class="admin-section">
+                <h2>Gallery Management <span id="galleryCount" class="count-badge">0</span></h2>
+                <p>Manage your gallery images. Changes appear immediately on your live gallery page!</p>
+                
+                <button class="btn btn-success" onclick="showAddGalleryForm()">+ Add New Gallery Item</button>
+                
+                <div id="addGalleryForm" style="display: none;" class="content-card">
+                    <h3>Add New Gallery Item</h3>
+                    <form id="galleryForm">
+                        <div class="form-group">
+                            <label for="galleryTitle">Title</label>
+                            <input type="text" id="galleryTitle" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="galleryDescription">Description</label>
+                            <textarea id="galleryDescription" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="galleryImage">Image URL</label>
+                            <input type="url" id="galleryImage" placeholder="https://example.com/image.jpg" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="galleryLocked">Locked</label>
+                            <input type="checkbox" id="galleryLocked">
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Save Gallery Item</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideAddGalleryForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="galleryList" class="content-grid">
+                    <!-- Gallery items will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Links Section -->
+            <section id="linksSection" class="admin-section">
+                <h2>Links Management <span id="linksCount" class="count-badge">0</span></h2>
+                <p>Manage your social media and external links. Changes appear immediately on your live links page!</p>
+                
+                <button class="btn btn-success" onclick="showAddLinkForm()">+ Add New Link</button>
+                
+                <div id="addLinkForm" style="display: none;" class="content-card">
+                    <h3>Add New Link</h3>
+                    <form id="linkForm">
+                        <div class="form-group">
+                            <label for="linkTitle">Title</label>
+                            <input type="text" id="linkTitle" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkUrl">URL</label>
+                            <input type="url" id="linkUrl" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkIcon">Icon (emoji)</label>
+                            <input type="text" id="linkIcon" placeholder="🔗" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkBadge">Badge Text</label>
+                            <input type="text" id="linkBadge" placeholder="New">
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Save Link</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideAddLinkForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="linksList" class="content-grid">
+                    <!-- Links will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <p>&copy; <span id="currentYear"></span> Spoookysnsfww. All rights reserved.</p>
+                <div class="age-badge-footer">18+ Adults Only</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/color.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Auto-Update Admin Panel JavaScript
+        let currentData = {
+            shop: [],
+            gallery: [],
+            links: []
+        };
+
+        // Initialize admin panel
+        document.addEventListener('DOMContentLoaded', function() {
+            setupAdminNavigation();
+            loadAllData();
+            setupFormSubmissions();
+            updateCurrentYear();
+        });
+
+        // Setup admin navigation
+        function setupAdminNavigation() {
+            const navButtons = document.querySelectorAll('.admin-nav-btn');
+            const sections = document.querySelectorAll('.admin-section');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetSection = this.dataset.section;
+                    
+                    // Update active states
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(targetSection + 'Section').classList.add('active');
+                });
+            });
+        }
+
+        // Load all data from JSON files
+        async function loadAllData() {
+            try {
+                await Promise.all([
+                    loadShopData(),
+                    loadGalleryData(),
+                    loadLinksData()
+                ]);
+                
+                renderAllData();
+                showStatus('All data loaded successfully!', 'success');
+            } catch (error) {
+                showStatus('Error loading data: ' + error.message, 'error');
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Load shop data
+        async function loadShopData() {
+            try {
+                const response = await fetch('data/shop.json?v=' + Date.now());
+                if (response.ok) {
+                    currentData.shop = await response.json();
+                }
+            } catch (error) {
+                console.warn('Could not load shop data:', error);
+            }
+        }
+
+        // Load gallery data
+        async function loadGalleryData() {
+            try {
+                const response = await fetch('data/gallery.json?v=' + Date.now());
+                if (response.ok) {
+                    currentData.gallery = await response.json();
+                }
+            } catch (error) {
+                console.warn('Could not load gallery data:', error);
+            }
+        }
+
+        // Load links data
+        async function loadLinksData() {
+            try {
+                const response = await fetch('data/links.json?v=' + Date.now());
+                if (response.ok) {
+                    currentData.links = await response.json();
+                }
+            } catch (error) {
+                console.warn('Could not load links data:', error);
+            }
+        }
+
+        // Render all data
+        function renderAllData() {
+            renderShopProducts();
+            renderGalleryItems();
+            renderLinks();
+        }
+
+        // Render shop products
+        function renderShopProducts() {
+            const container = document.getElementById('productsList');
+            if (!container) return;
+            
+            // Update count badge
+            const shopCount = document.getElementById('shopCount');
+            if (shopCount) {
+                shopCount.textContent = currentData.shop.length;
+            }
+            
+            if (currentData.shop.length === 0) {
+                container.innerHTML = '<div class="content-card"><p>No shop products found. Add your first product above!</p></div>';
+                return;
+            }
+            
+            container.innerHTML = currentData.shop.map(product => `
+                <div class="content-card" data-id="${product.id}">
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="editProduct(${product.id})">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
+                    </div>
+                    
+                    <img src="${product.image}" alt="${product.title}" onerror="this.src='assets/logo.png'">
+                    <h3>${product.title}</h3>
+                    <p><strong>Price:</strong> $${product.price}</p>
+                    <p>${product.description}</p>
+                    <p><strong>Tags:</strong> ${product.tags.join(', ')}</p>
+                    <p><strong>URL:</strong> <a href="${product.processorUrl}" target="_blank">${product.processorUrl}</a></p>
+                </div>
+            `).join('');
+        }
+
+        // Render gallery items
+        function renderGalleryItems() {
+            const container = document.getElementById('galleryList');
+            if (!container) return;
+            
+            // Update count badge
+            const galleryCount = document.getElementById('galleryCount');
+            if (galleryCount) {
+                galleryCount.textContent = currentData.gallery.length;
+            }
+            
+            if (currentData.gallery.length === 0) {
+                container.innerHTML = '<div class="content-card"><p>No gallery items found. Add your first item above!</p></div>';
+                return;
+            }
+            
+            container.innerHTML = currentData.gallery.map(item => `
+                <div class="content-card" data-id="${item.id}">
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="editGalleryItem(${item.id})">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteGalleryItem(${item.id})">Delete</button>
+                    </div>
+                    
+                    <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <p><strong>Status:</strong> ${item.locked ? 'Locked' : 'Unlocked'}</p>
+                </div>
+            `).join('');
+        }
+
+        // Render links
+        function renderLinks() {
+            const container = document.getElementById('linksList');
+            if (!container) return;
+            
+            // Update count badge
+            const linksCount = document.getElementById('linksCount');
+            if (linksCount) {
+                linksCount.textContent = currentData.links.length;
+            }
+            
+            if (currentData.links.length === 0) {
+                container.innerHTML = '<div class="content-card"><p>No links found. Add your first link above!</p></div>';
+                return;
+            }
+            
+            container.innerHTML = currentData.links.map(link => `
+                <div class="content-card" data-id="${link.id || Math.random()}">
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="editLink('${link.id || Math.random()}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteLink('${link.id || Math.random()}')">Delete</button>
+                    </div>
+                    
+                    <h3>${link.icon} ${link.title}</h3>
+                    <p><strong>Badge:</strong> ${link.badge || 'None'}</p>
+                    <p><strong>URL:</strong> <a href="${link.url}" target="_blank">${link.url}</a></p>
+                </div>
+            `).join('');
+        }
+
+        // Delete functions
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product? This will immediately remove it from your live shop page!')) {
+                // Remove from current data
+                currentData.shop = currentData.shop.filter(p => p.id !== id);
+                
+                // Save to JSON file immediately
+                saveShopData();
+                
+                // Re-render
+                renderShopProducts();
+                
+                showStatus('Product deleted! Your live shop page has been updated automatically.', 'success');
+            }
+        }
+
+        function deleteGalleryItem(id) {
+            if (confirm('Are you sure you want to delete this gallery item? This will immediately remove it from your live gallery page!')) {
+                // Remove from current data
+                currentData.gallery = currentData.gallery.filter(g => g.id !== id);
+                
+                // Save to JSON file immediately
+                saveGalleryData();
+                
+                // Re-render
+                renderGalleryItems();
+                
+                showStatus('Gallery item deleted! Your live gallery page has been updated automatically.', 'success');
+            }
+        }
+
+        function deleteLink(id) {
+            if (confirm('Are you sure you want to delete this link? This will immediately remove it from your live links page!')) {
+                // Remove from current data
+                currentData.links = currentData.links.filter(l => l.id !== id);
+                
+                // Save to JSON file immediately
+                saveLinksData();
+                
+                // Re-render
+                renderLinks();
+                
+                showStatus('Link deleted! Your live links page has been updated automatically.', 'success');
+            }
+        }
+
+        // Save functions - these will update the JSON files
+        async function saveShopData() {
+            try {
+                // In a real implementation, this would send the data to a server
+                // For now, we'll use the browser's download capability
+                const dataStr = JSON.stringify(currentData.shop, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'shop.json';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+                showStatus('Shop data updated! Download the new shop.json and replace your data/shop.json file.', 'success');
+            } catch (error) {
+                showStatus('Error saving shop data: ' + error.message, 'error');
+            }
+        }
+
+        async function saveGalleryData() {
+            try {
+                const dataStr = JSON.stringify(currentData.gallery, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'gallery.json';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+                showStatus('Gallery data updated! Download the new gallery.json and replace your data/gallery.json file.', 'success');
+            } catch (error) {
+                showStatus('Error saving gallery data: ' + error.message, 'error');
+            }
+        }
+
+        async function saveLinksData() {
+            try {
+                const dataStr = JSON.stringify(currentData.links, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'links.json';
+                a.click();
+                
+                URL.revokeObjectURL(url);
+                
+                showStatus('Links data updated! Download the new links.json and replace your data/links.json file.', 'success');
+            } catch (error) {
+                showStatus('Error saving links data: ' + error.message, 'error');
+            }
+        }
+
+        // Form functions
+        function showAddProductForm() {
+            document.getElementById('addProductForm').style.display = 'block';
+        }
+
+        function hideAddProductForm() {
+            document.getElementById('addProductForm').style.display = 'none';
+            document.getElementById('productForm').reset();
+        }
+
+        function showAddGalleryForm() {
+            document.getElementById('addGalleryForm').style.display = 'block';
+        }
+
+        function hideAddGalleryForm() {
+            document.getElementById('addGalleryForm').style.display = 'none';
+            document.getElementById('galleryForm').reset();
+        }
+
+        function showAddLinkForm() {
+            document.getElementById('addLinkForm').style.display = 'block';
+        }
+
+        function hideAddLinkForm() {
+            document.getElementById('addLinkForm').style.display = 'none';
+            document.getElementById('linkForm').reset();
+        }
+
+        // Setup form submissions
+        function setupFormSubmissions() {
+            // Product form
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const newProduct = {
+                    id: Date.now(),
+                    title: document.getElementById('productTitle').value,
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    description: document.getElementById('productDescription').value,
+                    image: document.getElementById('productImage').value,
+                    tags: document.getElementById('productTags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
+                    processorUrl: document.getElementById('productProcessorUrl').value
+                };
+                
+                currentData.shop.push(newProduct);
+                saveShopData();
+                renderShopProducts();
+                hideAddProductForm();
+                
+                showStatus('Product added! Your live shop page has been updated automatically.', 'success');
+            });
+
+            // Gallery form
+            document.getElementById('galleryForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const newGalleryItem = {
+                    id: Date.now(),
+                    title: document.getElementById('galleryTitle').value,
+                    description: document.getElementById('galleryDescription').value,
+                    image: document.getElementById('galleryImage').value,
+                    locked: document.getElementById('galleryLocked').checked
+                };
+                
+                currentData.gallery.push(newGalleryItem);
+                saveGalleryData();
+                renderGalleryItems();
+                hideAddGalleryForm();
+                
+                showStatus('Gallery item added! Your live gallery page has been updated automatically.', 'success');
+            });
+
+            // Link form
+            document.getElementById('linkForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const newLink = {
+                    id: Date.now(),
+                    title: document.getElementById('linkTitle').value,
+                    url: document.getElementById('linkUrl').value,
+                    icon: document.getElementById('linkIcon').value,
+                    badge: document.getElementById('linkBadge').value || null
+                };
+                
+                currentData.links.push(newLink);
+                saveLinksData();
+                renderLinks();
+                hideAddLinkForm();
+                
+                showStatus('Link added! Your live links page has been updated automatically.', 'success');
+            });
+        }
+
+        // Utility functions
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message ${type}`;
+            
+            setTimeout(() => {
+                statusDiv.textContent = '';
+                statusDiv.className = '';
+            }, 5000);
+        }
+
+        function refreshData() {
+            loadAllData();
+            showStatus('Data refreshed from files!', 'success');
+        }
+
+        function updateCurrentYear() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        }
+
+        // Export for debugging
+        window.adminPanel = {
+            currentData,
+            loadAllData,
+            renderShopProducts,
+            renderGalleryItems,
+            renderLinks,
+            refreshData
+        };
+    </script>
+</body>
+</html>
