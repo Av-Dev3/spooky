@@ -12,10 +12,19 @@
     <!-- Splash Screen -->
     <div id="splashScreen" class="splash-screen">
         <div class="splash-video-container">
-            <video id="splashVideo" class="splash-video" autoplay muted playsinline>
+            <!-- Desktop Splash Video -->
+            <video id="splashVideo" class="splash-video desktop-splash" autoplay muted playsinline>
                 <source src="splash.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+            
+            <!-- Mobile Splash Video -->
+            <video id="mobileSplashVideo" class="splash-video mobile-splash" autoplay muted playsinline>
+                <source src="mobile_splash.webp" type="video/webm">
+                <source src="mobile_splash.webp" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
             <div class="splash-overlay">
                 <button id="skipSplash" class="skip-splash-btn">Skip</button>
             </div>

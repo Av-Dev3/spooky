@@ -790,6 +790,11 @@ img:not(.logo-large) {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
+/* Mobile splash video - hidden by default */
+.mobile-splash {
+    display: none;
+}
+
 .splash-video:hover {
     filter: brightness(1.4) contrast(1.1);
     transform: translate(-50%, -50%) scale(1.02);
@@ -841,7 +846,14 @@ img:not(.logo-large) {
 
 /* Mobile optimizations for splash screen */
 @media (max-width: 768px) {
-    .splash-video {
+    /* Hide desktop video on mobile */
+    .desktop-splash {
+        display: none !important;
+    }
+    
+    /* Show mobile video on mobile */
+    .mobile-splash {
+        display: block !important;
         width: auto;
         height: auto;
         max-width: none;
@@ -879,7 +891,14 @@ img:not(.logo-large) {
 
 /* Small mobile devices */
 @media (max-width: 480px) {
-    .splash-video {
+    /* Hide desktop video on small mobile */
+    .desktop-splash {
+        display: none !important;
+    }
+    
+    /* Show mobile video on small mobile */
+    .mobile-splash {
+        display: block !important;
         width: auto;
         height: auto;
         max-width: none;
