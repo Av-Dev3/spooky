@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load gallery items from JSON
 async function loadGalleryItems() {
     try {
-        const response = await fetch('data/gallery.json');
+                    const response = await fetch('data/gallery.json?v=' + Date.now());
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

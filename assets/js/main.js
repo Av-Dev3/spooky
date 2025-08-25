@@ -90,7 +90,7 @@
 
     async function loadLinks() {
         try {
-            const response = await fetch('data/links.json');
+            const response = await fetch('data/links.json?v=' + Date.now());
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

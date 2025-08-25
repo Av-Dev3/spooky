@@ -667,7 +667,7 @@
         // Load shop data from JSON file
         async function loadShopData() {
             try {
-                const response = await fetch('data/shop.json');
+                const response = await fetch('data/shop.json?v=' + Date.now());
                 if (response.ok) {
                     currentData.shop = await response.json();
                     saveToLocalStorage('shop');
@@ -680,7 +680,7 @@
         // Load gallery data from JSON file
         async function loadGalleryData() {
             try {
-                const response = await fetch('data/gallery.json');
+                const response = await fetch('data/gallery.json?v=' + Date.now());
                 if (response.ok) {
                     currentData.gallery = await response.json();
                     saveToLocalStorage('gallery');
@@ -693,7 +693,7 @@
         // Load links data from JSON file
         async function loadLinksData() {
             try {
-                const response = await fetch('data/links.json');
+                const response = await fetch('data/links.json?v=' + Date.now());
                 if (response.ok) {
                     currentData.links = await response.json();
                     saveToLocalStorage('links');
