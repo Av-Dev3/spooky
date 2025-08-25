@@ -851,7 +851,7 @@ img:not(.logo-large) {
         display: none !important;
     }
     
-    /* Show mobile image on mobile */
+    /* Show mobile video on mobile */
     .mobile-splash {
         display: block !important;
         width: auto;
@@ -897,7 +897,7 @@ img:not(.logo-large) {
         display: none !important;
     }
     
-    /* Show mobile image on small mobile */
+    /* Show mobile video on small mobile */
     .mobile-splash {
         display: block !important;
         width: auto;
