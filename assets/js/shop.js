@@ -44,9 +44,21 @@
         });
     }
 
-    // Load products from JSON
+    // Load products from JSON or admin LocalStorage
     async function loadProducts() {
         try {
+            // Check if admin has made changes
+            const adminShopData = localStorage.getItem('spooky_admin_shop');
+            
+            if (adminShopData) {
+                // Use admin data instead of JSON file
+                const products = JSON.parse(adminShopData);
+                renderProducts(products);
+                console.log('Products loaded from admin changes:', products);
+                return;
+            }
+            
+            // Load from JSON file if no admin changes
             const response = await fetch('data/shop.json?v=' + Date.now());
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -55,7 +67,7 @@
             const products = await response.json();
             renderProducts(products);
             
-            console.log('Products loaded successfully:', products);
+            console.log('Products loaded from JSON file:', products);
             
         } catch (error) {
             console.warn('Could not load shop.json, using fallback:', error);

@@ -9,24 +9,36 @@ document.addEventListener('DOMContentLoaded', function() {
     setupLightbox();
 });
 
-// Load gallery items from JSON
-async function loadGalleryItems() {
-    try {
-                    const response = await fetch('data/gallery.json?v=' + Date.now());
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Load gallery items from JSON or admin LocalStorage
+        async function loadGalleryItems() {
+            try {
+                // Check if admin has made changes
+                const adminGalleryData = localStorage.getItem('spooky_admin_gallery');
+                
+                if (adminGalleryData) {
+                    // Use admin data instead of JSON file
+                    const galleryItems = JSON.parse(adminGalleryData);
+                    renderGalleryItems(galleryItems);
+                    console.log('Gallery items loaded from admin changes:', galleryItems);
+                    return;
+                }
+                
+                // Load from JSON file if no admin changes
+                const response = await fetch('data/gallery.json?v=' + Date.now());
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const galleryItems = await response.json();
+                renderGalleryItems(galleryItems);
+                
+                console.log('Gallery items loaded from JSON file:', galleryItems);
+                
+            } catch (error) {
+                console.warn('Could not load gallery.json, using fallback:', error);
+                renderFallbackGalleryItems();
+            }
         }
-        
-        const galleryItems = await response.json();
-        renderGalleryItems(galleryItems);
-        
-        console.log('Gallery items loaded successfully:', galleryItems);
-        
-    } catch (error) {
-        console.warn('Could not load gallery.json, using fallback:', error);
-        renderFallbackGalleryItems();
-    }
-}
 
 // Render gallery items
 function renderGalleryItems(items) {

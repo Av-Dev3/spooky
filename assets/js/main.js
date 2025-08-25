@@ -90,6 +90,18 @@
 
     async function loadLinks() {
         try {
+            // Check if admin has made changes
+            const adminLinksData = localStorage.getItem('spooky_admin_links');
+            
+            if (adminLinksData) {
+                // Use admin data instead of JSON file
+                const links = JSON.parse(adminLinksData);
+                renderLinks(links);
+                console.log('Links loaded from admin changes:', links);
+                return;
+            }
+            
+            // Load from JSON file if no admin changes
             const response = await fetch('data/links.json?v=' + Date.now());
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -98,7 +110,7 @@
             const links = await response.json();
             renderLinks(links);
             
-            console.log('Links loaded successfully:', links);
+            console.log('Links loaded from JSON file:', links);
             
         } catch (error) {
             console.warn('Could not load links.json, using fallback:', error);
