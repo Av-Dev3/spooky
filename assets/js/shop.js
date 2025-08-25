@@ -47,7 +47,7 @@
     // Load products from JSON
     async function loadProducts() {
         try {
-            const response = await fetch('/data/shop.json');
+            const response = await fetch('data/shop.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

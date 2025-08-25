@@ -1515,6 +1515,19 @@ img:not(.logo-large) {
     margin-bottom: 0.5rem;
 }
 
+/* Loading placeholder */
+.loading-placeholder {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text);
+    font-size: 18px;
+}
+
+.loading-placeholder p {
+    margin: 0;
+    opacity: 0.7;
+}
+
 /* Lightbox */
 .lightbox {
     position: fixed;

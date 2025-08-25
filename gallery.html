@@ -72,50 +72,9 @@
             </div>
             
             <div class="gallery-grid">
-                <!-- Sample gallery items - in production these would be loaded dynamically -->
-                <div class="gallery-item locked" data-image="assets/logo.png">
-                    <div class="gallery-image">
-                        <img src="assets/logo.png" alt="Teaser 1" loading="lazy">
-                        <div class="lock-overlay">
-                            <svg class="lock-icon" viewBox="0 0 24 24">
-                                <path d="M12 1C9.24 1 7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm6 10v10H6V10h12zm-9-2V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="gallery-caption">
-                        <h3>Teaser 1</h3>
-                        <p>Click to preview</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item locked" data-image="assets/logo.png">
-                    <div class="gallery-image">
-                        <img src="assets/logo.png" alt="Teaser 2" loading="lazy">
-                        <div class="lock-overlay">
-                            <svg class="lock-icon" viewBox="0 0 24 24">
-                                <path d="M12 1C9.24 1 7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm6 10v10H6V10h12zm-9-2V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="gallery-caption">
-                        <h3>Teaser 2</h3>
-                        <p>Click to preview</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item locked" data-image="assets/logo.png">
-                    <div class="gallery-image">
-                        <img src="assets/logo.png" alt="Teaser 3" loading="lazy">
-                        <div class="lock-overlay">
-                            <svg class="lock-icon" viewBox="0 0 24 24">
-                                <path d="M12 1C9.24 1 7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm6 10v10H6V10h12zm-9-2V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="gallery-caption">
-                        <h3>Teaser 3</h3>
-                        <p>Click to preview</p>
-                    </div>
+                <!-- Gallery items will be loaded dynamically from gallery.json -->
+                <div class="loading-placeholder">
+                    <p>Loading gallery items...</p>
                 </div>
             </div>
         </section>
@@ -151,5 +110,6 @@
 
     <script src="assets/js/color.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/gallery.js"></script>
 </body>
 </html>

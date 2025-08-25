@@ -90,7 +90,7 @@
 
     async function loadLinks() {
         try {
-            const response = await fetch('/data/links.json');
+            const response = await fetch('data/links.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -466,9 +466,9 @@
         console.log('Looking for mobile splash video:', mobileVideo);
         
         if (mobileVideo) {
-            // Set playback rate to 0.7 (slightly faster than 0.5) for better pacing
-            mobileVideo.playbackRate = 0.7;
-            console.log('Mobile splash video playback rate set to 0.7x');
+            // Set playback rate to normal speed (1.0)
+            mobileVideo.playbackRate = 1.0;
+            console.log('Mobile splash video playback rate set to normal (1.0x)');
             
             // Add error handling
             mobileVideo.addEventListener('error', function(e) {
