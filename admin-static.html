@@ -316,6 +316,7 @@
                     <button class="btn btn-secondary" onclick="refreshAllData()">🔄 Refresh Data from Files</button>
                     <button class="btn btn-warning" onclick="clearLocalChanges()">🗑️ Clear Local Changes</button>
                     <button class="btn btn-danger" onclick="debugData()">🐛 Debug Data</button>
+                    <button class="btn btn-warning" onclick="resetToOriginalData()">🔄 Reset to Original</button>
                 </div>
                 
                 <div class="admin-nav">
@@ -523,6 +524,7 @@
                         <button class="btn btn-success" onclick="exportGalleryData()">Export Gallery Data</button>
                         <button class="btn btn-success" onclick="exportLinksData()">Export Links Data</button>
                         <button class="btn btn-warning" onclick="exportAllData()">Export All Data</button>
+                        <button class="btn btn-info" onclick="exportCurrentData()">Export Current State</button>
                     </div>
                 </div>
                 
@@ -601,30 +603,32 @@
         // Load all data from localStorage and JSON files
         async function loadAllData() {
             try {
-                // Always load fresh data from JSON files first
-                await Promise.all([
-                    loadShopData(),
-                    loadGalleryData(),
-                    loadLinksData()
-                ]);
-                
-                // Then check localStorage for any unsaved changes
+                // Check localStorage first for any existing data
                 const savedShop = localStorage.getItem('spooky_shop_data');
                 const savedGallery = localStorage.getItem('spooky_gallery_data');
                 const savedLinks = localStorage.getItem('spooky_links_data');
                 
-                if (savedShop) {
-                    const localShop = JSON.parse(savedShop);
-                    // Merge with server data, keeping local changes
-                    currentData.shop = mergeData(currentData.shop, localShop);
-                }
-                if (savedGallery) {
-                    const localGallery = JSON.parse(savedGallery);
-                    currentData.gallery = mergeData(currentData.gallery, localGallery);
-                }
-                if (savedLinks) {
-                    const localLinks = JSON.parse(savedLinks);
-                    currentData.links = mergeData(currentData.links, localLinks);
+                // If we have saved data, use it (this preserves deletions)
+                if (savedShop || savedGallery || savedLinks) {
+                    console.log('Loading from LocalStorage (preserving changes)...');
+                    
+                    if (savedShop) {
+                        currentData.shop = JSON.parse(savedShop);
+                    }
+                    if (savedGallery) {
+                        currentData.gallery = JSON.parse(savedGallery);
+                    }
+                    if (savedLinks) {
+                        currentData.links = JSON.parse(savedLinks);
+                    }
+                } else {
+                    // Only load from JSON files if no LocalStorage data exists
+                    console.log('No LocalStorage data found, loading from JSON files...');
+                    await Promise.all([
+                        loadShopData(),
+                        loadGalleryData(),
+                        loadLinksData()
+                    ]);
                 }
                 
                 // Debug logging
@@ -1078,6 +1082,25 @@
             downloadJSON(allData, 'all-data.json');
             showStatus('All data exported successfully!', 'success');
         }
+        
+        // Export current LocalStorage data (preserves deletions)
+        function exportCurrentData() {
+            try {
+                // Export current state (including deletions)
+                const currentState = {
+                    shop: currentData.shop,
+                    gallery: currentData.gallery,
+                    links: currentData.links,
+                    exportDate: new Date().toISOString(),
+                    note: 'This export includes all current changes including deletions'
+                };
+                
+                downloadJSON(currentState, `spooky-data-${new Date().toISOString().split('T')[0]}.json`);
+                showStatus('Current data exported successfully! (includes deletions)', 'success');
+            } catch (error) {
+                showStatus('Error exporting current data: ' + error.message, 'error');
+            }
+        }
 
         // Import functions
         function importShopData() {
@@ -1383,6 +1406,33 @@
                     showStatus('Local changes cleared and data reloaded!', 'success');
                 } catch (error) {
                     showStatus('Error clearing changes: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        // Reset to original data from JSON files
+        async function resetToOriginalData() {
+            if (confirm('Are you sure you want to reset to the original data? This will overwrite all local changes.')) {
+                try {
+                    // Clear localStorage
+                    localStorage.removeItem('spooky_shop_data');
+                    localStorage.removeItem('spooky_gallery_data');
+                    localStorage.removeItem('spooky_links_data');
+                    
+                    // Load fresh data from JSON files
+                    await Promise.all([
+                        loadShopData(),
+                        loadGalleryData(),
+                        loadLinksData()
+                    ]);
+                    
+                    // Re-render everything
+                    renderAllData();
+                    
+                    showStatus('Reset to original data successfully!', 'success');
+                } catch (error) {
+                    showStatus('Error resetting data: ' + error.message, 'error');
+                    console.error('Error resetting data:', error);
                 }
             }
         }

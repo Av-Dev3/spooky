@@ -9,6 +9,7 @@
     const SPLASH_KEY = 'spoookysnsfww_splash_shown';
     const splashScreen = document.getElementById('splashScreen');
     const splashVideo = document.getElementById('splashVideo');
+    const mobileSplashVideo = document.getElementById('mobileSplashVideo');
     
     if (!splashScreen || !splashVideo) {
         console.warn('Splash screen elements not found');
@@ -54,39 +55,53 @@
 
     // Handle video events
     function handleVideoEvents() {
-        // Video ended - hide splash and show age gate
+        // Desktop video events
         splashVideo.addEventListener('ended', function() {
-            console.log('Splash video ended - playing full duration');
+            console.log('Desktop splash video ended - playing full duration');
             hideSplash();
         });
 
-        // Video error - fallback to hiding splash
         splashVideo.addEventListener('error', function(e) {
-            console.warn('Splash video error:', e);
+            console.warn('Desktop splash video error:', e);
             hideSplash();
         });
 
-        // Video can play - ensure it's playing
         splashVideo.addEventListener('canplay', function() {
-            console.log('Splash video can play - starting playback');
+            console.log('Desktop splash video can play - starting playback');
             splashVideo.play().catch(function(error) {
-                console.warn('Could not autoplay video:', error);
-                // If autoplay fails, hide splash after a delay
+                console.warn('Could not autoplay desktop video:', error);
                 setTimeout(hideSplash, 2000);
             });
         });
 
-        // Video loaded metadata
         splashVideo.addEventListener('loadedmetadata', function() {
-            console.log('Splash video metadata loaded - duration:', splashVideo.duration);
+            console.log('Desktop splash video metadata loaded - duration:', splashVideo.duration);
         });
 
-        // Video time update - log progress
-        splashVideo.addEventListener('timeupdate', function() {
-            if (splashVideo.currentTime > 0) {
-                console.log('Video playing:', Math.round(splashVideo.currentTime), 'seconds');
-            }
-        });
+        // Mobile video events
+        if (mobileSplashVideo) {
+            mobileSplashVideo.addEventListener('ended', function() {
+                console.log('Mobile splash video ended - playing full duration');
+                hideSplash();
+            });
+
+            mobileSplashVideo.addEventListener('error', function(e) {
+                console.warn('Mobile splash video error:', e);
+                hideSplash();
+            });
+
+            mobileSplashVideo.addEventListener('canplay', function() {
+                console.log('Mobile splash video can play - starting playback');
+                mobileSplashVideo.play().catch(function(error) {
+                    console.warn('Could not autoplay mobile video:', error);
+                    setTimeout(hideSplash, 2000);
+                });
+            });
+
+            mobileSplashVideo.addEventListener('loadedmetadata', function() {
+                console.log('Mobile splash video metadata loaded - duration:', mobileSplashVideo.duration);
+            });
+        }
     }
 
     // Handle skip button

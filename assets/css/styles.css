@@ -858,15 +858,18 @@ img:not(.logo-large) {
         height: 100% !important;
         max-width: 100% !important;
         max-height: 100% !important;
-        object-fit: cover;
-        border-radius: 0;
+        object-fit: cover !important;
+        border-radius: 0 !important;
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
-        transform: none;
-        box-shadow: none;
+        transform: none !important;
+        box-shadow: none !important;
         z-index: 1;
-        filter: brightness(1.4) contrast(1.1);
+        filter: brightness(1.4) contrast(1.1) !important;
+        /* Override any base splash-video styles */
+        border: none !important;
+        outline: none !important;
     }
     
     .splash-video-container {
@@ -906,15 +909,18 @@ img:not(.logo-large) {
         height: 100% !important;
         max-width: 100% !important;
         max-height: 100% !important;
-        object-fit: cover;
-        border-radius: 0;
+        object-fit: cover !important;
+        border-radius: 0 !important;
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
-        transform: none;
-        box-shadow: none;
+        transform: none !important;
+        box-shadow: none !important;
         z-index: 1;
-        filter: brightness(1.4) contrast(1.1);
+        filter: brightness(1.4) contrast(1.1) !important;
+        /* Override any base splash-video styles */
+        border: none !important;
+        outline: none !important;
     }
     
     .splash-video-container {
