@@ -466,9 +466,8 @@
         console.log('Looking for mobile splash video:', mobileVideo);
         
         if (mobileVideo) {
-            // Set playback rate to normal speed (1.0)
-            mobileVideo.playbackRate = 1.0;
-            console.log('Mobile splash video playback rate set to normal (1.0x)');
+            // Let video play at its natural speed (no playback rate modification)
+            console.log('Mobile splash video found - playing at natural speed');
             
             // Add error handling
             mobileVideo.addEventListener('error', function(e) {
