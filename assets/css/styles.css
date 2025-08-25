@@ -842,11 +842,11 @@ img:not(.logo-large) {
 /* Mobile optimizations for splash screen */
 @media (max-width: 768px) {
     .splash-video {
-        width: 90%;
-        height: 50%;
+        width: 85%;
+        height: 35%;
         border-radius: 10px;
-        max-width: 100vw;
-        max-height: 100vh;
+        max-width: 90vw;
+        max-height: 40vh;
     }
     
     .splash-screen {
@@ -869,9 +869,11 @@ img:not(.logo-large) {
 /* Small mobile devices */
 @media (max-width: 480px) {
     .splash-video {
-        width: 95%;
-        height: 45%;
+        width: 90%;
+        height: 30%;
         border-radius: 8px;
+        max-width: 85vw;
+        max-height: 35vh;
     }
     
     .splash-screen {
