@@ -463,10 +463,30 @@
     // Setup mobile splash video playback rate
     function setupMobileSplash() {
         const mobileVideo = document.getElementById('mobileSplashVideo');
+        console.log('Looking for mobile splash video:', mobileVideo);
+        
         if (mobileVideo) {
             // Set playback rate to 0.5 (half speed) to make it about 7 seconds
             mobileVideo.playbackRate = 0.5;
             console.log('Mobile splash video playback rate set to 0.5x');
+            
+            // Add error handling
+            mobileVideo.addEventListener('error', function(e) {
+                console.error('Mobile splash video error:', e);
+            });
+            
+            // Add load handling
+            mobileVideo.addEventListener('loadeddata', function() {
+                console.log('Mobile splash video loaded successfully');
+            });
+            
+            // Check if video is visible
+            const computedStyle = window.getComputedStyle(mobileVideo);
+            console.log('Mobile video display:', computedStyle.display);
+            console.log('Mobile video visibility:', computedStyle.visibility);
+            console.log('Mobile video position:', computedStyle.position);
+        } else {
+            console.error('Mobile splash video element not found!');
         }
     }
 

@@ -790,9 +790,11 @@ img:not(.logo-large) {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
-/* Mobile splash image - hidden by default */
+/* Mobile splash video - hidden by default */
 .mobile-splash {
     display: none;
+    /* Debug: temporary border to see the element */
+    border: 2px solid red !important;
 }
 
 .splash-video:hover {
@@ -854,17 +856,18 @@ img:not(.logo-large) {
     /* Show mobile video on mobile */
     .mobile-splash {
         display: block !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        max-width: 100vw !important;
-        max-height: 100vh !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
         object-fit: cover;
         border-radius: 0;
-        position: fixed !important;
+        position: absolute !important;
         top: 0 !important;
         left: 0 !important;
         transform: none;
         box-shadow: none;
+        z-index: 1;
     }
     
     .splash-video-container {
@@ -900,17 +903,18 @@ img:not(.logo-large) {
     /* Show mobile video on small mobile */
     .mobile-splash {
         display: block !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        max-width: 100vw !important;
-        max-height: 100vh !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
         object-fit: cover;
         border-radius: 0;
-        position: fixed !important;
+        position: absolute !important;
         top: 0 !important;
         left: 0 !important;
         transform: none;
         box-shadow: none;
+        z-index: 1;
     }
     
     .splash-video-container {
