@@ -1,0 +1,76 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+(() => {
+var exports = {};
+exports.id = "pages/api/admin/shop/list";
+exports.ids = ["pages/api/admin/shop/list"];
+exports.modules = {
+
+/***/ "@supabase/supabase-js":
+/*!****************************************!*\
+  !*** external "@supabase/supabase-js" ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = require("@supabase/supabase-js");
+
+/***/ }),
+
+/***/ "next/dist/compiled/next-server/pages-api.runtime.dev.js":
+/*!**************************************************************************!*\
+  !*** external "next/dist/compiled/next-server/pages-api.runtime.dev.js" ***!
+  \**************************************************************************/
+/***/ ((module) => {
+
+module.exports = require("next/dist/compiled/next-server/pages-api.runtime.dev.js");
+
+/***/ }),
+
+/***/ "(api)/./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES_API&page=%2Fapi%2Fadmin%2Fshop%2Flist&preferredRegion=&absolutePagePath=.%2Fpages%2Fapi%2Fadmin%2Fshop%2Flist.js&middlewareConfigBase64=e30%3D!":
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES_API&page=%2Fapi%2Fadmin%2Fshop%2Flist&preferredRegion=&absolutePagePath=.%2Fpages%2Fapi%2Fadmin%2Fshop%2Flist.js&middlewareConfigBase64=e30%3D! ***!
+  \********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   config: () => (/* binding */ config),\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__),\n/* harmony export */   routeModule: () => (/* binding */ routeModule)\n/* harmony export */ });\n/* harmony import */ var next_dist_server_future_route_modules_pages_api_module_compiled__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/dist/server/future/route-modules/pages-api/module.compiled */ \"(api)/./node_modules/next/dist/server/future/route-modules/pages-api/module.compiled.js\");\n/* harmony import */ var next_dist_server_future_route_modules_pages_api_module_compiled__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_dist_server_future_route_modules_pages_api_module_compiled__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_dist_server_future_route_kind__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/dist/server/future/route-kind */ \"(api)/./node_modules/next/dist/server/future/route-kind.js\");\n/* harmony import */ var next_dist_build_templates_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/dist/build/templates/helpers */ \"(api)/./node_modules/next/dist/build/templates/helpers.js\");\n/* harmony import */ var _pages_api_admin_shop_list_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/api/admin/shop/list.js */ \"(api)/./pages/api/admin/shop/list.js\");\n\n\n\n// Import the userland code.\n\n// Re-export the handler (should be the default export).\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,next_dist_build_templates_helpers__WEBPACK_IMPORTED_MODULE_2__.hoist)(_pages_api_admin_shop_list_js__WEBPACK_IMPORTED_MODULE_3__, \"default\"));\n// Re-export config.\nconst config = (0,next_dist_build_templates_helpers__WEBPACK_IMPORTED_MODULE_2__.hoist)(_pages_api_admin_shop_list_js__WEBPACK_IMPORTED_MODULE_3__, \"config\");\n// Create and export the route module that will be consumed.\nconst routeModule = new next_dist_server_future_route_modules_pages_api_module_compiled__WEBPACK_IMPORTED_MODULE_0__.PagesAPIRouteModule({\n    definition: {\n        kind: next_dist_server_future_route_kind__WEBPACK_IMPORTED_MODULE_1__.RouteKind.PAGES_API,\n        page: \"/api/admin/shop/list\",\n        pathname: \"/api/admin/shop/list\",\n        // The following aren't used in production.\n        bundlePath: \"\",\n        filename: \"\"\n    },\n    userland: _pages_api_admin_shop_list_js__WEBPACK_IMPORTED_MODULE_3__\n});\n\n//# sourceMappingURL=pages-api.js.map//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LXJvdXRlLWxvYWRlci9pbmRleC5qcz9raW5kPVBBR0VTX0FQSSZwYWdlPSUyRmFwaSUyRmFkbWluJTJGc2hvcCUyRmxpc3QmcHJlZmVycmVkUmVnaW9uPSZhYnNvbHV0ZVBhZ2VQYXRoPS4lMkZwYWdlcyUyRmFwaSUyRmFkbWluJTJGc2hvcCUyRmxpc3QuanMmbWlkZGxld2FyZUNvbmZpZ0Jhc2U2ND1lMzAlM0QhIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7O0FBQXNHO0FBQ3ZDO0FBQ0w7QUFDMUQ7QUFDMkQ7QUFDM0Q7QUFDQSxpRUFBZSx3RUFBSyxDQUFDLDBEQUFRLFlBQVksRUFBQztBQUMxQztBQUNPLGVBQWUsd0VBQUssQ0FBQywwREFBUTtBQUNwQztBQUNPLHdCQUF3QixnSEFBbUI7QUFDbEQ7QUFDQSxjQUFjLHlFQUFTO0FBQ3ZCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxLQUFLO0FBQ0wsWUFBWTtBQUNaLENBQUM7O0FBRUQiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zdGF0aWMtc2l0ZS13aXRoLWFkbWluLz83YTE3Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFBhZ2VzQVBJUm91dGVNb2R1bGUgfSBmcm9tIFwibmV4dC9kaXN0L3NlcnZlci9mdXR1cmUvcm91dGUtbW9kdWxlcy9wYWdlcy1hcGkvbW9kdWxlLmNvbXBpbGVkXCI7XG5pbXBvcnQgeyBSb3V0ZUtpbmQgfSBmcm9tIFwibmV4dC9kaXN0L3NlcnZlci9mdXR1cmUvcm91dGUta2luZFwiO1xuaW1wb3J0IHsgaG9pc3QgfSBmcm9tIFwibmV4dC9kaXN0L2J1aWxkL3RlbXBsYXRlcy9oZWxwZXJzXCI7XG4vLyBJbXBvcnQgdGhlIHVzZXJsYW5kIGNvZGUuXG5pbXBvcnQgKiBhcyB1c2VybGFuZCBmcm9tIFwiLi9wYWdlcy9hcGkvYWRtaW4vc2hvcC9saXN0LmpzXCI7XG4vLyBSZS1leHBvcnQgdGhlIGhhbmRsZXIgKHNob3VsZCBiZSB0aGUgZGVmYXVsdCBleHBvcnQpLlxuZXhwb3J0IGRlZmF1bHQgaG9pc3QodXNlcmxhbmQsIFwiZGVmYXVsdFwiKTtcbi8vIFJlLWV4cG9ydCBjb25maWcuXG5leHBvcnQgY29uc3QgY29uZmlnID0gaG9pc3QodXNlcmxhbmQsIFwiY29uZmlnXCIpO1xuLy8gQ3JlYXRlIGFuZCBleHBvcnQgdGhlIHJvdXRlIG1vZHVsZSB0aGF0IHdpbGwgYmUgY29uc3VtZWQuXG5leHBvcnQgY29uc3Qgcm91dGVNb2R1bGUgPSBuZXcgUGFnZXNBUElSb3V0ZU1vZHVsZSh7XG4gICAgZGVmaW5pdGlvbjoge1xuICAgICAgICBraW5kOiBSb3V0ZUtpbmQuUEFHRVNfQVBJLFxuICAgICAgICBwYWdlOiBcIi9hcGkvYWRtaW4vc2hvcC9saXN0XCIsXG4gICAgICAgIHBhdGhuYW1lOiBcIi9hcGkvYWRtaW4vc2hvcC9saXN0XCIsXG4gICAgICAgIC8vIFRoZSBmb2xsb3dpbmcgYXJlbid0IHVzZWQgaW4gcHJvZHVjdGlvbi5cbiAgICAgICAgYnVuZGxlUGF0aDogXCJcIixcbiAgICAgICAgZmlsZW5hbWU6IFwiXCJcbiAgICB9LFxuICAgIHVzZXJsYW5kXG59KTtcblxuLy8jIHNvdXJjZU1hcHBpbmdVUkw9cGFnZXMtYXBpLmpzLm1hcCJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES_API&page=%2Fapi%2Fadmin%2Fshop%2Flist&preferredRegion=&absolutePagePath=.%2Fpages%2Fapi%2Fadmin%2Fshop%2Flist.js&middlewareConfigBase64=e30%3D!\n");
+
+/***/ }),
+
+/***/ "(api)/./lib/supabaseServer.js":
+/*!*******************************!*\
+  !*** ./lib/supabaseServer.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   supabaseAdmin: () => (/* binding */ supabaseAdmin)\n/* harmony export */ });\n/* harmony import */ var _supabase_supabase_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @supabase/supabase-js */ \"@supabase/supabase-js\");\n/* harmony import */ var _supabase_supabase_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_supabase_supabase_js__WEBPACK_IMPORTED_MODULE_0__);\n\nfunction supabaseAdmin() {\n    return (0,_supabase_supabase_js__WEBPACK_IMPORTED_MODULE_0__.createClient)(\"https://clmzwnhrdxgvdweflqjx.supabase.co\", process.env.SUPABASE_SERVICE_ROLE_KEY, {\n        auth: {\n            persistSession: false\n        }\n    });\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvc3VwYWJhc2VTZXJ2ZXIuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQXFEO0FBRTlDLFNBQVNDO0lBQ2QsT0FBT0QsbUVBQVlBLENBQ2pCRSwwQ0FBb0MsRUFDcENBLFFBQVFDLEdBQUcsQ0FBQ0UseUJBQXlCLEVBQ3JDO1FBQUVDLE1BQU07WUFBRUMsZ0JBQWdCO1FBQU07SUFBRTtBQUV0QyIsInNvdXJjZXMiOlsid2VicGFjazovL3N0YXRpYy1zaXRlLXdpdGgtYWRtaW4vLi9saWIvc3VwYWJhc2VTZXJ2ZXIuanM/NWM3MCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBjcmVhdGVDbGllbnQgfSBmcm9tIFwiQHN1cGFiYXNlL3N1cGFiYXNlLWpzXCI7XG5cbmV4cG9ydCBmdW5jdGlvbiBzdXBhYmFzZUFkbWluKCkge1xuICByZXR1cm4gY3JlYXRlQ2xpZW50KFxuICAgIHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX1NVUEFCQVNFX1VSTCxcbiAgICBwcm9jZXNzLmVudi5TVVBBQkFTRV9TRVJWSUNFX1JPTEVfS0VZLFxuICAgIHsgYXV0aDogeyBwZXJzaXN0U2Vzc2lvbjogZmFsc2UgfSB9XG4gICk7XG59XG4iXSwibmFtZXMiOlsiY3JlYXRlQ2xpZW50Iiwic3VwYWJhc2VBZG1pbiIsInByb2Nlc3MiLCJlbnYiLCJORVhUX1BVQkxJQ19TVVBBQkFTRV9VUkwiLCJTVVBBQkFTRV9TRVJWSUNFX1JPTEVfS0VZIiwiYXV0aCIsInBlcnNpc3RTZXNzaW9uIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./lib/supabaseServer.js\n");
+
+/***/ }),
+
+/***/ "(api)/./pages/api/admin/shop/list.js":
+/*!**************************************!*\
+  !*** ./pages/api/admin/shop/list.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ handler)\n/* harmony export */ });\n/* harmony import */ var _lib_supabaseServer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../lib/supabaseServer */ \"(api)/./lib/supabaseServer.js\");\n\nasync function handler(req, res) {\n    if (req.method !== \"GET\") return res.status(405).end();\n    // Check authentication directly in the route\n    const cookie = req.cookies.admin_auth;\n    if (!cookie || cookie !== \"ok\") {\n        return res.status(401).json({\n            error: \"Not authorized\"\n        });\n    }\n    try {\n        console.log(\"Fetching shop items from shop_items table...\");\n        const { data, error } = await (0,_lib_supabaseServer__WEBPACK_IMPORTED_MODULE_0__.supabaseAdmin)().from(\"shop_items\").select(\"*\").order(\"created_at\", {\n            ascending: false\n        });\n        if (error) {\n            console.error(\"Supabase select error:\", error);\n            throw error;\n        }\n        console.log(`Successfully fetched ${data.length} shop items`);\n        res.json(data);\n    } catch (error) {\n        console.error(\"Error fetching shop items:\", error);\n        res.status(500).json({\n            error: \"Failed to fetch shop items\",\n            details: error.message\n        });\n    }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9wYWdlcy9hcGkvYWRtaW4vc2hvcC9saXN0LmpzIiwibWFwcGluZ3MiOiI7Ozs7O0FBQStEO0FBRWhELGVBQWVDLFFBQVFDLEdBQUcsRUFBRUMsR0FBRztJQUM1QyxJQUFJRCxJQUFJRSxNQUFNLEtBQUssT0FBTyxPQUFPRCxJQUFJRSxNQUFNLENBQUMsS0FBS0MsR0FBRztJQUVwRCw2Q0FBNkM7SUFDN0MsTUFBTUMsU0FBU0wsSUFBSU0sT0FBTyxDQUFDQyxVQUFVO0lBQ3JDLElBQUksQ0FBQ0YsVUFBVUEsV0FBVyxNQUFNO1FBQzlCLE9BQU9KLElBQUlFLE1BQU0sQ0FBQyxLQUFLSyxJQUFJLENBQUM7WUFBRUMsT0FBTztRQUFpQjtJQUN4RDtJQUVBLElBQUk7UUFDRkMsUUFBUUMsR0FBRyxDQUFDO1FBRVosTUFBTSxFQUFFQyxJQUFJLEVBQUVILEtBQUssRUFBRSxHQUFHLE1BQU1YLGtFQUFhQSxHQUN4Q2UsSUFBSSxDQUFDLGNBQ0xDLE1BQU0sQ0FBQyxLQUNQQyxLQUFLLENBQUMsY0FBYztZQUFFQyxXQUFXO1FBQU07UUFFMUMsSUFBSVAsT0FBTztZQUNUQyxRQUFRRCxLQUFLLENBQUMsMEJBQTBCQTtZQUN4QyxNQUFNQTtRQUNSO1FBRUFDLFFBQVFDLEdBQUcsQ0FBQyxDQUFDLHFCQUFxQixFQUFFQyxLQUFLSyxNQUFNLENBQUMsV0FBVyxDQUFDO1FBQzVEaEIsSUFBSU8sSUFBSSxDQUFDSTtJQUNYLEVBQUUsT0FBT0gsT0FBTztRQUNkQyxRQUFRRCxLQUFLLENBQUMsOEJBQThCQTtRQUM1Q1IsSUFBSUUsTUFBTSxDQUFDLEtBQUtLLElBQUksQ0FBQztZQUNuQkMsT0FBTztZQUNQUyxTQUFTVCxNQUFNVSxPQUFPO1FBQ3hCO0lBQ0Y7QUFDRiIsInNvdXJjZXMiOlsid2VicGFjazovL3N0YXRpYy1zaXRlLXdpdGgtYWRtaW4vLi9wYWdlcy9hcGkvYWRtaW4vc2hvcC9saXN0LmpzP2Y3MDMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgc3VwYWJhc2VBZG1pbiB9IGZyb20gXCIuLi8uLi8uLi8uLi9saWIvc3VwYWJhc2VTZXJ2ZXJcIjtcblxuZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykge1xuICBpZiAocmVxLm1ldGhvZCAhPT0gXCJHRVRcIikgcmV0dXJuIHJlcy5zdGF0dXMoNDA1KS5lbmQoKTtcblxuICAvLyBDaGVjayBhdXRoZW50aWNhdGlvbiBkaXJlY3RseSBpbiB0aGUgcm91dGVcbiAgY29uc3QgY29va2llID0gcmVxLmNvb2tpZXMuYWRtaW5fYXV0aDtcbiAgaWYgKCFjb29raWUgfHwgY29va2llICE9PSBcIm9rXCIpIHtcbiAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDEpLmpzb24oeyBlcnJvcjogXCJOb3QgYXV0aG9yaXplZFwiIH0pO1xuICB9XG5cbiAgdHJ5IHtcbiAgICBjb25zb2xlLmxvZyhcIkZldGNoaW5nIHNob3AgaXRlbXMgZnJvbSBzaG9wX2l0ZW1zIHRhYmxlLi4uXCIpO1xuICAgIFxuICAgIGNvbnN0IHsgZGF0YSwgZXJyb3IgfSA9IGF3YWl0IHN1cGFiYXNlQWRtaW4oKVxuICAgICAgLmZyb20oXCJzaG9wX2l0ZW1zXCIpXG4gICAgICAuc2VsZWN0KFwiKlwiKVxuICAgICAgLm9yZGVyKFwiY3JlYXRlZF9hdFwiLCB7IGFzY2VuZGluZzogZmFsc2UgfSk7XG5cbiAgICBpZiAoZXJyb3IpIHtcbiAgICAgIGNvbnNvbGUuZXJyb3IoXCJTdXBhYmFzZSBzZWxlY3QgZXJyb3I6XCIsIGVycm9yKTtcbiAgICAgIHRocm93IGVycm9yO1xuICAgIH1cbiAgICBcbiAgICBjb25zb2xlLmxvZyhgU3VjY2Vzc2Z1bGx5IGZldGNoZWQgJHtkYXRhLmxlbmd0aH0gc2hvcCBpdGVtc2ApO1xuICAgIHJlcy5qc29uKGRhdGEpO1xuICB9IGNhdGNoIChlcnJvcikge1xuICAgIGNvbnNvbGUuZXJyb3IoXCJFcnJvciBmZXRjaGluZyBzaG9wIGl0ZW1zOlwiLCBlcnJvcik7XG4gICAgcmVzLnN0YXR1cyg1MDApLmpzb24oeyBcbiAgICAgIGVycm9yOiBcIkZhaWxlZCB0byBmZXRjaCBzaG9wIGl0ZW1zXCIsXG4gICAgICBkZXRhaWxzOiBlcnJvci5tZXNzYWdlIFxuICAgIH0pO1xuICB9XG59XG4iXSwibmFtZXMiOlsic3VwYWJhc2VBZG1pbiIsImhhbmRsZXIiLCJyZXEiLCJyZXMiLCJtZXRob2QiLCJzdGF0dXMiLCJlbmQiLCJjb29raWUiLCJjb29raWVzIiwiYWRtaW5fYXV0aCIsImpzb24iLCJlcnJvciIsImNvbnNvbGUiLCJsb2ciLCJkYXRhIiwiZnJvbSIsInNlbGVjdCIsIm9yZGVyIiwiYXNjZW5kaW5nIiwibGVuZ3RoIiwiZGV0YWlscyIsIm1lc3NhZ2UiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./pages/api/admin/shop/list.js\n");
+
+/***/ })
+
+};
+;
+
+// load runtime
+var __webpack_require__ = require("../../../../webpack-api-runtime.js");
+__webpack_require__.C(exports);
+var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next"], () => (__webpack_exec__("(api)/./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES_API&page=%2Fapi%2Fadmin%2Fshop%2Flist&preferredRegion=&absolutePagePath=.%2Fpages%2Fapi%2Fadmin%2Fshop%2Flist.js&middlewareConfigBase64=e30%3D!")));
+module.exports = __webpack_exports__;
+
+})();

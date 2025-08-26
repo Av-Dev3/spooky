@@ -301,8 +301,10 @@ class SimpleAdminPanel {
             const shopResponse = await fetch('/api/admin/shop/list');
             if (shopResponse.ok) {
                 this.shopItems = await shopResponse.json();
+                console.log('Loaded shop items:', this.shopItems);
             } else {
-                console.error('Failed to load shop items');
+                const errorData = await shopResponse.json();
+                console.error('Failed to load shop items:', errorData);
                 this.shopItems = [];
             }
             
@@ -392,8 +394,9 @@ class SimpleAdminPanel {
                 this.showAlert('Shop item deleted successfully!', 'success');
                 await this.loadCurrentContent();
             } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to delete shop item');
+                const errorData = await response.json();
+                console.error('Server error response:', errorData);
+                throw new Error(errorData.error || errorData.details || 'Failed to delete shop item');
             }
         } catch (error) {
             console.error('Error deleting shop item:', error);
