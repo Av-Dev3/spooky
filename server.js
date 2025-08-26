@@ -22,9 +22,9 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  // Serve HTML files directly
-  server.get('*.html', (req, res) => {
-    const filePath = path.join(__dirname, 'public', req.path);
+  // Serve HTML files directly - handle specific HTML routes
+  server.get('/:filename.html', (req, res) => {
+    const filePath = path.join(__dirname, 'public', req.params.filename + '.html');
     res.sendFile(filePath);
   });
 
