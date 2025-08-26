@@ -43,10 +43,14 @@ function renderGalleryItems(items) {
     const container = document.querySelector('.gallery-grid');
     if (!container) return;
     
-    container.innerHTML = items.map(item => `
-        <div class="gallery-item ${item.locked ? 'locked' : ''}" data-image="${item.image}" data-title="${item.title}" data-description="${item.description}">
+    container.innerHTML = items.map(item => {
+        // Build the full image URL from Supabase storage
+        const imageUrl = `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${item.storage_path.split('/').pop()}`;
+        
+        return `
+        <div class="gallery-item ${item.locked ? 'locked' : ''}" data-image="${imageUrl}" data-title="${item.title}" data-description="${item.description}">
             <div class="gallery-image">
-                <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='assets/logo.png'">
+                <img src="${imageUrl}" alt="${item.title}" loading="lazy" onerror="this.src='/assets/logo.png'">
                 ${item.locked ? `
                     <div class="lock-overlay">
                         <svg class="lock-icon" viewBox="0 0 24 24">
@@ -60,7 +64,8 @@ function renderGalleryItems(items) {
                 <p>${item.description}</p>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
     
     // Re-setup lightbox after rendering
     setupLightbox();

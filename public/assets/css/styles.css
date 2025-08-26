@@ -1464,10 +1464,11 @@ img:not(.logo-large) {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 .gallery-item {
@@ -1492,9 +1493,8 @@ img:not(.logo-large) {
 
 .gallery-image img {
     width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
+    height: 300px;
+    object-fit: cover;
     transition: filter 0.3s ease;
 }
 
@@ -1580,10 +1580,11 @@ img:not(.logo-large) {
     height: 40px;
 }
 
-.lightbox-image {
+#lightboxImage {
     max-width: 100%;
     max-height: 100%;
     border-radius: 8px;
+    object-fit: contain;
 }
 
 .lightbox-caption {
