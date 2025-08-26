@@ -15,12 +15,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("Creating signed upload URL for filename:", filename);
+    // Generate unique filename to avoid conflicts
+    const timestamp = Date.now();
+    const fileExtension = filename.split('.').pop();
+    const baseName = filename.replace(`.${fileExtension}`, '');
+    const uniqueFilename = `${baseName}_${timestamp}.${fileExtension}`;
+    
+    console.log("Original filename:", filename);
+    console.log("Unique filename:", uniqueFilename);
     console.log("Using bucket: media");
     
     const { data, error } = await supabaseAdmin().storage
       .from("media")
-      .createSignedUploadUrl(filename);
+      .createSignedUploadUrl(uniqueFilename);
 
     console.log("Supabase response:", { data, error });
     
@@ -37,7 +44,7 @@ export default async function handler(req, res) {
     // Return the data in the expected format
     res.json({
       uploadUrl: data.signedUrl,
-      fileId: filename
+      fileId: uniqueFilename
     });
   } catch (error) {
     console.error("Error creating signed upload URL:", error);
