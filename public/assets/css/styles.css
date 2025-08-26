@@ -795,6 +795,15 @@ img:not(.logo-large) {
     display: none;
 }
 
+/* Mobile-specific video sizing */
+@media (max-width: 768px) {
+    .splash-video {
+        width: 95%;
+        height: 95%;
+        border-radius: 10px;
+    }
+}
+
 .splash-video:hover {
     filter: brightness(1.4) contrast(1.1);
     transform: translate(-50%, -50%) scale(1.02);
@@ -1474,14 +1483,14 @@ img:not(.logo-large) {
 .gallery-image {
     position: relative;
     width: 100%;
-    height: 300px;
     overflow: hidden;
 }
 
 .gallery-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
     transition: filter 0.3s ease;
 }
 

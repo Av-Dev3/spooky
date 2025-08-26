@@ -161,6 +161,21 @@
         // Show splash screen
         showSplash();
         
+        // Show appropriate video based on device
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile && mobileSplashVideo) {
+            console.log('Mobile device detected - showing mobile splash video');
+            splashVideo.style.display = 'none';
+            mobileSplashVideo.style.display = 'block';
+            mobileSplashVideo.classList.remove('mobile-splash');
+        } else {
+            console.log('Desktop device detected - showing desktop splash video');
+            if (mobileSplashVideo) {
+                mobileSplashVideo.style.display = 'none';
+            }
+            splashVideo.style.display = 'block';
+        }
+        
         // Set up video event handlers
         handleVideoEvents();
         

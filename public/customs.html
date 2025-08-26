@@ -69,13 +69,8 @@
 
             <form class="customs-form" id="customsForm">
                 <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-
-                <div class="form-group">
                     <label for="handle">Platform Handle</label>
-                    <input type="text" id="handle" name="handle" placeholder="Your OnlyFans/X username">
+                    <input type="text" id="handle" name="handle" placeholder="Your OnlyFans/X username" required>
                 </div>
 
                 <div class="form-group">
@@ -151,19 +146,11 @@
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
             
-            // Create mailto link
-            const subject = 'Custom Content Request - Spoookysnsfww';
-            const body = `Email: ${data.email}
-Handle: ${data.handle}
-Request Type: ${data.requestType}
-Budget: ${data.budget}
-Details: ${data.details}
-Age Confirmed: ${data.ageConfirm ? 'Yes' : 'No'}`;
+            // Show confirmation message
+            alert('Thank you for your custom content request! Please message me on OnlyFans with these details to proceed.');
             
-            const mailtoLink = `mailto:customs@spoookysnsfww.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
+            // Redirect to OnlyFans
+            window.open('https://onlyfans.com', '_blank');
         });
     </script>
 </body>
