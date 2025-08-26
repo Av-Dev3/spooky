@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   let pw = req.body?.password;
   if (!pw) pw = await readFormPassword(req);
 
-  const next = (req.query?.next && decodeURIComponent(req.query.next)) || "/admin/panel.html";
+  const next = (req.query?.next && decodeURIComponent(req.query.next)) || "/management/panel.html";
 
   if (pw !== process.env.ADMIN_PASSWORD) {
     return res.writeHead(302, { Location: "/management/login.html?error=1" }).end();
