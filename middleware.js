@@ -1,25 +1,26 @@
 import { NextResponse } from "next/server";
 
-/** Protect /admin/* and /api/admin/* except the login page itself */
+/** Protect only API routes, allow static admin files */
 export function middleware(req) {
   const { pathname, origin, search } = req.nextUrl;
-  const needsAuth =
-    pathname.startsWith("/admin") || pathname.startsWith("/api/admin/");
-
-  if (!needsAuth) return NextResponse.next();
-
-  // Allow the login page itself
-  if (pathname === "/admin/login.html" || pathname.startsWith("/api/admin/login")) {
+  
+  // Only protect API routes, not static files
+  if (!pathname.startsWith("/api/admin/")) {
     return NextResponse.next();
   }
 
+  // Allow login API
+  if (pathname.startsWith("/api/admin/login")) {
+    return NextResponse.next();
+  }
+
+  // Check authentication for other admin API routes
   const cookie = req.cookies.get("admin_auth")?.value;
   if (cookie === "ok") return NextResponse.next();
 
-  const nextUrl = encodeURIComponent(pathname + (search || ""));
-  return NextResponse.redirect(`${origin}/admin/login.html?next=${nextUrl}`);
+  return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/api/admin/:path*"],
 };

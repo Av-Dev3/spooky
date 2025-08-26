@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customs - Spoookysnsfww</title>
+    <meta name="description" content="Request custom content from Spoookysnsfww">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+                    <div class="header-title">
+            <h1 class="header-text">SPOOOKYSNSFWW</h1>
+        </div>
+            <nav class="nav">
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <!-- Desktop Navigation - INSIDE nav container -->
+                <ul class="nav-menu desktop-nav">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="links.html" class="nav-link">Links</a></li>
+                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    <li><a href="shop.html" class="nav-link">Shop</a></li>
+                    <li><a href="customs.html" class="nav-link active">Customs</a></li>
+                    <li><a href="faq.html" class="nav-link">FAQ</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li><a href="/management/panel.html" class="nav-link">Admin</a></li>
+                </ul>
+            </nav>
+            
+        </div>
+    </header>
+    
+    <!-- Mobile Navigation Menu - OUTSIDE header for full screen coverage -->
+    <ul class="nav-menu mobile-nav">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="links.html" class="nav-link">Links</a></li>
+        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li><a href="shop.html" class="nav-link">Shop</a></li>
+        <li><a href="customs.html" class="nav-link active">Customs</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="/management/panel.html" class="nav-link">Admin</a></li>
+    </ul>
+
+    <!-- Main Content -->
+    <main class="main">
+        <section class="page-header">
+            <h1>Custom Content</h1>
+            <p>Request personalized content just for you</p>
+        </section>
+
+        <section class="customs-section">
+            <div class="customs-info">
+                <h2>How It Works</h2>
+                <ul>
+                    <li>Fill out the form below with your request details</li>
+                    <li>I'll review and provide a quote within 24-48 hours</li>
+                    <li>Payment is required upfront via OnlyFans or other platforms</li>
+                    <li>Delivery typically takes 3-7 business days</li>
+                </ul>
+            </div>
+
+            <form class="customs-form" id="customsForm">
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="handle">Platform Handle</label>
+                    <input type="text" id="handle" name="handle" placeholder="Your OnlyFans/X username">
+                </div>
+
+                <div class="form-group">
+                    <label for="requestType">Request Type *</label>
+                    <select id="requestType" name="requestType" required>
+                        <option value="">Select type...</option>
+                        <option value="photos">Photo Set</option>
+                        <option value="video">Video</option>
+                        <option value="audio">Audio</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Budget Range *</label>
+                    <select id="budget" name="budget" required>
+                        <option value="">Select budget...</option>
+                        <option value="25-50">$25 - $50</option>
+                        <option value="51-100">$51 - $100</option>
+                        <option value="101-200">$101 - $200</option>
+                        <option value="200+">$200+</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="details">Request Details *</label>
+                    <textarea id="details" name="details" rows="6" placeholder="Describe your custom content request in detail..." required></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="ageConfirm" name="ageConfirm" required>
+                        <span class="checkmark"></span>
+                        I confirm I am 18+ years old and agree to the Terms & Privacy Policy
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <p>&copy; <span id="currentYear"></span> Spoookysnsfww. All rights reserved.</p>
+                <div class="age-badge-footer">18+ Adults Only</div>
+            </div>
+            <div class="footer-links">
+                <a href="legal/terms.html">Terms</a>
+                <a href="legal/privacy.html">Privacy</a>
+                <a href="legal/dmca.html">DMCA</a>
+                <a href="legal/2257.html">2257</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/color.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        function resetForm() {
+            document.getElementById('customsForm').reset();
+        }
+
+        document.getElementById('customsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Create mailto link
+            const subject = 'Custom Content Request - Spoookysnsfww';
+            const body = `Email: ${data.email}
+Handle: ${data.handle}
+Request Type: ${data.requestType}
+Budget: ${data.budget}
+Details: ${data.details}
+Age Confirmed: ${data.ageConfirm ? 'Yes' : 'No'}`;
+            
+            const mailtoLink = `mailto:customs@spoookysnsfww.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+        });
+    </script>
+</body>
+</html>
