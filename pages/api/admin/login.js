@@ -24,9 +24,9 @@ export default async function handler(req, res) {
 
   console.log("Password correct - setting cookie and returning success");
   
-  // Set cookie with proper attributes
+  // Set cookie without HttpOnly so JavaScript can read it
   res.setHeader('Set-Cookie', [
-    'admin_auth=ok; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800'
+    'admin_auth=ok; Path=/; SameSite=Lax; Max-Age=28800'
   ]);
   
   return res.status(200).json({ 

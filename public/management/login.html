@@ -37,9 +37,25 @@
                 resultDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
                 
                 if (data.success) {
-                    resultDiv.innerHTML += '<br><strong>SUCCESS! Redirecting...</strong>';
+                    resultDiv.innerHTML += '<br><strong>SUCCESS! Checking cookies...</strong>';
+                    
+                    // Check if cookie was set
                     setTimeout(() => {
-                        window.location.href = data.redirect;
+                        const cookies = document.cookie;
+                        console.log('All cookies after login:', cookies);
+                        
+                        const adminAuth = cookies.split(';').find(cookie => 
+                            cookie.trim().startsWith('admin_auth=')
+                        );
+                        
+                        if (adminAuth && adminAuth.split('=')[1] === 'ok') {
+                            resultDiv.innerHTML += '<br><strong>Cookie found! Redirecting in 3 seconds...</strong>';
+                            setTimeout(() => {
+                                window.location.href = data.redirect;
+                            }, 3000);
+                        } else {
+                            resultDiv.innerHTML += '<br><strong>ERROR: Cookie not found!</strong>';
+                        }
                     }, 1000);
                 }
             })
