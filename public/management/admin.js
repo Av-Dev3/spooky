@@ -243,9 +243,15 @@ class SimpleAdminPanel {
                 throw new Error(error.error || 'Failed to get upload URL');
             }
             
-            const { uploadUrl, fileId } = await response.json();
+            const responseData = await response.json();
+            console.log('Response data:', responseData);
+            
+            const { uploadUrl, fileId } = responseData;
+            console.log('Upload URL:', uploadUrl);
+            console.log('File ID:', fileId);
             
             // Upload file to Supabase storage
+            console.log('About to upload file to Supabase storage...');
             const uploadResponse = await fetch(uploadUrl, {
                 method: 'PUT',
                 body: file,
@@ -253,6 +259,9 @@ class SimpleAdminPanel {
                     'Content-Type': file.type,
                 }
             });
+            
+            console.log('Upload response status:', uploadResponse.status);
+            console.log('Upload response headers:', uploadResponse.headers);
             
             if (!uploadResponse.ok) {
                 throw new Error('Failed to upload file to storage');
