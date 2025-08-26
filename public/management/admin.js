@@ -218,17 +218,25 @@ class SimpleAdminPanel {
     
     async uploadImage(file) {
         try {
+            console.log('Starting upload for file:', file.name, 'type:', file.type);
+            
+            const requestBody = {
+                filename: file.name,
+                contentType: file.type
+            };
+            console.log('Request body:', requestBody);
+            
             // Get signed upload URL from Supabase
             const response = await fetch('/api/admin/media/signed-upload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    filename: file.name,
-                    contentType: file.type
-                })
+                body: JSON.stringify(requestBody)
             });
+            
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
             
             if (!response.ok) {
                 const error = await response.json();
