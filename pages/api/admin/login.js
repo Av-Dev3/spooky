@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const next = (req.query?.next && decodeURIComponent(req.query.next)) || "/admin/panel.html";
 
   if (pw !== process.env.ADMIN_PASSWORD) {
-    return res.writeHead(302, { Location: "/admin/login.html?error=1" }).end();
+    return res.writeHead(302, { Location: "/management/login.html?error=1" }).end();
   }
 
   const isProd = process.env.NODE_ENV === "production";

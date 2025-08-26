@@ -6,8 +6,8 @@ function checkAdminAuth() {
   if (!adminAuth || adminAuth.split('=')[1] !== 'ok') {
     // Not authenticated, redirect to login
     const currentPath = window.location.pathname;
-    if (currentPath !== '/admin/login.html') {
-      window.location.href = `/admin/login.html?next=${encodeURIComponent(currentPath)}`;
+    if (currentPath !== '/management/login.html') {
+      window.location.href = `/management/login.html?next=${encodeURIComponent(currentPath)}`;
     }
   }
 }
