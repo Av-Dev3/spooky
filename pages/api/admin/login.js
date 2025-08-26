@@ -18,11 +18,11 @@ export default async function handler(req, res) {
   const next = (req.query?.next && decodeURIComponent(req.query.next)) || "/management/panel.html";
 
   if (password !== process.env.ADMIN_PASSWORD) {
-    console.log("Password mismatch - redirecting to error");
-    return res.writeHead(302, { Location: "/management/login.html?error=1" }).end();
+    console.log("Password mismatch - returning error");
+    return res.status(401).json({ error: "Invalid password", redirect: "/management/login.html?error=1" });
   }
 
-  console.log("Password correct - setting cookie and redirecting");
+  console.log("Password correct - setting cookie and returning success");
   const isProd = process.env.NODE_ENV === "production";
   const cookie = [
     `admin_auth=ok`,
@@ -34,5 +34,9 @@ export default async function handler(req, res) {
   ].filter(Boolean).join("; ");
 
   res.setHeader("Set-Cookie", cookie);
-  res.writeHead(302, { Location: next }).end();
+  return res.status(200).json({ 
+    success: true, 
+    redirect: next,
+    message: "Login successful"
+  });
 }
