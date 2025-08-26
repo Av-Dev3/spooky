@@ -185,10 +185,11 @@ class SimpleAdminPanel {
             
             // Create gallery item data
             const galleryItem = {
+                storagePath: `media/${imageUrl}`,
                 title,
-                image: imageUrl,
                 description,
-                locked,
+                contentType: this.galleryImageFile.type,
+                tags: [],
                 type: 'gallery'
             };
             
