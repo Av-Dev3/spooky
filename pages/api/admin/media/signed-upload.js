@@ -15,14 +15,24 @@ export default async function handler(req, res) {
   }
 
   try {
+    console.log("Creating signed upload URL for filename:", filename);
+    console.log("Using bucket: media");
+    
     const { data, error } = await supabaseAdmin().storage
       .from("media")
       .createSignedUploadUrl(filename);
 
-    if (error) throw error;
-    
-    // Log the actual response structure
     console.log("Supabase response:", { data, error });
+    
+    if (error) {
+      console.error("Supabase error:", error);
+      throw error;
+    }
+    
+    if (!data || !data.signedUrl) {
+      console.error("No signed URL in response:", data);
+      throw new Error("No signed URL received from Supabase");
+    }
     
     // Return the data in the expected format
     res.json({
@@ -31,6 +41,9 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Error creating signed upload URL:", error);
-    res.status(500).json({ error: "Failed to create signed upload URL" });
+    res.status(500).json({ 
+      error: "Failed to create signed upload URL",
+      details: error.message 
+    });
   }
 }
