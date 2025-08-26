@@ -47,45 +47,9 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-        }
-        
-        .tabs {
-            display: flex;
-            background: #2d2d2d;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        
-        .tab {
-            flex: 1;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            background: transparent;
-            color: #ccc;
-        }
-        
-        .tab.active {
-            background: #ff6b6b;
-            color: white;
-        }
-        
-        .tab:hover:not(.active) {
-            background: #3d3d3d;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
         }
         
         .section {
@@ -102,19 +66,50 @@
             font-size: 1.5rem;
         }
         
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        .upload-area {
+            border: 3px dashed #444;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #ff6b6b;
+            background: #1a1a1a;
+        }
+        
+        .upload-area.dragover {
+            border-color: #ff6b6b;
+            background: #1a1a1a;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 4rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-hint {
+            font-size: 0.9rem;
+            color: #888;
         }
         
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 1.5rem;
         }
         
         .form-group label {
+            display: block;
             margin-bottom: 0.5rem;
             color: #ccc;
             font-weight: 500;
@@ -123,6 +118,7 @@
         .form-group input,
         .form-group textarea,
         .form-group select {
+            width: 100%;
             padding: 0.75rem;
             border: 2px solid #444;
             border-radius: 5px;
@@ -138,16 +134,23 @@
             border-color: #ff6b6b;
         }
         
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
         .btn {
             background: #ff6b6b;
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 500;
             transition: all 0.3s ease;
+            margin-right: 1rem;
         }
         
         .btn:hover {
@@ -163,121 +166,19 @@
             background: #5a6268;
         }
         
-        .btn-danger {
-            background: #dc3545;
-        }
-        
-        .btn-danger:hover {
-            background: #c82333;
-        }
-        
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .content-card {
-            background: #1a1a1a;
-            border-radius: 10px;
+        .content-preview {
+            margin-top: 2rem;
             padding: 1.5rem;
-            border: 2px solid #444;
-            transition: all 0.3s ease;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border: 1px solid #444;
         }
         
-        .content-card:hover {
-            border-color: #ff6b6b;
-            transform: translateY(-5px);
-        }
-        
-        .content-card img {
-            width: 100%;
-            height: 200px;
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
             object-fit: cover;
             border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-        
-        .content-card h3 {
-            color: #ff6b6b;
-            margin-bottom: 0.5rem;
-        }
-        
-        .content-card p {
-            color: #ccc;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .content-card .price {
-            color: #28a745;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .content-card .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .tag {
-            background: #444;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-        }
-        
-        .card-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        
-        .status-published {
-            background: #28a745;
-            color: white;
-        }
-        
-        .status-draft {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .upload-area {
-            border: 2px dashed #444;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .upload-area:hover {
-            border-color: #ff6b6b;
-            background: #1a1a1a;
-        }
-        
-        .upload-area.dragover {
-            border-color: #ff6b6b;
-            background: #1a1a1a;
-        }
-        
-        .upload-icon {
-            font-size: 3rem;
-            color: #666;
             margin-bottom: 1rem;
         }
         
@@ -317,6 +218,37 @@
         .hidden {
             display: none;
         }
+        
+        .content-type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .type-btn {
+            flex: 1;
+            padding: 1rem;
+            background: #444;
+            color: #ccc;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .type-btn.active {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .type-btn:hover {
+            background: #555;
+        }
+        
+        .type-btn.active:hover {
+            background: #ff5252;
+        }
     </style>
 </head>
 <body>
@@ -328,139 +260,111 @@
     </div>
 
     <div class="container">
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('shop')">🛍️ Shop Management</button>
-            <button class="tab" onclick="showTab('gallery')">🖼️ Gallery Management</button>
-            <button class="tab" onclick="showTab('upload')">📤 Media Upload</button>
-            <button class="tab" onclick="showTab('settings')">⚙️ Settings</button>
+        <!-- Content Type Selector -->
+        <div class="content-type-selector">
+            <button class="type-btn active" onclick="selectContentType('shop')">🛍️ Add Shop Item</button>
+            <button class="type-btn" onclick="selectContentType('gallery')">🖼️ Add Gallery Item</button>
         </div>
 
-        <!-- Shop Management Tab -->
-        <div id="shop" class="tab-content active">
-            <div class="section">
-                <h2>Add New Shop Item</h2>
-                <form id="shopForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="shopTitle">Title</label>
-                            <input type="text" id="shopTitle" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="shopPrice">Price ($)</label>
-                            <input type="number" id="shopPrice" min="0" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="shopImage">Image URL</label>
-                            <input type="text" id="shopImage" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="shopTags">Tags (comma separated)</label>
-                            <input type="text" id="shopTags" placeholder="photos, spooky, dark">
-                        </div>
-                        <div class="form-group">
-                            <label for="shopProcessor">Payment Processor URL</label>
-                            <input type="url" id="shopProcessor" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="shopDescription">Description</label>
-                            <textarea id="shopDescription" rows="3" required></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Add Shop Item</button>
-                </form>
+        <!-- Shop Item Form -->
+        <div id="shopForm" class="section">
+            <h2>Add New Shop Item</h2>
+            
+            <!-- File Upload Area -->
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Click to select image or drag & drop</div>
+                <div class="upload-hint">Supports: JPG, PNG, GIF, WebP</div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
             </div>
-
-            <div class="section">
-                <h2>Current Shop Items</h2>
-                <div id="shopItems" class="content-grid">
-                    <!-- Shop items will be loaded here -->
+            
+            <!-- Form Fields -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" placeholder="e.g., Spooky Photo Set" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price ($)</label>
+                    <input type="number" id="price" min="0" step="0.01" placeholder="15.00" required>
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" rows="3" placeholder="Describe your content..." required></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tags">Tags (comma separated)</label>
+                    <input type="text" id="tags" placeholder="photos, spooky, dark">
+                </div>
+                <div class="form-group">
+                    <label for="processorUrl">Payment Link</label>
+                    <input type="url" id="processorUrl" placeholder="https://onlyfans.com/yourprofile" required>
+                </div>
+            </div>
+            
+            <!-- Content Preview -->
+            <div id="contentPreview" class="content-preview hidden">
+                <h3>Preview:</h3>
+                <img id="previewImage" class="preview-image" src="" alt="Preview">
+                <div id="previewInfo"></div>
+            </div>
+            
+            <button type="button" class="btn" onclick="addShopItem()">Add to Shop</button>
+            <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
         </div>
 
-        <!-- Gallery Management Tab -->
-        <div id="gallery" class="tab-content">
-            <div class="section">
-                <h2>Add New Gallery Item</h2>
-                <form id="galleryForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="galleryTitle">Title</label>
-                            <input type="text" id="galleryTitle" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="galleryImage">Image URL</label>
-                            <input type="text" id="galleryImage" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="galleryDescription">Description</label>
-                            <textarea id="galleryDescription" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="galleryLocked">Locked</label>
-                            <select id="galleryLocked">
-                                <option value="true">Yes (Requires unlock)</option>
-                                <option value="false">No (Public)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Add Gallery Item</button>
-                </form>
+        <!-- Gallery Item Form -->
+        <div id="galleryForm" class="section hidden">
+            <h2>Add New Gallery Item</h2>
+            
+            <!-- File Upload Area -->
+            <div class="upload-area" id="galleryUploadArea" onclick="document.getElementById('galleryFileInput').click()">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">Click to select image or drag & drop</div>
+                <div class="upload-hint">Supports: JPG, PNG, GIF, WebP</div>
+                <input type="file" id="galleryFileInput" accept="image/*" style="display: none;">
             </div>
-
-            <div class="section">
-                <h2>Current Gallery Items</h2>
-                <div id="galleryItems" class="content-grid">
-                    <!-- Gallery items will be loaded here -->
+            
+            <!-- Form Fields -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="galleryTitle">Title</label>
+                    <input type="text" id="galleryTitle" placeholder="e.g., Teaser 1" required>
+                </div>
+                <div class="form-group">
+                    <label for="locked">Locked Status</label>
+                    <select id="locked">
+                        <option value="true">🔒 Locked (Requires unlock)</option>
+                        <option value="false">🔓 Public (Free preview)</option>
+                    </select>
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label for="galleryDescription">Description</label>
+                <textarea id="galleryDescription" rows="3" placeholder="Brief description..." required></textarea>
+            </div>
+            
+            <!-- Content Preview -->
+            <div id="galleryPreview" class="content-preview hidden">
+                <h3>Preview:</h3>
+                <img id="galleryPreviewImage" class="preview-image" src="" alt="Preview">
+                <div id="galleryPreviewInfo"></div>
+            </div>
+            
+            <button type="button" class="btn" onclick="addGalleryItem()">Add to Gallery</button>
+            <button type="button" class="btn btn-secondary" onclick="clearGalleryForm()">Clear Form</button>
         </div>
 
-        <!-- Media Upload Tab -->
-        <div id="upload" class="tab-content">
-            <div class="section">
-                <h2>Upload New Media</h2>
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📁</div>
-                    <p>Drag and drop files here or click to select</p>
-                    <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
-                    <button type="button" class="btn" onclick="document.getElementById('fileInput').click()">Select Files</button>
-                </div>
-                <div id="uploadProgress"></div>
-            </div>
-
-            <div class="section">
-                <h2>Uploaded Media</h2>
-                <div id="mediaLibrary" class="content-grid">
-                    <!-- Media items will be loaded here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Settings Tab -->
-        <div id="settings" class="tab-content">
-            <div class="section">
-                <h2>Site Settings</h2>
-                <form id="settingsForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="siteTitle">Site Title</label>
-                            <input type="text" id="siteTitle" value="Spooky">
-                        </div>
-                        <div class="form-group">
-                            <label for="siteDescription">Site Description</label>
-                            <textarea id="siteDescription" rows="3">Dark and spooky content</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="maintenanceMode">Maintenance Mode</label>
-                            <select id="maintenanceMode">
-                                <option value="false">Off</option>
-                                <option value="true">On</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Save Settings</button>
-                </form>
+        <!-- Current Content Display -->
+        <div class="section">
+            <h2>Current Content</h2>
+            <div id="currentContent">
+                <p>Loading current content...</p>
             </div>
         </div>
     </div>

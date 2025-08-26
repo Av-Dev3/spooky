@@ -1,167 +1,154 @@
-// Admin Panel JavaScript
-class AdminPanel {
+// Simple Admin Panel JavaScript
+class SimpleAdminPanel {
     constructor() {
-        this.currentTab = 'shop';
+        this.currentContentType = 'shop';
         this.shopItems = [];
         this.galleryItems = [];
-        this.mediaItems = [];
         
         this.init();
     }
     
     init() {
-        this.bindEvents();
-        this.loadContent();
+        this.setupEventListeners();
         this.setupDragAndDrop();
+        this.loadCurrentContent();
     }
     
-    bindEvents() {
-        // Shop form
-        document.getElementById('shopForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.addShopItem();
-        });
-        
-        // Gallery form
-        document.getElementById('galleryForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.addGalleryItem();
-        });
-        
-        // Settings form
-        document.getElementById('settingsForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.saveSettings();
-        });
-        
-        // File input
+    setupEventListeners() {
+        // File input change handlers
         document.getElementById('fileInput').addEventListener('change', (e) => {
-            this.handleFileSelect(e.target.files);
+            this.handleFileSelect(e.target.files[0], 'shop');
+        });
+        
+        document.getElementById('galleryFileInput').addEventListener('change', (e) => {
+            this.handleFileSelect(e.target.files[0], 'gallery');
         });
     }
     
     setupDragAndDrop() {
-        const uploadArea = document.getElementById('uploadArea');
+        const uploadAreas = [
+            document.getElementById('uploadArea'),
+            document.getElementById('galleryUploadArea')
+        ];
         
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            this.handleFileSelect(e.dataTransfer.files);
+        uploadAreas.forEach(area => {
+            if (!area) return;
+            
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+            
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+            
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const contentType = area.id === 'uploadArea' ? 'shop' : 'gallery';
+                    this.handleFileSelect(files[0], contentType);
+                }
+            });
         });
     }
     
-    showTab(tabName) {
-        // Hide all tab contents
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
+    selectContentType(type) {
+        this.currentContentType = type;
+        
+        // Update button states
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.classList.remove('active');
         });
-        
-        // Remove active class from all tabs
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        
-        // Show selected tab content
-        document.getElementById(tabName).classList.add('active');
-        
-        // Add active class to selected tab
         event.target.classList.add('active');
         
-        this.currentTab = tabName;
+        // Show/hide forms
+        if (type === 'shop') {
+            document.getElementById('shopForm').classList.remove('hidden');
+            document.getElementById('galleryForm').classList.add('hidden');
+        } else {
+            document.getElementById('shopForm').classList.add('hidden');
+            document.getElementById('galleryForm').classList.remove('hidden');
+        }
+    }
+    
+    async handleFileSelect(file, contentType) {
+        if (!file) return;
         
-        // Load content for the selected tab
-        if (tabName === 'shop') {
-            this.loadShopItems();
-        } else if (tabName === 'gallery') {
-            this.loadGalleryItems();
-        } else if (tabName === 'upload') {
-            this.loadMediaLibrary();
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            this.showAlert('Please select an image file', 'error');
+            return;
+        }
+        
+        // Show preview
+        this.showImagePreview(file, contentType);
+        
+        // Store file for later use
+        if (contentType === 'shop') {
+            this.shopImageFile = file;
+        } else {
+            this.galleryImageFile = file;
         }
     }
     
-    async loadContent() {
-        await Promise.all([
-            this.loadShopItems(),
-            this.loadGalleryItems(),
-            this.loadMediaLibrary()
-        ]);
-    }
-    
-    async loadShopItems() {
-        try {
-            const response = await fetch('/api/admin/list/media?type=shop');
-            if (response.ok) {
-                this.shopItems = await response.json();
-                this.renderShopItems();
+    showImagePreview(file, contentType) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (contentType === 'shop') {
+                document.getElementById('previewImage').src = e.target.result;
+                document.getElementById('contentPreview').classList.remove('hidden');
+            } else {
+                document.getElementById('galleryPreviewImage').src = e.target.result;
+                document.getElementById('galleryPreview').classList.remove('hidden');
             }
-        } catch (error) {
-            console.error('Error loading shop items:', error);
-            this.showAlert('Error loading shop items', 'error');
-        }
-    }
-    
-    async loadGalleryItems() {
-        try {
-            const response = await fetch('/api/admin/list/media?type=gallery');
-            if (response.ok) {
-                this.galleryItems = await response.json();
-                this.renderGalleryItems();
-            }
-        } catch (error) {
-            console.error('Error loading gallery items:', error);
-            this.showAlert('Error loading gallery items', 'error');
-        }
-    }
-    
-    async loadMediaLibrary() {
-        try {
-            const response = await fetch('/api/admin/list/media?type=all');
-            if (response.ok) {
-                this.mediaItems = await response.json();
-                this.renderMediaLibrary();
-            }
-        } catch (error) {
-            console.error('Error loading media library:', error);
-            this.showAlert('Error loading media library', 'error');
-        }
+        };
+        reader.readAsDataURL(file);
     }
     
     async addShopItem() {
-        const formData = {
-            title: document.getElementById('shopTitle').value,
-            price: parseFloat(document.getElementById('shopPrice').value),
-            image: document.getElementById('shopImage').value,
-            tags: document.getElementById('shopTags').value.split(',').map(tag => tag.trim()),
-            processorUrl: document.getElementById('shopProcessor').value,
-            description: document.getElementById('shopDescription').value,
-            type: 'shop'
-        };
+        const title = document.getElementById('title').value.trim();
+        const price = parseFloat(document.getElementById('price').value);
+        const description = document.getElementById('description').value.trim();
+        const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim()).filter(Boolean);
+        const processorUrl = document.getElementById('processorUrl').value.trim();
+        
+        if (!title || !price || !description || !processorUrl) {
+            this.showAlert('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        if (!this.shopImageFile) {
+            this.showAlert('Please select an image', 'error');
+            return;
+        }
         
         try {
-            const response = await fetch('/api/admin/media/commit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+            // Upload image first
+            const imageUrl = await this.uploadImage(this.shopImageFile);
             
-            if (response.ok) {
-                this.showAlert('Shop item added successfully!', 'success');
-                document.getElementById('shopForm').reset();
-                await this.loadShopItems();
-            } else {
-                throw new Error('Failed to add shop item');
-            }
+            // Create shop item
+            const shopItem = {
+                id: Date.now(), // Simple ID generation
+                title,
+                price,
+                image: imageUrl,
+                description,
+                tags,
+                processorUrl,
+                type: 'shop'
+            };
+            
+            // Add to local storage (this will update the shop page)
+            this.shopItems.push(shopItem);
+            localStorage.setItem('spooky_admin_shop', JSON.stringify(this.shopItems));
+            
+            this.showAlert('Shop item added successfully!', 'success');
+            this.clearForm();
+            this.loadCurrentContent();
+            
         } catch (error) {
             console.error('Error adding shop item:', error);
             this.showAlert('Error adding shop item', 'error');
@@ -169,329 +156,172 @@ class AdminPanel {
     }
     
     async addGalleryItem() {
-        const formData = {
-            title: document.getElementById('galleryTitle').value,
-            image: document.getElementById('galleryImage').value,
-            description: document.getElementById('galleryDescription').value,
-            locked: document.getElementById('galleryLocked').value === 'true',
-            type: 'gallery'
-        };
+        const title = document.getElementById('galleryTitle').value.trim();
+        const description = document.getElementById('galleryDescription').value.trim();
+        const locked = document.getElementById('locked').value === 'true';
+        
+        if (!title || !description) {
+            this.showAlert('Please fill in all required fields', 'error');
+            return;
+        }
+        
+        if (!this.galleryImageFile) {
+            this.showAlert('Please select an image', 'error');
+            return;
+        }
         
         try {
-            const response = await fetch('/api/admin/media/commit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+            // Upload image first
+            const imageUrl = await this.uploadImage(this.galleryImageFile);
             
-            if (response.ok) {
-                this.showAlert('Gallery item added successfully!', 'success');
-                document.getElementById('galleryForm').reset();
-                await this.loadGalleryItems();
-            } else {
-                throw new Error('Failed to add gallery item');
-            }
+            // Create gallery item
+            const galleryItem = {
+                id: Date.now(), // Simple ID generation
+                title,
+                image: imageUrl,
+                description,
+                locked,
+                type: 'gallery'
+            };
+            
+            // Add to local storage (this will update the gallery page)
+            this.galleryItems.push(galleryItem);
+            localStorage.setItem('spooky_admin_gallery', JSON.stringify(this.galleryItems));
+            
+            this.showAlert('Gallery item added successfully!', 'success');
+            this.clearGalleryForm();
+            this.loadCurrentContent();
+            
         } catch (error) {
             console.error('Error adding gallery item:', error);
             this.showAlert('Error adding gallery item', 'error');
         }
     }
     
-    async saveSettings() {
-        const settings = {
-            siteTitle: document.getElementById('siteTitle').value,
-            siteDescription: document.getElementById('siteDescription').value,
-            maintenanceMode: document.getElementById('maintenanceMode').value === 'true'
-        };
-        
+    async uploadImage(file) {
         try {
-            // Save to localStorage for now (you can implement API endpoint later)
-            localStorage.setItem('siteSettings', JSON.stringify(settings));
-            this.showAlert('Settings saved successfully!', 'success');
+            // For now, we'll use a simple approach - convert to base64
+            // In production, you'd upload to Supabase storage
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    resolve(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
         } catch (error) {
-            console.error('Error saving settings:', error);
-            this.showAlert('Error saving settings', 'error');
+            console.error('Error uploading image:', error);
+            throw new Error('Failed to upload image');
         }
     }
     
-    async handleFileSelect(files) {
-        for (let file of files) {
-            await this.uploadFile(file);
-        }
+    clearForm() {
+        document.getElementById('title').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('tags').value = '';
+        document.getElementById('processorUrl').value = '';
+        document.getElementById('contentPreview').classList.add('hidden');
+        this.shopImageFile = null;
     }
     
-    async uploadFile(file) {
+    clearGalleryForm() {
+        document.getElementById('galleryTitle').value = '';
+        document.getElementById('galleryDescription').value = '';
+        document.getElementById('locked').value = 'true';
+        document.getElementById('galleryPreview').classList.add('hidden');
+        this.galleryImageFile = null;
+    }
+    
+    async loadCurrentContent() {
         try {
-            // Get signed upload URL
-            const response = await fetch('/api/admin/media/signed-upload', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    filename: file.name,
-                    contentType: file.type
-                })
-            });
+            // Load shop items
+            const shopData = localStorage.getItem('spooky_admin_shop');
+            this.shopItems = shopData ? JSON.parse(shopData) : [];
             
-            if (!response.ok) {
-                throw new Error('Failed to get upload URL');
-            }
+            // Load gallery items
+            const galleryData = localStorage.getItem('spooky_admin_gallery');
+            this.galleryItems = galleryData ? JSON.parse(galleryData) : [];
             
-            const { uploadUrl, fileId } = await response.json();
-            
-            // Upload file to Supabase
-            const uploadResponse = await fetch(uploadUrl, {
-                method: 'PUT',
-                body: file,
-                headers: {
-                    'Content-Type': file.type,
-                }
-            });
-            
-            if (!uploadResponse.ok) {
-                throw new Error('Failed to upload file');
-            }
-            
-            // Commit the upload
-            const commitResponse = await fetch('/api/admin/media/commit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fileId,
-                    title: file.name,
-                    type: 'media'
-                })
-            });
-            
-            if (commitResponse.ok) {
-                this.showAlert(`File ${file.name} uploaded successfully!`, 'success');
-                await this.loadMediaLibrary();
-            } else {
-                throw new Error('Failed to commit upload');
-            }
+            this.renderCurrentContent();
             
         } catch (error) {
-            console.error('Error uploading file:', error);
-            this.showAlert(`Error uploading ${file.name}`, 'error');
+            console.error('Error loading current content:', error);
+            this.showAlert('Error loading current content', 'error');
         }
     }
     
-    renderShopItems() {
-        const container = document.getElementById('shopItems');
-        container.innerHTML = '';
+    renderCurrentContent() {
+        const container = document.getElementById('currentContent');
         
-        this.shopItems.forEach(item => {
-            const card = this.createShopCard(item);
-            container.appendChild(card);
-        });
+        let html = '<div style="display: grid; gap: 1rem;">';
+        
+        // Shop items
+        if (this.shopItems.length > 0) {
+            html += '<h3>🛍️ Shop Items (' + this.shopItems.length + ')</h3>';
+            this.shopItems.forEach(item => {
+                html += `
+                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <img src="${item.image}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
+                            <div style="flex: 1;">
+                                <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
+                                <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
+                                <div style="color: #28a745; font-weight: bold;">$${item.price}</div>
+                            </div>
+                            <button onclick="adminPanel.deleteShopItem(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            html += '<p style="color: #888;">No shop items yet. Add your first item above!</p>';
+        }
+        
+        // Gallery items
+        if (this.galleryItems.length > 0) {
+            html += '<h3 style="margin-top: 2rem;">🖼️ Gallery Items (' + this.galleryItems.length + ')</h3>';
+            this.galleryItems.forEach(item => {
+                html += `
+                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <img src="${item.image}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
+                            <div style="flex: 1;">
+                                <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
+                                <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
+                                <div style="color: ${item.locked ? '#ff6b6b' : '#28a745'};">${item.locked ? '🔒 Locked' : '🔓 Public'}</div>
+                            </div>
+                            <button onclick="adminPanel.deleteGalleryItem(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            html += '<p style="color: #888;">No gallery items yet. Add your first item above!</p>';
+        }
+        
+        html += '</div>';
+        container.innerHTML = html;
     }
     
-    renderGalleryItems() {
-        const container = document.getElementById('galleryItems');
-        container.innerHTML = '';
-        
-        this.galleryItems.forEach(item => {
-            const card = this.createGalleryCard(item);
-            container.appendChild(card);
-        });
-    }
-    
-    renderMediaLibrary() {
-        const container = document.getElementById('mediaLibrary');
-        container.innerHTML = '';
-        
-        this.mediaItems.forEach(item => {
-            const card = this.createMediaCard(item);
-            container.appendChild(card);
-        });
-    }
-    
-    createShopCard(item) {
-        const card = document.createElement('div');
-        card.className = 'content-card';
-        
-        card.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" onerror="this.src='/assets/logo.png'">
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-            <div class="price">$${item.price}</div>
-            <div class="tags">
-                ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <div class="card-actions">
-                <button class="btn btn-secondary" onclick="adminPanel.editShopItem(${item.id})">Edit</button>
-                <button class="btn btn-danger" onclick="adminPanel.deleteShopItem(${item.id})">Delete</button>
-            </div>
-        `;
-        
-        return card;
-    }
-    
-    createGalleryCard(item) {
-        const card = document.createElement('div');
-        card.className = 'content-card';
-        
-        card.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" onerror="this.src='/assets/logo.png'">
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-            <div class="status-badge ${item.locked ? 'status-draft' : 'status-published'}">
-                ${item.locked ? 'Locked' : 'Public'}
-            </div>
-            <div class="card-actions">
-                <button class="btn btn-secondary" onclick="adminPanel.editGalleryItem(${item.id})">Edit</button>
-                <button class="btn btn-danger" onclick="adminPanel.deleteGalleryItem(${item.id})">Delete</button>
-            </div>
-        `;
-        
-        return card;
-    }
-    
-    createMediaCard(item) {
-        const card = document.createElement('div');
-        card.className = 'content-card';
-        
-        const isVideo = item.contentType && item.contentType.startsWith('video/');
-        const mediaElement = isVideo ? 
-            `<video src="${item.url}" controls></video>` : 
-            `<img src="${item.url}" alt="${item.title}" onerror="this.src='/assets/logo.png'">`;
-        
-        card.innerHTML = `
-            ${mediaElement}
-            <h3>${item.title}</h3>
-            <p>${item.contentType || 'Unknown type'}</p>
-            <div class="card-actions">
-                <button class="btn btn-secondary" onclick="adminPanel.copyMediaUrl('${item.url}')">Copy URL</button>
-                <button class="btn btn-danger" onclick="adminPanel.deleteMediaItem(${item.id})">Delete</button>
-            </div>
-        `;
-        
-        return card;
-    }
-    
-    async editShopItem(id) {
-        const item = this.shopItems.find(item => item.id === id);
-        if (!item) return;
-        
-        // Populate form with item data
-        document.getElementById('shopTitle').value = item.title;
-        document.getElementById('shopPrice').value = item.price;
-        document.getElementById('shopImage').value = item.image;
-        document.getElementById('shopTags').value = item.tags.join(', ');
-        document.getElementById('shopProcessor').value = item.processorUrl;
-        document.getElementById('shopDescription').value = item.description;
-        
-        // Switch to shop tab
-        this.showTab('shop');
-        
-        // Change button text
-        const submitBtn = document.querySelector('#shopForm button[type="submit"]');
-        submitBtn.textContent = 'Update Shop Item';
-        submitBtn.dataset.editId = id;
-    }
-    
-    async editGalleryItem(id) {
-        const item = this.galleryItems.find(item => item.id === id);
-        if (!item) return;
-        
-        // Populate form with item data
-        document.getElementById('galleryTitle').value = item.title;
-        document.getElementById('galleryImage').value = item.image;
-        document.getElementById('galleryDescription').value = item.description;
-        document.getElementById('galleryLocked').value = item.locked.toString();
-        
-        // Switch to gallery tab
-        this.showTab('gallery');
-        
-        // Change button text
-        const submitBtn = document.querySelector('#galleryForm button[type="submit"]');
-        submitBtn.textContent = 'Update Gallery Item';
-        submitBtn.dataset.editId = id;
-    }
-    
-    async deleteShopItem(id) {
+    deleteShopItem(id) {
         if (!confirm('Are you sure you want to delete this shop item?')) return;
         
-        try {
-            const response = await fetch('/api/admin/media/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, type: 'shop' })
-            });
-            
-            if (response.ok) {
-                this.showAlert('Shop item deleted successfully!', 'success');
-                await this.loadShopItems();
-            } else {
-                throw new Error('Failed to delete shop item');
-            }
-        } catch (error) {
-            console.error('Error deleting shop item:', error);
-            this.showAlert('Error deleting shop item', 'error');
-        }
+        this.shopItems = this.shopItems.filter(item => item.id !== id);
+        localStorage.setItem('spooky_admin_shop', JSON.stringify(this.shopItems));
+        
+        this.showAlert('Shop item deleted successfully!', 'success');
+        this.loadCurrentContent();
     }
     
-    async deleteGalleryItem(id) {
+    deleteGalleryItem(id) {
         if (!confirm('Are you sure you want to delete this gallery item?')) return;
         
-        try {
-            const response = await fetch('/api/admin/media/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, type: 'gallery' })
-            });
-            
-            if (response.ok) {
-                this.showAlert('Gallery item deleted successfully!', 'success');
-                await this.loadGalleryItems();
-            } else {
-                throw new Error('Failed to delete gallery item');
-            }
-        } catch (error) {
-            console.error('Error deleting gallery item:', error);
-            this.showAlert('Error deleting gallery item', 'error');
-        }
-    }
-    
-    async deleteMediaItem(id) {
-        if (!confirm('Are you sure you want to delete this media item?')) return;
+        this.galleryItems = this.galleryItems.filter(item => item.id !== id);
+        localStorage.setItem('spooky_admin_gallery', JSON.stringify(this.galleryItems));
         
-        try {
-            const response = await fetch('/api/admin/media/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, type: 'media' })
-            });
-            
-            if (response.ok) {
-                this.showAlert('Media item deleted successfully!', 'success');
-                await this.loadMediaLibrary();
-            } else {
-                throw new Error('Failed to delete media item');
-            }
-        } catch (error) {
-            console.error('Error deleting media item:', error);
-            this.showAlert('Error deleting media item', 'error');
-        }
-    }
-    
-    copyMediaUrl(url) {
-        navigator.clipboard.writeText(url).then(() => {
-            this.showAlert('Media URL copied to clipboard!', 'success');
-        }).catch(() => {
-            this.showAlert('Failed to copy URL', 'error');
-        });
+        this.showAlert('Gallery item deleted successfully!', 'success');
+        this.loadCurrentContent();
     }
     
     showAlert(message, type) {
@@ -508,27 +338,31 @@ class AdminPanel {
             alert.remove();
         }, 5000);
     }
-    
-    loadSettings() {
-        try {
-            const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
-            if (settings.siteTitle) document.getElementById('siteTitle').value = settings.siteTitle;
-            if (settings.siteDescription) document.getElementById('siteDescription').value = settings.siteDescription;
-            if (settings.maintenanceMode !== undefined) document.getElementById('maintenanceMode').value = settings.maintenanceMode.toString();
-        } catch (error) {
-            console.error('Error loading settings:', error);
-        }
-    }
 }
 
-// Global function for tab switching
-function showTab(tabName) {
-    adminPanel.showTab(tabName);
+// Global functions for button clicks
+function selectContentType(type) {
+    adminPanel.selectContentType(type);
+}
+
+function addShopItem() {
+    adminPanel.addShopItem();
+}
+
+function addGalleryItem() {
+    adminPanel.addGalleryItem();
+}
+
+function clearForm() {
+    adminPanel.clearForm();
+}
+
+function clearGalleryForm() {
+    adminPanel.clearGalleryForm();
 }
 
 // Initialize admin panel when page loads
 let adminPanel;
 document.addEventListener('DOMContentLoaded', () => {
-    adminPanel = new AdminPanel();
-    adminPanel.loadSettings();
+    adminPanel = new SimpleAdminPanel();
 });
