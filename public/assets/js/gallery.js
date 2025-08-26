@@ -129,8 +129,8 @@ function setupLightbox() {
             
             // Show lightbox
             lightboxImage.src = image;
-            lightboxImage.style.width = '100%';
-            lightboxImage.style.height = '100%';
+            lightboxImage.style.width = '90%';
+            lightboxImage.style.height = '90%';
             lightboxImage.style.objectFit = 'contain';
             lightboxTitle.textContent = title;
             lightboxDescription.textContent = description;
