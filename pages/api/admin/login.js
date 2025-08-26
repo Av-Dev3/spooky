@@ -23,17 +23,12 @@ export default async function handler(req, res) {
   }
 
   console.log("Password correct - setting cookie and returning success");
-  const isProd = process.env.NODE_ENV === "production";
-  const cookie = [
-    `admin_auth=ok`,
-    `HttpOnly`,
-    `Path=/`,
-    `SameSite=Lax`,
-    `Max-Age=${60 * 60 * 8}`, // 8h
-    isProd ? `Secure` : ``,
-  ].filter(Boolean).join("; ");
-
-  res.setHeader("Set-Cookie", cookie);
+  
+  // Set cookie with proper attributes
+  res.setHeader('Set-Cookie', [
+    'admin_auth=ok; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800'
+  ]);
+  
   return res.status(200).json({ 
     success: true, 
     redirect: next,
