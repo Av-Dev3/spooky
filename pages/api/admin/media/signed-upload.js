@@ -20,7 +20,15 @@ export default async function handler(req, res) {
       .createSignedUploadUrl(filename);
 
     if (error) throw error;
-    res.json(data);
+    
+    // Log the actual response structure
+    console.log("Supabase response:", { data, error });
+    
+    // Return the data in the expected format
+    res.json({
+      uploadUrl: data.signedUrl,
+      fileId: filename
+    });
   } catch (error) {
     console.error("Error creating signed upload URL:", error);
     res.status(500).json({ error: "Failed to create signed upload URL" });
