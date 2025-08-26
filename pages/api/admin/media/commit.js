@@ -25,12 +25,22 @@ export default async function handler(req, res) {
       description: description || "",
       tags: tags || [],
       content_type: contentType || "unknown",
-      kind: 'image',
-      price: type === 'shop' ? price : null,
-      processor_url: type === 'shop' ? processorUrl : null
+      kind: 'image'
     };
+    
+    // For shop items, add additional data to tags or description
+    if (type === 'shop') {
+      const shopData = {
+        price: price,
+        processorUrl: processorUrl,
+        type: 'shop'
+      };
+      // Store shop data as JSON in the description field
+      insertData.description = JSON.stringify(shopData);
+    }
     console.log("Insert data:", insertData);
     
+    console.log("About to call Supabase with table: media_asset");
     const { data, error } = await supabaseAdmin()
       .from("media_asset")
       .insert(insertData)

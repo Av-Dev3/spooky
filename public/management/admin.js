@@ -131,18 +131,16 @@ class SimpleAdminPanel {
             
             // Create shop item data
             const shopItem = {
-                storagePath: `media/${imageUrl}`,
                 title,
-                description,
-                contentType: this.shopImageFile.type,
-                tags,
-                type: 'shop',
                 price,
+                description,
+                imageUrl,
+                tags,
                 processorUrl
             };
             
             // Send to Supabase via API
-            const response = await fetch('/api/admin/media/commit', {
+            const response = await fetch('/api/admin/shop/commit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,8 +153,9 @@ class SimpleAdminPanel {
                 this.clearForm();
                 await this.loadCurrentContent();
             } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to add shop item');
+                const errorData = await response.json();
+                console.error('Server error response:', errorData);
+                throw new Error(errorData.error || errorData.details || 'Failed to add shop item');
             }
             
         } catch (error) {
@@ -299,7 +298,7 @@ class SimpleAdminPanel {
     async loadCurrentContent() {
         try {
             // Load shop items from Supabase
-            const shopResponse = await fetch('/api/admin/list/media?type=shop');
+            const shopResponse = await fetch('/api/admin/shop/list');
             if (shopResponse.ok) {
                 this.shopItems = await shopResponse.json();
             } else {
@@ -336,7 +335,7 @@ class SimpleAdminPanel {
                 html += `
                     <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
                         <div style="display: flex; gap: 1rem; align-items: center;">
-                            <img src="${item.image}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
+                            <img src="${item.image_url}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
                             <div style="flex: 1;">
                                 <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
                                 <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
@@ -381,12 +380,12 @@ class SimpleAdminPanel {
         if (!confirm('Are you sure you want to delete this shop item?')) return;
         
         try {
-            const response = await fetch('/api/admin/media/delete', {
+            const response = await fetch('/api/admin/shop/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id, type: 'shop' })
+                body: JSON.stringify({ id })
             });
             
             if (response.ok) {
