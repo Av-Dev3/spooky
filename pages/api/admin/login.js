@@ -1,13 +1,18 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-  // Accept JSON or form POST
-  let pw = req.body?.password;
-  if (!pw) pw = await readFormPassword(req);
+  // Get password from request body (Next.js parses this automatically)
+  const { password } = req.body;
+  
+  if (!password) {
+    return res.status(400).json({ error: "Password is required" });
+  }
 
   const next = (req.query?.next && decodeURIComponent(req.query.next)) || "/management/panel.html";
 
-  if (pw !== process.env.ADMIN_PASSWORD) {
+  if (password !== process.env.ADMIN_PASSWORD) {
     return res.writeHead(302, { Location: "/management/login.html?error=1" }).end();
   }
 
@@ -23,12 +28,4 @@ export default async function handler(req, res) {
 
   res.setHeader("Set-Cookie", cookie);
   res.writeHead(302, { Location: next }).end();
-}
-
-async function readFormPassword(req) {
-  const chunks = [];
-  for await (const c of req) chunks.push(c);
-  const body = Buffer.concat(chunks).toString("utf8");
-  const m = body.match(/(?:^|&)password=([^&]*)/);
-  return m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : "";
 }
