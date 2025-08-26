@@ -11,8 +11,20 @@
     const splashVideo = document.getElementById('splashVideo');
     const mobileSplashVideo = document.getElementById('mobileSplashVideo');
     
-    if (!splashScreen || !splashVideo) {
-        console.warn('Splash screen elements not found');
+    if (!splashScreen) {
+        console.warn('Splash screen element not found');
+        return;
+    }
+    
+    // Check if videos exist
+    if (!splashVideo && !mobileSplashVideo) {
+        console.warn('No splash videos found - skipping splash screen');
+        // Skip splash and go directly to age gate
+        setTimeout(() => {
+            if (window.ageGate && window.ageGate.show) {
+                window.ageGate.show();
+            }
+        }, 100);
         return;
     }
 
@@ -65,27 +77,29 @@
     // Handle video events
     function handleVideoEvents() {
         // Desktop video events
-        splashVideo.addEventListener('ended', function() {
-            console.log('Desktop splash video ended - playing full duration');
-            hideSplash();
-        });
-
-        splashVideo.addEventListener('error', function(e) {
-            console.warn('Desktop splash video error:', e);
-            hideSplash();
-        });
-
-        splashVideo.addEventListener('canplay', function() {
-            console.log('Desktop splash video can play - starting playback');
-            splashVideo.play().catch(function(error) {
-                console.warn('Could not autoplay desktop video:', error);
-                setTimeout(hideSplash, 2000);
+        if (splashVideo) {
+            splashVideo.addEventListener('ended', function() {
+                console.log('Desktop splash video ended - playing full duration');
+                hideSplash();
             });
-        });
 
-        splashVideo.addEventListener('loadedmetadata', function() {
-            console.log('Desktop splash video metadata loaded - duration:', splashVideo.duration);
-        });
+            splashVideo.addEventListener('error', function(e) {
+                console.warn('Desktop splash video error:', e);
+                hideSplash();
+            });
+
+            splashVideo.addEventListener('canplay', function() {
+                console.log('Desktop splash video can play - starting playback');
+                splashVideo.play().catch(function(error) {
+                    console.warn('Could not autoplay desktop video:', error);
+                    setTimeout(hideSplash, 2000);
+                });
+            });
+
+            splashVideo.addEventListener('loadedmetadata', function() {
+                console.log('Desktop splash video metadata loaded - duration:', splashVideo.duration);
+            });
+        }
 
         // Mobile video events
         if (mobileSplashVideo) {
@@ -165,15 +179,18 @@
         const isMobile = window.innerWidth <= 768;
         if (isMobile && mobileSplashVideo) {
             console.log('Mobile device detected - showing mobile splash video');
-            splashVideo.style.display = 'none';
+            if (splashVideo) splashVideo.style.display = 'none';
             mobileSplashVideo.style.display = 'block';
             mobileSplashVideo.classList.remove('mobile-splash');
-        } else {
+        } else if (splashVideo) {
             console.log('Desktop device detected - showing desktop splash video');
             if (mobileSplashVideo) {
                 mobileSplashVideo.style.display = 'none';
             }
             splashVideo.style.display = 'block';
+        } else {
+            console.log('No videos available - hiding splash screen');
+            hideSplash();
         }
         
         // Set up video event handlers

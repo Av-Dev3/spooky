@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  // Ensure API routes are properly handled
+  
+  // Serve static files from public directory
   async rewrites() {
     return [
       {
@@ -9,6 +10,26 @@ const nextConfig = {
         destination: '/api/:path*',
       },
     ];
+  },
+
+  // Ensure static files are served correctly
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+        ],
+      },
+    ];
+  },
+
+  // Disable automatic static optimization for HTML files
+  experimental: {
+    esmExternals: false,
   },
 };
 
