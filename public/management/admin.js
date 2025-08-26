@@ -1,4 +1,4 @@
-// Simple Admin Panel JavaScript
+// Simple Admin Panel JavaScript - Connected to Supabase
 class SimpleAdminPanel {
     constructor() {
         this.currentContentType = 'shop';
@@ -129,9 +129,8 @@ class SimpleAdminPanel {
             // Upload image first
             const imageUrl = await this.uploadImage(this.shopImageFile);
             
-            // Create shop item
+            // Create shop item data
             const shopItem = {
-                id: Date.now(), // Simple ID generation
                 title,
                 price,
                 image: imageUrl,
@@ -141,17 +140,27 @@ class SimpleAdminPanel {
                 type: 'shop'
             };
             
-            // Add to local storage (this will update the shop page)
-            this.shopItems.push(shopItem);
-            localStorage.setItem('spooky_admin_shop', JSON.stringify(this.shopItems));
+            // Send to Supabase via API
+            const response = await fetch('/api/admin/media/commit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(shopItem)
+            });
             
-            this.showAlert('Shop item added successfully!', 'success');
-            this.clearForm();
-            this.loadCurrentContent();
+            if (response.ok) {
+                this.showAlert('Shop item added successfully!', 'success');
+                this.clearForm();
+                await this.loadCurrentContent();
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to add shop item');
+            }
             
         } catch (error) {
             console.error('Error adding shop item:', error);
-            this.showAlert('Error adding shop item', 'error');
+            this.showAlert(`Error adding shop item: ${error.message}`, 'error');
         }
     }
     
@@ -174,9 +183,8 @@ class SimpleAdminPanel {
             // Upload image first
             const imageUrl = await this.uploadImage(this.galleryImageFile);
             
-            // Create gallery item
+            // Create gallery item data
             const galleryItem = {
-                id: Date.now(), // Simple ID generation
                 title,
                 image: imageUrl,
                 description,
@@ -184,34 +192,70 @@ class SimpleAdminPanel {
                 type: 'gallery'
             };
             
-            // Add to local storage (this will update the gallery page)
-            this.galleryItems.push(galleryItem);
-            localStorage.setItem('spooky_admin_gallery', JSON.stringify(this.galleryItems));
+            // Send to Supabase via API
+            const response = await fetch('/api/admin/media/commit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(galleryItem)
+            });
             
-            this.showAlert('Gallery item added successfully!', 'success');
-            this.clearGalleryForm();
-            this.loadCurrentContent();
+            if (response.ok) {
+                this.showAlert('Gallery item added successfully!', 'success');
+                this.clearGalleryForm();
+                await this.loadCurrentContent();
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to add gallery item');
+            }
             
         } catch (error) {
             console.error('Error adding gallery item:', error);
-            this.showAlert('Error adding gallery item', 'error');
+            this.showAlert(`Error adding gallery item: ${error.message}`, 'error');
         }
     }
     
     async uploadImage(file) {
         try {
-            // For now, we'll use a simple approach - convert to base64
-            // In production, you'd upload to Supabase storage
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    resolve(e.target.result);
-                };
-                reader.readAsDataURL(file);
+            // Get signed upload URL from Supabase
+            const response = await fetch('/api/admin/media/signed-upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: file.name,
+                    contentType: file.type
+                })
             });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to get upload URL');
+            }
+            
+            const { uploadUrl, fileId } = await response.json();
+            
+            // Upload file to Supabase storage
+            const uploadResponse = await fetch(uploadUrl, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'Content-Type': file.type,
+                }
+            });
+            
+            if (!uploadResponse.ok) {
+                throw new Error('Failed to upload file to storage');
+            }
+            
+            // Return the file ID for the commit API
+            return fileId;
+            
         } catch (error) {
             console.error('Error uploading image:', error);
-            throw new Error('Failed to upload image');
+            throw new Error(`Failed to upload image: ${error.message}`);
         }
     }
     
@@ -235,13 +279,23 @@ class SimpleAdminPanel {
     
     async loadCurrentContent() {
         try {
-            // Load shop items
-            const shopData = localStorage.getItem('spooky_admin_shop');
-            this.shopItems = shopData ? JSON.parse(shopData) : [];
+            // Load shop items from Supabase
+            const shopResponse = await fetch('/api/admin/list/media?type=shop');
+            if (shopResponse.ok) {
+                this.shopItems = await shopResponse.json();
+            } else {
+                console.error('Failed to load shop items');
+                this.shopItems = [];
+            }
             
-            // Load gallery items
-            const galleryData = localStorage.getItem('spooky_admin_gallery');
-            this.galleryItems = galleryData ? JSON.parse(galleryData) : [];
+            // Load gallery items from Supabase
+            const galleryResponse = await fetch('/api/admin/list/media?type=gallery');
+            if (galleryResponse.ok) {
+                this.galleryItems = await galleryResponse.json();
+            } else {
+                console.error('Failed to load gallery items');
+                this.galleryItems = [];
+            }
             
             this.renderCurrentContent();
             
@@ -304,24 +358,54 @@ class SimpleAdminPanel {
         container.innerHTML = html;
     }
     
-    deleteShopItem(id) {
+    async deleteShopItem(id) {
         if (!confirm('Are you sure you want to delete this shop item?')) return;
         
-        this.shopItems = this.shopItems.filter(item => item.id !== id);
-        localStorage.setItem('spooky_admin_shop', JSON.stringify(this.shopItems));
-        
-        this.showAlert('Shop item deleted successfully!', 'success');
-        this.loadCurrentContent();
+        try {
+            const response = await fetch('/api/admin/media/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, type: 'shop' })
+            });
+            
+            if (response.ok) {
+                this.showAlert('Shop item deleted successfully!', 'success');
+                await this.loadCurrentContent();
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete shop item');
+            }
+        } catch (error) {
+            console.error('Error deleting shop item:', error);
+            this.showAlert(`Error deleting shop item: ${error.message}`, 'error');
+        }
     }
     
-    deleteGalleryItem(id) {
+    async deleteGalleryItem(id) {
         if (!confirm('Are you sure you want to delete this gallery item?')) return;
         
-        this.galleryItems = this.galleryItems.filter(item => item.id !== id);
-        localStorage.setItem('spooky_admin_gallery', JSON.stringify(this.galleryItems));
-        
-        this.showAlert('Gallery item deleted successfully!', 'success');
-        this.loadCurrentContent();
+        try {
+            const response = await fetch('/api/admin/media/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, type: 'gallery' })
+            });
+            
+            if (response.ok) {
+                this.showAlert('Gallery item deleted successfully!', 'success');
+                await this.loadCurrentContent();
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete gallery item');
+            }
+        } catch (error) {
+            console.error('Error deleting gallery item:', error);
+            this.showAlert(`Error deleting gallery item: ${error.message}`, 'error');
+        }
     }
     
     showAlert(message, type) {

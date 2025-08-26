@@ -44,33 +44,31 @@
         });
     }
 
-    // Load products from JSON or admin LocalStorage
+    // Load products from Supabase API
     async function loadProducts() {
         try {
-            // Check if admin has made changes
-            const adminShopData = localStorage.getItem('spooky_admin_shop');
-            
-            if (adminShopData) {
-                // Use admin data instead of JSON file
-                const products = JSON.parse(adminShopData);
+            // Load from Supabase API
+            const response = await fetch('/api/admin/list/media?type=shop');
+            if (response.ok) {
+                const products = await response.json();
                 renderProducts(products);
-                console.log('Products loaded from admin changes:', products);
+                console.log('Products loaded from Supabase:', products);
                 return;
             }
             
-            // Load from JSON file if no admin changes
-            const response = await fetch('data/shop.json?v=' + Date.now());
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            // Fallback to JSON file if API fails
+            const jsonResponse = await fetch('data/shop.json?v=' + Date.now());
+            if (jsonResponse.ok) {
+                const products = await jsonResponse.json();
+                renderProducts(products);
+                console.log('Products loaded from JSON file (fallback):', products);
+                return;
             }
             
-            const products = await response.json();
-            renderProducts(products);
-            
-            console.log('Products loaded from JSON file:', products);
+            throw new Error('Both API and JSON failed');
             
         } catch (error) {
-            console.warn('Could not load shop.json, using fallback:', error);
+            console.warn('Could not load products, using fallback:', error);
             renderFallbackProducts();
         }
     }

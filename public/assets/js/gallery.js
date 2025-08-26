@@ -9,33 +9,31 @@ document.addEventListener('DOMContentLoaded', function() {
     setupLightbox();
 });
 
-        // Load gallery items from JSON or admin LocalStorage
+        // Load gallery items from Supabase API
         async function loadGalleryItems() {
             try {
-                // Check if admin has made changes
-                const adminGalleryData = localStorage.getItem('spooky_admin_gallery');
-                
-                if (adminGalleryData) {
-                    // Use admin data instead of JSON file
-                    const galleryItems = JSON.parse(adminGalleryData);
+                // Load from Supabase API
+                const response = await fetch('/api/admin/list/media?type=gallery');
+                if (response.ok) {
+                    const galleryItems = await response.json();
                     renderGalleryItems(galleryItems);
-                    console.log('Gallery items loaded from admin changes:', galleryItems);
+                    console.log('Gallery items loaded from Supabase:', galleryItems);
                     return;
                 }
                 
-                // Load from JSON file if no admin changes
-                const response = await fetch('data/gallery.json?v=' + Date.now());
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                // Fallback to JSON file if API fails
+                const jsonResponse = await fetch('data/gallery.json?v=' + Date.now());
+                if (jsonResponse.ok) {
+                    const galleryItems = await jsonResponse.json();
+                    renderGalleryItems(galleryItems);
+                    console.log('Gallery items loaded from JSON file (fallback):', galleryItems);
+                    return;
                 }
                 
-                const galleryItems = await response.json();
-                renderGalleryItems(galleryItems);
-                
-                console.log('Gallery items loaded from JSON file:', galleryItems);
+                throw new Error('Both API and JSON failed');
                 
             } catch (error) {
-                console.warn('Could not load gallery.json, using fallback:', error);
+                console.warn('Could not load gallery items, using fallback:', error);
                 renderFallbackGalleryItems();
             }
         }
