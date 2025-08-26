@@ -1529,47 +1529,44 @@ img:not(.logo-large) {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-    max-width: 1400px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
 .gallery-item {
     background: var(--surface);
-    border-radius: 20px;
+    border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--border);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
     cursor: pointer;
-    position: relative;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .gallery-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    border-color: var(--accent1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .gallery-image {
     position: relative;
     width: 100%;
-    height: 280px;
+    height: 250px;
     overflow: hidden;
-    background: linear-gradient(45deg, var(--surface), var(--bg));
 }
 
 .gallery-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s ease;
 }
 
 .gallery-item:hover .gallery-image img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .gallery-item.locked .gallery-image img {
@@ -1596,21 +1593,20 @@ img:not(.logo-large) {
 }
 
 .gallery-caption {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%);
+    padding: 1rem;
+    text-align: center;
 }
 
 .gallery-caption h3 {
     color: var(--accent1);
-    margin-bottom: 0.75rem;
-    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
     font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .gallery-caption p {
     color: var(--text);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.4;
     opacity: 0.8;
 }
@@ -1683,11 +1679,11 @@ img:not(.logo-large) {
 }
 
 #lightboxImage {
-    max-width: 95%;
-    max-height: 85%;
+    max-width: 98%;
+    max-height: 95%;
     object-fit: contain;
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
     transition: all 0.3s ease;
 }
 
