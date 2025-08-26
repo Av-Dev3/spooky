@@ -47,10 +47,14 @@ function renderGalleryItems(items) {
         // Build the full image URL from Supabase storage
         const imageUrl = `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${item.storage_path.split('/').pop()}`;
         
+        console.log('Gallery item:', item);
+        console.log('Storage path:', item.storage_path);
+        console.log('Image URL:', imageUrl);
+        
         return `
         <div class="gallery-item ${item.locked ? 'locked' : ''}" data-image="${imageUrl}" data-title="${item.title}" data-description="${item.description}">
             <div class="gallery-image">
-                <img src="${imageUrl}" alt="${item.title}" loading="lazy" onerror="this.src='/assets/logo.png'">
+                <img src="${imageUrl}" alt="${item.title}" loading="lazy" onerror="this.src='/assets/logo.png'" style="width: 100% !important; height: 100% !important; object-fit: cover !important;">
                 ${item.locked ? `
                     <div class="lock-overlay">
                         <svg class="lock-icon" viewBox="0 0 24 24">
@@ -125,6 +129,9 @@ function setupLightbox() {
             
             // Show lightbox
             lightboxImage.src = image;
+            lightboxImage.style.width = '100%';
+            lightboxImage.style.height = '100%';
+            lightboxImage.style.objectFit = 'contain';
             lightboxTitle.textContent = title;
             lightboxDescription.textContent = description;
             lightbox.style.display = 'flex';
