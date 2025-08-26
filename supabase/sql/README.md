@@ -25,6 +25,9 @@ CREATE TABLE media_asset (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Run the migration file 001_add_shop_support.sql to add shop support
+```
+
 -- Enable Row Level Security (optional but recommended)
 ALTER TABLE media_asset ENABLE ROW LEVEL SECURITY;
 

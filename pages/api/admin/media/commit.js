@@ -9,8 +9,8 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Not authorized" });
   }
 
-  const { storagePath, title, description, tags, contentType } = req.body;
-  console.log("Received commit request:", { storagePath, title, description, tags, contentType });
+  const { storagePath, title, description, tags, contentType, type, price, processorUrl } = req.body;
+  console.log("Received commit request:", { storagePath, title, description, tags, contentType, type, price, processorUrl });
   
   if (!storagePath || !title) {
     console.log("Missing required fields:", { storagePath, title });
@@ -24,7 +24,10 @@ export default async function handler(req, res) {
       title,
       description: description || "",
       tags: tags || [],
-      content_type: contentType || "unknown"
+      content_type: contentType || "unknown",
+      kind: 'image',
+      price: type === 'shop' ? price : null,
+      processor_url: type === 'shop' ? processorUrl : null
     };
     console.log("Insert data:", insertData);
     

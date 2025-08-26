@@ -131,13 +131,14 @@ class SimpleAdminPanel {
             
             // Create shop item data
             const shopItem = {
+                storagePath: `media/${imageUrl}`,
                 title,
-                price,
-                image: imageUrl,
                 description,
+                contentType: this.shopImageFile.type,
                 tags,
-                processorUrl,
-                type: 'shop'
+                type: 'shop',
+                price,
+                processorUrl
             };
             
             // Send to Supabase via API
