@@ -879,6 +879,8 @@ img:not(.logo-large) {
         /* Override any base splash-video styles */
         border: none !important;
         outline: none !important;
+        /* Remove transitions to prevent slide-in effect */
+        transition: none !important;
     }
     
     .splash-video-container {
@@ -930,6 +932,8 @@ img:not(.logo-large) {
         /* Override any base splash-video styles */
         border: none !important;
         outline: none !important;
+        /* Remove transitions to prevent slide-in effect */
+        transition: none !important;
     }
     
     .splash-video-container {
