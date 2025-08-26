@@ -2,19 +2,27 @@ import { supabaseAdmin } from "../../../../lib/supabaseServer";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).end();
-  if (!isAuthed(req)) return res.status(401).json({ error: "Not authorized" });
 
-  const path = req.query.path;
-  if (!path) return res.status(400).json({ error: "path required" });
+  // Check authentication directly in the route
+  const cookie = req.cookies.admin_auth;
+  if (!cookie || cookie !== "ok") {
+    return res.status(401).json({ error: "Not authorized" });
+  }
 
-  const supa = supabaseAdmin();
-  const { data, error } = await supa.storage.from("media").createSignedUrl(path, 60 * 60);
-  if (error) return res.status(400).json({ error: error.message });
+  const { id } = req.query;
+  if (!id) return res.status(400).json({ error: "Missing media ID" });
 
-  res.writeHead(302, { Location: data.signedUrl }).end();
-}
+  try {
+    const { data, error } = await supabaseAdmin()
+      .from("media_asset")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-function isAuthed(req) {
-  return (req.cookies && req.cookies.admin_auth === "ok") ||
-         (req.headers.cookie || "").includes("admin_auth=ok");
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    console.error("Error getting media preview:", error);
+    res.status(500).json({ error: "Failed to get media preview" });
+  }
 }
