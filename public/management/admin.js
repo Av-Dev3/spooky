@@ -344,6 +344,7 @@ class SimpleAdminPanel {
             }
             
             this.renderCurrentContent();
+            this.updateDebugInfo(); // Update debug info after content is loaded
             
         } catch (error) {
             console.error('Error loading current content:', error);
@@ -352,14 +353,38 @@ class SimpleAdminPanel {
     }
     
     // Helper method to construct proper image URLs
-    getImageUrl(fileId) {
+    async getImageUrl(fileId) {
         if (!fileId || !this.config) return this.getPlaceholderImage();
+        
+        try {
+            // Try to get a signed URL instead of public URL
+            const response = await fetch(`/api/admin/media/signed-url?filename=${encodeURIComponent(fileId)}`);
+            if (response.ok) {
+                const data = await response.json();
+                return data.signedUrl || this.getPlaceholderImage();
+            }
+        } catch (error) {
+            console.error('Error getting signed URL:', error);
+        }
+        
+        // Fallback to public URL (might not work if bucket isn't public)
         return `${this.config.supabaseUrl}/storage/v1/object/public/${this.config.storageBucket}/${fileId}`;
+    }
+    
+    // Test if an image URL is accessible
+    async testImageUrl(imageUrl) {
+        try {
+            const response = await fetch(imageUrl, { method: 'HEAD' });
+            return response.ok;
+        } catch (error) {
+            console.error('Error testing image URL:', imageUrl, error);
+            return false;
+        }
     }
     
     // Get a simple placeholder image as data URL
     getPlaceholderImage() {
-        return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAyMEg2MFY2MEgyMFYyMFoiIHN0cm9rZT0iIzk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0yMCAyMEg2MFY2MEgyMFYyMFoiIHN0cm9rZT0iIzk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIj5JbWFnZTwvdGV4dD4KPC9zdmc+';
+        return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAyMEg2MFY2MEgyMFYyMFoiIHN0cm9rZT0iIzk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0yMCAyMEg2MFY2MEgyMFYyMFoiIHN0cm9rZT0iIjk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIjk5OSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIj5JbWFnZTwvdGV4dD4KPC9zdmc+';
     }
     
     renderCurrentContent() {
@@ -375,22 +400,32 @@ class SimpleAdminPanel {
                 console.log('Rendering shop item:', item);
                 
                 // Construct proper image URL from fileId stored in image_url
-                const imageUrl = this.getImageUrl(item.image_url);
-                console.log('Constructed image URL:', imageUrl);
-                
-                html += `
-                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
-                        <div style="display: flex; gap: 1rem; align-items: center;">
-                            <img src="${imageUrl}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage()">
-                            <div style="flex: 1;">
-                                <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
-                                <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
-                                <div style="color: #28a745; font-weight: bold;">$${item.price}</div>
+                this.getImageUrl(item.image_url).then(imageUrl => {
+                    console.log('Constructed image URL:', imageUrl);
+                    
+                    // Test the image URL
+                    this.testImageUrl(imageUrl).then(isAccessible => {
+                        console.log(`Image ${imageUrl} is accessible:`, isAccessible);
+                        if (!isAccessible) {
+                            console.warn('Image not accessible, this might be a storage bucket configuration issue');
+                        }
+                    });
+                    
+                    html += `
+                        <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <img src="${imageUrl}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${imageUrl}');">
+                                <div style="flex: 1;">
+                                    <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
+                                    <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
+                                    <div style="color: #28a745; font-weight: bold;">$${item.price}</div>
+                                    <div style="color: #888; font-size: 0.8rem;">File: ${item.image_url}</div>
+                                </div>
+                                <button onclick="deleteShopItemGlobal(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
                             </div>
-                            <button onclick="adminPanel.deleteShopItem(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
                         </div>
-                    </div>
-                `;
+                    `;
+                });
             });
         } else {
             html += '<p style="color: #888;">No shop items yet. Add your first item above!</p>';
@@ -409,7 +444,7 @@ class SimpleAdminPanel {
                                 <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
                                 <div style="color: ${item.locked ? '#ff6b6b' : '#28a745'};">${item.locked ? '🔒 Locked' : '🔓 Public'}</div>
                             </div>
-                            <button onclick="adminPanel.deleteGalleryItem(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                            <button onclick="deleteGalleryItemGlobal(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
                         </div>
                     </div>
                 `;
@@ -420,12 +455,23 @@ class SimpleAdminPanel {
         
         html += '</div>';
         container.innerHTML = html;
+        
+        // Update debug info
+        this.updateDebugInfo();
     }
     
     async deleteShopItem(id) {
-        if (!confirm('Are you sure you want to delete this shop item?')) return;
+        console.log('deleteShopItem called with ID:', id);
+        console.log('ID type:', typeof id);
+        console.log('ID value:', id);
+        
+        if (!confirm('Are you sure you want to delete this shop item?')) {
+            console.log('User cancelled deletion');
+            return;
+        }
         
         try {
+            console.log('Sending delete request to /api/admin/shop/delete with ID:', id);
             const response = await fetch('/api/admin/shop/delete', {
                 method: 'POST',
                 headers: {
@@ -434,7 +480,12 @@ class SimpleAdminPanel {
                 body: JSON.stringify({ id })
             });
             
+            console.log('Delete response status:', response.status);
+            console.log('Delete response headers:', response.headers);
+            
             if (response.ok) {
+                const result = await response.json();
+                console.log('Delete successful, result:', result);
                 this.showAlert('Shop item deleted successfully!', 'success');
                 await this.loadCurrentContent();
             } else {
@@ -487,6 +538,74 @@ class SimpleAdminPanel {
             alert.remove();
         }, 5000);
     }
+    
+    // Debug method to test all current image URLs
+    async testCurrentImages() {
+        const debugInfo = document.getElementById('debugInfo');
+        debugInfo.innerHTML = '<p>Testing image URLs...</p>';
+        
+        let results = [];
+        
+        // Test shop item images
+        for (const item of this.shopItems) {
+            const imageUrl = await this.getImageUrl(item.image_url);
+            const isAccessible = await this.testImageUrl(imageUrl);
+            results.push({
+                type: 'Shop Item',
+                title: item.title,
+                filename: item.image_url,
+                url: imageUrl,
+                accessible: isAccessible
+            });
+        }
+        
+        // Display results
+        let html = '<div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">';
+        html += '<h4>Image URL Test Results:</h4>';
+        
+        results.forEach(result => {
+            const statusColor = result.accessible ? '#28a745' : '#dc3545';
+            const statusText = result.accessible ? '✅ Accessible' : '❌ Not Accessible';
+            
+            html += `
+                <div style="margin-bottom: 0.5rem; padding: 0.5rem; border-left: 3px solid ${statusColor}; background: #2d2d2d;">
+                    <div><strong>${result.type}:</strong> ${result.title}</div>
+                    <div style="color: #888; font-size: 0.8rem;">File: ${result.filename}</div>
+                    <div style="color: #888; font-size: 0.8rem;">URL: ${result.url}</div>
+                    <div style="color: ${statusColor}; font-weight: bold;">${statusText}</div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        
+        // Add configuration info
+        html += '<div style="background: #1a1a1a; padding: 1rem; border-radius: 8px;">';
+        html += '<h4>Configuration:</h4>';
+        html += `<div>Supabase URL: ${this.config?.supabaseUrl || 'Not loaded'}</div>`;
+        html += `<div>Storage Bucket: ${this.config?.storageBucket || 'Not loaded'}</div>`;
+        html += '</div>';
+        
+        debugInfo.innerHTML = html;
+    }
+    
+    // Update debug info when content is loaded
+    updateDebugInfo() {
+        const debugInfo = document.getElementById('debugInfo');
+        if (debugInfo) {
+            let html = '<div style="background: #1a1a1a; padding: 1rem; border-radius: 8px;">';
+            html += '<h4>Current Status:</h4>';
+            html += `<div>Shop Items: ${this.shopItems.length}</div>`;
+            html += `<div>Gallery Items: ${this.galleryItems.length}</div>`;
+            html += `<div>Config Loaded: ${this.config ? 'Yes' : 'No'}</div>`;
+            if (this.config) {
+                html += `<div>Supabase URL: ${this.config.supabaseUrl}</div>`;
+                html += `<div>Storage Bucket: ${this.config.storageBucket}</div>`;
+            }
+            html += '</div>';
+            debugInfo.innerHTML = html;
+        }
+    }
 }
 
 // Global functions for button clicks
@@ -508,6 +627,27 @@ function clearForm() {
 
 function clearGalleryForm() {
     adminPanel.clearGalleryForm();
+}
+
+// Global delete functions
+function deleteShopItemGlobal(id) {
+    console.log('deleteShopItemGlobal called with ID:', id);
+    if (adminPanel) {
+        adminPanel.deleteShopItem(id);
+    } else {
+        console.error('adminPanel not available');
+        alert('Admin panel not ready. Please refresh the page.');
+    }
+}
+
+function deleteGalleryItemGlobal(id) {
+    console.log('deleteGalleryItemGlobal called with ID:', id);
+    if (adminPanel) {
+        adminPanel.deleteGalleryItem(id);
+    } else {
+        console.error('adminPanel not available');
+        alert('Admin panel not ready. Please refresh the page.');
+    }
 }
 
 // Initialize admin panel when page loads

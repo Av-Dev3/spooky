@@ -20,7 +20,16 @@ export default async function handler(req, res) {
       .single();
 
     if (error) throw error;
-    res.json(data);
+    
+    // Also try to get the public URL from storage
+    const { data: publicUrlData } = supabaseAdmin().storage
+      .from("media")
+      .getPublicUrl(id);
+    
+    res.json({
+      ...data,
+      publicUrl: publicUrlData?.publicUrl
+    });
   } catch (error) {
     console.error("Error getting media preview:", error);
     res.status(500).json({ error: "Failed to get media preview" });

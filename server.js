@@ -22,8 +22,8 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  // Handle all other routes with Next.js
-  server.use('*', (req, res) => {
+  // Handle all other routes with Next.js using a proper catch-all
+  server.use((req, res) => {
     return handle(req, res);
   });
 
