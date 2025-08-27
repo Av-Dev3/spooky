@@ -618,21 +618,38 @@ function clearGalleryForm() {
 // Global delete functions
 function deleteShopItemGlobal(id) {
     console.log('deleteShopItemGlobal called with ID:', id);
-    if (adminPanel) {
-        adminPanel.deleteShopItem(id);
-    } else {
-        console.error('adminPanel not available');
-        alert('Admin panel not ready. Please refresh the page.');
+    console.log('adminPanel available:', typeof adminPanel !== 'undefined');
+    console.log('adminPanel value:', adminPanel);
+    
+    try {
+        if (adminPanel && typeof adminPanel.deleteShopItem === 'function') {
+            console.log('Calling adminPanel.deleteShopItem...');
+            adminPanel.deleteShopItem(id);
+        } else {
+            console.error('adminPanel not available or deleteShopItem method not found');
+            alert('Admin panel not ready. Please refresh the page.');
+        }
+    } catch (error) {
+        console.error('Error in deleteShopItemGlobal:', error);
+        alert('Error deleting shop item: ' + error.message);
     }
 }
 
 function deleteGalleryItemGlobal(id) {
     console.log('deleteGalleryItemGlobal called with ID:', id);
-    if (adminPanel) {
-        adminPanel.deleteGalleryItem(id);
-    } else {
-        console.error('adminPanel not available');
-        alert('Admin panel not ready. Please refresh the page.');
+    console.log('adminPanel available:', typeof adminPanel !== 'undefined');
+    
+    try {
+        if (adminPanel && typeof adminPanel.deleteGalleryItem === 'function') {
+            console.log('Calling adminPanel.deleteGalleryItem...');
+            adminPanel.deleteGalleryItem(id);
+        } else {
+            console.error('adminPanel not available or deleteGalleryItem method not found');
+            alert('Admin panel not ready. Please refresh the page.');
+        }
+    } catch (error) {
+        console.error('Error in deleteGalleryItemGlobal:', error);
+        alert('Error deleting gallery item: ' + error.message);
     }
 }
 
