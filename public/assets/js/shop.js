@@ -47,12 +47,12 @@
     // Load products from Supabase API
     async function loadProducts() {
         try {
-            // Load from Supabase API
-            const response = await fetch('/api/admin/list/media?type=shop');
+            // Load from Supabase API - use the correct shop endpoint
+            const response = await fetch('/api/admin/shop/list');
             if (response.ok) {
                 const products = await response.json();
                 renderProducts(products);
-                console.log('Products loaded from Supabase:', products);
+                console.log('Shop products loaded from Supabase:', products);
                 return;
             }
             
@@ -78,26 +78,38 @@
         const container = document.getElementById('shopContainer');
         if (!container) return;
         
-        container.innerHTML = products.map(product => `
-            <div class="product-card" data-tags="${product.tags.join(',')}">
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.title}" loading="lazy">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.title}</h3>
-                    <div class="product-price">$${product.price}</div>
-                    <p class="product-description">${product.description}</p>
-                    <div class="product-tags">
-                        ${product.tags.map(tag => `<span class="product-tag">${tag}</span>`).join('')}
+        console.log('Rendering products with data:', products);
+        
+        container.innerHTML = products.map(product => {
+            // Construct proper image URL from fileId stored in image_url
+            const imageUrl = product.image_url ? 
+                `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${product.image_url}` : 
+                '/assets/logo.png';
+            
+            // Use the tags array from the database, or default to general
+            const tags = product.tags && product.tags.length > 0 ? product.tags : ['general'];
+            
+            return `
+                <div class="product-card" data-tags="${tags.join(',')}">
+                    <div class="product-image">
+                        <img src="${imageUrl}" alt="${product.title}" loading="lazy" onerror="this.src='/assets/logo.png'">
                     </div>
-                    <div class="product-actions">
-                        <a href="${product.processorUrl}" class="btn btn-primary" target="_blank" rel="noopener">
-                            Buy / Unlock
-                        </a>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title || 'Untitled Product'}</h3>
+                        <div class="product-price">$${product.price || 0}</div>
+                        <p class="product-description">${product.description || 'No description available'}</p>
+                        <div class="product-tags">
+                            ${tags.map(tag => `<span class="product-tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="product-actions">
+                            <a href="${product.processor_url || '#'}" class="btn btn-primary" target="_blank" rel="noopener">
+                                Buy / Unlock
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         
         // Add click tracking to product cards
         setupProductTracking();
