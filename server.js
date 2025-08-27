@@ -22,11 +22,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  // Serve HTML files directly - handle specific HTML routes
-  server.get('/:filename.html', (req, res) => {
-    const filePath = path.join(__dirname, 'public', req.params.filename + '.html');
-    res.sendFile(filePath);
-  });
+  // HTML files will be handled by Next.js
 
   // Handle all other routes with Next.js
   server.all('*', (req, res) => {
