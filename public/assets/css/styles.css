@@ -1802,19 +1802,20 @@ img:not(.logo-large) {
 .product-image {
     width: 100%;
     height: auto;
-    overflow: visible;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
+    max-height: 300px;
 }
 
 .product-image img {
     max-width: 100% !important;
-    max-height: none !important;
+    max-height: 280px !important;
     width: auto !important;
     height: auto !important;
-    object-fit: none !important;
+    object-fit: contain !important;
     transition: transform 0.3s ease !important;
 }
 
