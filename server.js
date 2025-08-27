@@ -22,10 +22,8 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  // HTML files will be handled by Next.js
-
   // Handle all other routes with Next.js
-  server.all('*', (req, res) => {
+  server.use('*', (req, res) => {
     return handle(req, res);
   });
 

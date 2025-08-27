@@ -4,14 +4,40 @@ class SimpleAdminPanel {
         this.currentContentType = 'shop';
         this.shopItems = [];
         this.galleryItems = [];
+        this.config = null;
         
         this.init();
     }
     
-    init() {
+    async init() {
+        await this.loadConfig();
         this.setupEventListeners();
         this.setupDragAndDrop();
         this.loadCurrentContent();
+    }
+    
+    async loadConfig() {
+        try {
+            const response = await fetch('/api/admin/config');
+            if (response.ok) {
+                this.config = await response.json();
+                console.log('Loaded config:', this.config);
+            } else {
+                console.error('Failed to load config');
+                // Use fallback config
+                this.config = {
+                    supabaseUrl: 'https://your-project.supabase.co',
+                    storageBucket: 'media'
+                };
+            }
+        } catch (error) {
+            console.error('Error loading config:', error);
+            // Use fallback config
+            this.config = {
+                supabaseUrl: 'https://your-project.supabase.co',
+                storageBucket: 'media'
+            };
+        }
     }
     
     setupEventListeners() {
@@ -325,6 +351,17 @@ class SimpleAdminPanel {
         }
     }
     
+    // Helper method to construct proper image URLs
+    getImageUrl(fileId) {
+        if (!fileId || !this.config) return this.getPlaceholderImage();
+        return `${this.config.supabaseUrl}/storage/v1/object/public/${this.config.storageBucket}/${fileId}`;
+    }
+    
+    // Get a simple placeholder image as data URL
+    getPlaceholderImage() {
+        return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAyMEg2MFY2MEgyMFYyMFoiIHN0cm9rZT0iIzk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik0yMCAyMEg2MFY2MEgyMFYyMFoiIHN0cm9rZT0iIzk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIj5JbWFnZTwvdGV4dD4KPC9zdmc+';
+    }
+    
     renderCurrentContent() {
         const container = document.getElementById('currentContent');
         
@@ -334,10 +371,17 @@ class SimpleAdminPanel {
         if (this.shopItems.length > 0) {
             html += '<h3>🛍️ Shop Items (' + this.shopItems.length + ')</h3>';
             this.shopItems.forEach(item => {
+                // Debug logging
+                console.log('Rendering shop item:', item);
+                
+                // Construct proper image URL from fileId stored in image_url
+                const imageUrl = this.getImageUrl(item.image_url);
+                console.log('Constructed image URL:', imageUrl);
+                
                 html += `
                     <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
                         <div style="display: flex; gap: 1rem; align-items: center;">
-                            <img src="${item.image_url}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
+                            <img src="${imageUrl}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage()">
                             <div style="flex: 1;">
                                 <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
                                 <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
@@ -359,7 +403,7 @@ class SimpleAdminPanel {
                 html += `
                     <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
                         <div style="display: flex; gap: 1rem; align-items: center;">
-                            <img src="${item.image}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
+                            <img src="${item.image}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage()">
                             <div style="flex: 1;">
                                 <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
                                 <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
