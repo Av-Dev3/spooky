@@ -377,7 +377,7 @@ class SimpleAdminPanel {
     renderCurrentContent() {
         const container = document.getElementById('currentContent');
         
-        let html = '<div style="display: grid; gap: 1rem;">';
+        let html = '<div class="content-grid">';
         
         console.log('Starting to render content...');
         console.log('Shop items count:', this.shopItems.length);
@@ -386,7 +386,7 @@ class SimpleAdminPanel {
         // Shop items
         if (this.shopItems.length > 0) {
             console.log('Rendering shop items...');
-            html += '<h3>🛍️ Shop Items (' + this.shopItems.length + ')</h3>';
+            html += '<h3 class="content-section-title">🛍️ Shop Items (' + this.shopItems.length + ')</h3>';
             this.shopItems.forEach((item, index) => {
                 console.log(`Rendering shop item ${index}:`, item);
                 
@@ -403,16 +403,16 @@ class SimpleAdminPanel {
                 });
                 
                 const itemHtml = `
-                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
-                        <div style="display: flex; gap: 1rem; align-items: center;">
-                            <img src="${imageUrl}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${imageUrl}');">
-                            <div style="flex: 1;">
-                                <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
-                                <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
-                                <div style="color: #28a745; font-weight: bold;">$${item.price}</div>
-                                <div style="color: #888; font-size: 0.8rem;">File: ${item.image_url}</div>
-                            </div>
-                            <button onclick="deleteShopItemGlobal('${item.id}')" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                    <div class="content-item">
+                        <img src="${imageUrl}" alt="${item.title}" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${imageUrl}');">
+                        <div class="content-info">
+                            <h4 class="content-title">${item.title}</h4>
+                            <p class="content-description">${item.description}</p>
+                            <div class="content-price">$${item.price}</div>
+                            <div class="content-meta">File: ${item.image_url}</div>
+                        </div>
+                        <div class="content-actions">
+                            <button onclick="deleteShopItemGlobal('${item.id}')" class="delete-btn">Delete</button>
                         </div>
                     </div>
                 `;
@@ -423,26 +423,26 @@ class SimpleAdminPanel {
             console.log('Finished rendering shop items');
         } else {
             console.log('No shop items to render');
-            html += '<p style="color: #888;">No shop items yet. Add your first item above!</p>';
+            html += '<p class="no-content-message">No shop items yet. Add your first item above!</p>';
         }
         
         // Gallery items
         if (this.galleryItems.length > 0) {
             console.log('Rendering gallery items...');
-            html += '<h3 style="margin-top: 2rem;">🖼️ Gallery Items (' + this.galleryItems.length + ')</h3>';
+            html += '<h3 class="content-section-title">🖼️ Gallery Items (' + this.galleryItems.length + ')</h3>';
             this.galleryItems.forEach((item, index) => {
                 console.log(`Rendering gallery item ${index}:`, item);
                 
                 const itemHtml = `
-                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
-                        <div style="display: flex; gap: 1rem; align-items: center;">
-                            <img src="${item.image}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${item.image}');">
-                            <div style="flex: 1;">
-                                <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
-                                <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
-                                <div style="color: ${item.locked ? '#ff6b6b' : '#28a745'};">${item.locked ? '🔒 Locked' : '🔓 Public'}</div>
-                            </div>
-                            <button onclick="deleteGalleryItemGlobal('${item.id}')" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                    <div class="content-item">
+                        <img src="${item.image}" alt="${item.title}" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${item.image}');">
+                        <div class="content-info">
+                            <h4 class="content-title">${item.title}</h4>
+                            <p class="content-description">${item.description}</p>
+                            <div class="content-status ${item.locked ? 'locked' : 'public'}">${item.locked ? '🔒 Locked' : '🔓 Public'}</div>
+                        </div>
+                        <div class="content-actions">
+                            <button onclick="deleteGalleryItemGlobal('${item.id}')" class="delete-btn">Delete</button>
                         </div>
                     </div>
                 `;
@@ -453,7 +453,7 @@ class SimpleAdminPanel {
             console.log('Finished rendering gallery items');
         } else {
             console.log('No gallery items to render');
-            html += '<p style="color: #888;">No gallery items yet. Add your first item above!</p>';
+            html += '<p class="no-content-message">No gallery items yet. Add your first item above!</p>';
         }
         
         html += '</div>';

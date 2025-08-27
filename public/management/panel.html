@@ -561,6 +561,69 @@
                 font-size: 0.8rem;
             }
         }
+
+        /* Additional Content Display Styles */
+        .content-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .content-section-title {
+            color: #ff6b6b;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #444;
+            padding-bottom: 0.5rem;
+        }
+
+        .content-meta {
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-status {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-status.locked {
+            color: #ff6b6b;
+        }
+
+        .content-status.public {
+            color: #28a745;
+        }
+
+        .no-content-message {
+            color: #888;
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        /* Mobile optimizations for content grid */
+        @media (max-width: 768px) {
+            .content-section-title {
+                font-size: 1.3rem;
+                margin: 1.5rem 0 0.75rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-section-title {
+                font-size: 1.2rem;
+                margin: 1rem 0 0.5rem 0;
+            }
+            
+            .no-content-message {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
