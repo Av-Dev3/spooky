@@ -353,21 +353,8 @@ class SimpleAdminPanel {
     }
     
     // Helper method to construct proper image URLs
-    async getImageUrl(fileId) {
+    getImageUrl(fileId) {
         if (!fileId || !this.config) return this.getPlaceholderImage();
-        
-        try {
-            // Try to get a signed URL instead of public URL
-            const response = await fetch(`/api/admin/media/signed-url?filename=${encodeURIComponent(fileId)}`);
-            if (response.ok) {
-                const data = await response.json();
-                return data.signedUrl || this.getPlaceholderImage();
-            }
-        } catch (error) {
-            console.error('Error getting signed URL:', error);
-        }
-        
-        // Fallback to public URL (might not work if bucket isn't public)
         return `${this.config.supabaseUrl}/storage/v1/object/public/${this.config.storageBucket}/${fileId}`;
     }
     
@@ -400,32 +387,31 @@ class SimpleAdminPanel {
                 console.log('Rendering shop item:', item);
                 
                 // Construct proper image URL from fileId stored in image_url
-                this.getImageUrl(item.image_url).then(imageUrl => {
-                    console.log('Constructed image URL:', imageUrl);
-                    
-                    // Test the image URL
-                    this.testImageUrl(imageUrl).then(isAccessible => {
-                        console.log(`Image ${imageUrl} is accessible:`, isAccessible);
-                        if (!isAccessible) {
-                            console.warn('Image not accessible, this might be a storage bucket configuration issue');
-                        }
-                    });
-                    
-                    html += `
-                        <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
-                            <div style="display: flex; gap: 1rem; align-items: center;">
-                                <img src="${imageUrl}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${imageUrl}');">
-                                <div style="flex: 1;">
-                                    <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
-                                    <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
-                                    <div style="color: #28a745; font-weight: bold;">$${item.price}</div>
-                                    <div style="color: #888; font-size: 0.8rem;">File: ${item.image_url}</div>
-                                </div>
-                                <button onclick="deleteShopItemGlobal(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
-                            </div>
-                        </div>
-                    `;
+                const imageUrl = this.getImageUrl(item.image_url);
+                console.log('Constructed image URL:', imageUrl);
+                
+                // Test the image URL
+                this.testImageUrl(imageUrl).then(isAccessible => {
+                    console.log(`Image ${imageUrl} is accessible:`, isAccessible);
+                    if (!isAccessible) {
+                        console.warn('Image not accessible, this might be a storage bucket configuration issue');
+                    }
                 });
+                
+                html += `
+                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #444;">
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <img src="${imageUrl}" alt="${item.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" onerror="this.src=adminPanel.getPlaceholderImage(); console.warn('Image failed to load:', '${imageUrl}');">
+                            <div style="flex: 1;">
+                                <h4 style="color: #ff6b6b; margin-bottom: 0.5rem;">${item.title}</h4>
+                                <p style="color: #ccc; margin-bottom: 0.5rem;">${item.description}</p>
+                                <div style="color: #28a745; font-weight: bold;">$${item.price}</div>
+                                <div style="color: #888; font-size: 0.8rem;">File: ${item.image_url}</div>
+                            </div>
+                            <button onclick="deleteShopItemGlobal(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Delete</button>
+                        </div>
+                    </div>
+                `;
             });
         } else {
             html += '<p style="color: #888;">No shop items yet. Add your first item above!</p>';
