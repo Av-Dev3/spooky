@@ -756,7 +756,7 @@ img:not(.logo-large) {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 1.5s ease-out, visibility 1.5s ease-out, transform 1.5s ease-out;
+    transition: opacity 1.5s ease-out, visibility 1.5s ease-out;
     overflow: hidden;
 }
 
@@ -793,6 +793,67 @@ img:not(.logo-large) {
 /* Mobile splash video - hidden by default */
 .mobile-splash {
     display: none;
+    /* Ensure no transforms or transitions for mobile */
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+}
+
+/* High specificity override for mobile splash to prevent sliding */
+.splash-video-container .mobile-splash,
+.splash-screen .mobile-splash {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    transform-origin: center !important;
+    will-change: auto !important;
+}
+
+/* Ensure mobile splash video appears immediately in correct position */
+.splash-video-container .mobile-splash[style*="display: block"],
+.splash-video-container .mobile-splash[style*="display: block !important"] {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Additional rule for when mobile-splash class is dynamically added */
+.splash-video-container video.mobile-splash,
+.splash-screen video.mobile-splash {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Ultimate override for mobile splash - highest specificity */
+.splash-screen .splash-video-container video.mobile-splash {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    /* Force immediate positioning */
+    transform-origin: center !important;
+    will-change: auto !important;
 }
 
 /* Mobile-specific video sizing */
@@ -872,6 +933,7 @@ img:not(.logo-large) {
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
+        /* CRITICAL: Override the base splash-video transform to prevent sliding */
         transform: none !important;
         box-shadow: none !important;
         z-index: 1;
@@ -882,6 +944,7 @@ img:not(.logo-large) {
         /* Remove ALL transitions and animations to prevent slide-in effect */
         transition: none !important;
         animation: none !important;
+        /* Double-ensure no transforms */
         transform: none !important;
         opacity: 1 !important;
         visibility: visible !important;
@@ -890,6 +953,9 @@ img:not(.logo-large) {
         transition-duration: 0s !important;
         transition-delay: 0s !important;
         transition-timing-function: none !important;
+        /* Additional specificity to override base splash-video */
+        transform-origin: center !important;
+        will-change: auto !important;
     }
     
     .splash-video-container {
@@ -934,6 +1000,7 @@ img:not(.logo-large) {
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
+        /* CRITICAL: Override the base splash-video transform to prevent sliding */
         transform: none !important;
         box-shadow: none !important;
         z-index: 1;
@@ -944,6 +1011,7 @@ img:not(.logo-large) {
         /* Remove ALL transitions and animations to prevent slide-in effect */
         transition: none !important;
         animation: none !important;
+        /* Double-ensure no transforms */
         transform: none !important;
         opacity: 1 !important;
         visibility: visible !important;
@@ -952,6 +1020,9 @@ img:not(.logo-large) {
         transition-duration: 0s !important;
         transition-delay: 0s !important;
         transition-timing-function: none !important;
+        /* Additional specificity to override base splash-video */
+        transform-origin: center !important;
+        will-change: auto !important;
     }
     
     .splash-video-container {

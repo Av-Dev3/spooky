@@ -180,8 +180,16 @@
         if (isMobile && mobileSplashVideo) {
             console.log('Mobile device detected - showing mobile splash video');
             if (splashVideo) splashVideo.style.display = 'none';
-            mobileSplashVideo.style.display = 'block';
-            mobileSplashVideo.classList.remove('mobile-splash');
+            // Force immediate positioning to prevent sliding
+            mobileSplashVideo.style.transform = 'none';
+            mobileSplashVideo.style.transition = 'none';
+            mobileSplashVideo.style.animation = 'none';
+            // Keep the mobile-splash class for proper styling
+            mobileSplashVideo.classList.add('mobile-splash');
+            // Small delay to ensure CSS is applied before display
+            setTimeout(() => {
+                mobileSplashVideo.style.display = 'block';
+            }, 10);
         } else if (splashVideo) {
             console.log('Desktop device detected - showing desktop splash video');
             if (mobileSplashVideo) {
