@@ -856,11 +856,7 @@ img:not(.logo-large) {
     will-change: auto !important;
 }
 
-/* Loading spinner animation for mobile splash */
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
+
 
 /* Mobile-specific video sizing */
 @media (max-width: 768px) {
