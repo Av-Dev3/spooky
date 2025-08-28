@@ -110,6 +110,11 @@
 
             mobileSplashVideo.addEventListener('error', function(e) {
                 console.warn('Mobile splash video error:', e);
+                // Hide loading indicator if there's an error
+                const loadingIndicator = document.getElementById('mobileLoadingIndicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
                 hideSplash();
             });
 
@@ -117,6 +122,11 @@
                 console.log('Mobile splash video can play - starting playback');
                 mobileSplashVideo.play().catch(function(error) {
                     console.warn('Could not autoplay mobile video:', error);
+                    // Hide loading indicator if autoplay fails
+                    const loadingIndicator = document.getElementById('mobileLoadingIndicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
                     setTimeout(hideSplash, 2000);
                 });
             });
@@ -140,6 +150,21 @@
             // Add playing event to confirm playback
             mobileSplashVideo.addEventListener('playing', function() {
                 console.log('Mobile video is now playing');
+                // Hide loading indicator once video starts playing
+                const loadingIndicator = document.getElementById('mobileLoadingIndicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+            });
+            
+            // Add loadstart event to track when video starts loading
+            mobileSplashVideo.addEventListener('loadstart', function() {
+                console.log('Mobile video started loading');
+            });
+            
+            // Add progress event to track loading progress
+            mobileSplashVideo.addEventListener('progress', function() {
+                console.log('Mobile video loading progress');
             });
         }
     }
@@ -180,16 +205,29 @@
         if (isMobile && mobileSplashVideo) {
             console.log('Mobile device detected - showing mobile splash video');
             if (splashVideo) splashVideo.style.display = 'none';
-            // Force immediate positioning to prevent sliding
-            mobileSplashVideo.style.transform = 'none';
-            mobileSplashVideo.style.transition = 'none';
-            mobileSplashVideo.style.animation = 'none';
-            // Keep the mobile-splash class for proper styling
-            mobileSplashVideo.classList.add('mobile-splash');
-            // Small delay to ensure CSS is applied before display
-            setTimeout(() => {
-                mobileSplashVideo.style.display = 'block';
-            }, 10);
+            
+            // Show loading state for mobile
+            showMobileLoadingState();
+            
+            // Wait for page to fully load before showing mobile video
+            if (document.readyState === 'complete') {
+                // Page already loaded, show video after a short delay
+                setTimeout(() => showMobileVideo(), 500);
+            } else {
+                // Wait for page to finish loading
+                window.addEventListener('load', () => {
+                    console.log('Page fully loaded, showing mobile splash video');
+                    setTimeout(() => showMobileVideo(), 500);
+                });
+                
+                // Fallback: if page takes too long to load, show video anyway
+                setTimeout(() => {
+                    if (document.readyState !== 'complete') {
+                        console.log('Page loading timeout, showing mobile splash video anyway');
+                        showMobileVideo();
+                    }
+                }, 8000); // 8 second timeout
+            }
         } else if (splashVideo) {
             console.log('Desktop device detected - showing desktop splash video');
             if (mobileSplashVideo) {
@@ -208,7 +246,7 @@
         handleSkipButton();
         
         // Fallback: hide splash after video duration + buffer (in case video doesn't load)
-        const maxDuration = 8000; // 6 seconds + 2 second buffer
+        const maxDuration = 12000; // Increased buffer for mobile loading
         setTimeout(function() {
             if (!splashScreen.classList.contains('hidden')) {
                 console.log('Splash screen timeout - hiding after maximum duration');
@@ -217,6 +255,65 @@
         }, maxDuration);
         
         console.log('Splash screen initialized');
+    }
+    
+    // Show mobile loading state
+    function showMobileLoadingState() {
+        // Create or show loading indicator
+        let loadingIndicator = document.getElementById('mobileLoadingIndicator');
+        if (!loadingIndicator) {
+            loadingIndicator = document.createElement('div');
+            loadingIndicator.id = 'mobileLoadingIndicator';
+            loadingIndicator.innerHTML = `
+                <div style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    text-align: center;
+                    color: white;
+                    z-index: 10;
+                    background: rgba(0,0,0,0.7);
+                    padding: 2rem;
+                    border-radius: 15px;
+                    backdrop-filter: blur(10px);
+                ">
+                    <div style="
+                        width: 50px;
+                        height: 50px;
+                        border: 3px solid #ff6b6b;
+                        border-top: 3px solid transparent;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto 1rem;
+                    "></div>
+                    <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Loading...</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Please wait while we prepare your experience</div>
+                </div>
+            `;
+            splashScreen.appendChild(loadingIndicator);
+        }
+        loadingIndicator.style.display = 'block';
+    }
+    
+    // Show mobile video after loading
+    function showMobileVideo() {
+        // Hide loading indicator
+        const loadingIndicator = document.getElementById('mobileLoadingIndicator');
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+        }
+        
+        // Force immediate positioning to prevent sliding
+        mobileSplashVideo.style.transform = 'none';
+        mobileSplashVideo.style.transition = 'none';
+        mobileSplashVideo.style.animation = 'none';
+        // Keep the mobile-splash class for proper styling
+        mobileSplashVideo.classList.add('mobile-splash');
+        // Show the video
+        mobileSplashVideo.style.display = 'block';
+        
+        console.log('Mobile splash video displayed after loading');
     }
 
     // Auto-initialize when DOM is ready
