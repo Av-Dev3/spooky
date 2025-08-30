@@ -1,5 +1,7 @@
 // Homepage functionality for Spoookysnsfww
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Homepage.js loaded, initializing...');
+    
     // Load quick links
     loadQuickLinks();
     
@@ -13,14 +15,28 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load quick links section
 async function loadQuickLinks() {
     try {
-        const response = await fetch('/data/links.json');
+        console.log('Loading quick links...');
+        const response = await fetch('data/links.json');
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const links = await response.json();
+        console.log('Loaded links:', links);
         
         const container = document.getElementById('quickLinksContainer');
-        if (!container) return;
+        console.log('Container element:', container);
+        
+        if (!container) {
+            console.error('Quick links container not found!');
+            return;
+        }
         
         // Show first 6 links as a preview
         const previewLinks = links.slice(0, 6);
+        console.log('Preview links:', previewLinks);
         
         container.innerHTML = previewLinks.map(link => `
             <a href="${link.url}" class="quick-link-card" target="_blank" rel="noopener">
@@ -32,6 +48,8 @@ async function loadQuickLinks() {
             </a>
         `).join('');
         
+        console.log('Quick links rendered successfully');
+        
     } catch (error) {
         console.error('Error loading quick links:', error);
     }
@@ -40,19 +58,33 @@ async function loadQuickLinks() {
 // Load gallery preview section
 async function loadGalleryPreview() {
     try {
-        const response = await fetch('/data/gallery.json');
+        console.log('Loading gallery preview...');
+        const response = await fetch('data/gallery.json');
+        console.log('Gallery response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const galleryItems = await response.json();
+        console.log('Loaded gallery items:', galleryItems);
         
         const container = document.getElementById('galleryPreviewContainer');
-        if (!container) return;
+        console.log('Gallery container element:', container);
+        
+        if (!container) {
+            console.error('Gallery preview container not found!');
+            return;
+        }
         
         // Show first 3 gallery items as a preview
         const previewItems = galleryItems.slice(0, 3);
+        console.log('Preview gallery items:', previewItems);
         
         container.innerHTML = previewItems.map(item => `
             <div class="gallery-preview-item">
                 <div class="gallery-preview-image">
-                    <img src="/${item.image}" alt="${item.title}" loading="lazy">
+                    <img src="${item.image}" alt="${item.title}" loading="lazy">
                     ${item.locked ? '<div class="gallery-lock-overlay">🔒</div>' : ''}
                 </div>
                 <div class="gallery-preview-info">
@@ -62,6 +94,8 @@ async function loadGalleryPreview() {
             </div>
         `).join('');
         
+        console.log('Gallery preview rendered successfully');
+        
     } catch (error) {
         console.error('Error loading gallery preview:', error);
     }
@@ -70,6 +104,8 @@ async function loadGalleryPreview() {
 // Load FAQ preview section
 async function loadFAQPreview() {
     try {
+        console.log('Loading FAQ preview...');
+        
         // Since we don't have a FAQ JSON file, we'll create some common FAQs
         const commonFAQs = [
             {
@@ -87,7 +123,12 @@ async function loadFAQPreview() {
         ];
         
         const container = document.getElementById('faqPreviewContainer');
-        if (!container) return;
+        console.log('FAQ container element:', container);
+        
+        if (!container) {
+            console.error('FAQ preview container not found!');
+            return;
+        }
         
         container.innerHTML = commonFAQs.map(faq => `
             <div class="faq-preview-item">
@@ -95,6 +136,8 @@ async function loadFAQPreview() {
                 <p class="faq-preview-answer">${faq.answer}</p>
             </div>
         `).join('');
+        
+        console.log('FAQ preview rendered successfully');
         
     } catch (error) {
         console.error('Error loading FAQ preview:', error);
