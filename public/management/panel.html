@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Content Management</title>
+    <title>Admin Panel - Gallery Management</title>
     <style>
         * {
             margin: 0;
@@ -148,8 +148,8 @@
             border: 2px solid #444;
             border-radius: 5px;
             background: #1a1a1a;
-            color: white;
-            font-size: 0.9rem;
+            color: #ffffff;
+            font-size: 1rem;
         }
         
         .form-group input:focus,
@@ -157,6 +157,7 @@
         .form-group select:focus {
             outline: none;
             border-color: #ff6b6b;
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
         }
         
         .form-row {
@@ -169,7 +170,7 @@
             background: #ff6b6b;
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
@@ -181,587 +182,208 @@
         .btn:hover {
             background: #ff5252;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
         }
         
         .btn-secondary {
-            background: #6c757d;
+            background: #666;
         }
         
         .btn-secondary:hover {
-            background: #5a6268;
+            background: #555;
         }
         
         .content-preview {
-            margin-top: 2rem;
-            padding: 1.5rem;
             background: #1a1a1a;
-            border-radius: 8px;
-            border: 1px solid #444;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+        
+        .content-preview h3 {
+            color: #ff6b6b;
+            margin-bottom: 1rem;
         }
         
         .preview-image {
-            max-width: 200px;
-            max-height: 200px;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 300px;
             border-radius: 8px;
             margin-bottom: 1rem;
-        }
-        
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-        
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ff6b6b;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         .hidden {
             display: none;
         }
         
-        .content-type-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .type-btn {
-            flex: 1;
+        .alert {
             padding: 1rem;
-            background: #444;
-            color: #ccc;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            font-weight: 500;
         }
         
-        .type-btn.active {
-            background: #ff6b6b;
+        .alert-success {
+            background: #28a745;
             color: white;
         }
         
-        .type-btn:hover {
-            background: #555;
+        .alert-error {
+            background: #dc3545;
+            color: white;
         }
         
-        .type-btn.active:hover {
-            background: #ff5252;
+        .alert-info {
+            background: #17a2b8;
+            color: white;
         }
-
-        /* Mobile Responsive Styles */
-        @media (max-width: 768px) {
-            .header {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .header-actions {
-                flex-direction: column;
-                gap: 0.75rem;
-                width: 100%;
-            }
-            
-            .back-home-btn,
-            .logout-btn {
-                width: 100%;
-                justify-content: center;
-                padding: 0.75rem 1rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .section h2 {
-                font-size: 1.3rem;
-                margin-bottom: 1rem;
-            }
-            
-            .upload-area {
-                padding: 2rem 1rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .upload-icon {
-                font-size: 3rem;
-            }
-            
-            .upload-text {
-                font-size: 1rem;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-            
-            .form-group {
-                margin-bottom: 1rem;
-            }
-            
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 0.875rem;
-                font-size: 16px; /* Prevents zoom on iOS */
-            }
-            
-            .btn {
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 0.5rem;
-                padding: 1rem;
-                font-size: 1rem;
-            }
-            
-            .content-type-selector {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .type-btn {
-                padding: 1rem;
-                font-size: 1rem;
-            }
-            
-            .content-preview {
-                padding: 1rem;
-                margin-top: 1.5rem;
-            }
-            
-            .preview-image {
-                max-width: 100%;
-                max-height: 150px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header {
-                padding: 0.75rem;
-            }
-            
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            
-            .header-actions {
-                gap: 0.5rem;
-            }
-            
-            .back-home-btn,
-            .logout-btn {
-                padding: 0.875rem 1rem;
-                font-size: 0.9rem;
-            }
-            
-            .container {
-                padding: 0.75rem;
-            }
-            
-            .section {
-                padding: 1rem;
-                margin-bottom: 1rem;
-            }
-            
-            .section h2 {
-                font-size: 1.2rem;
-            }
-            
-            .upload-area {
-                padding: 1.5rem 0.75rem;
-            }
-            
-            .upload-icon {
-                font-size: 2.5rem;
-            }
-            
-            .upload-text {
-                font-size: 0.9rem;
-            }
-            
-            .upload-hint {
-                font-size: 0.8rem;
-            }
-            
-            .form-group label {
-                font-size: 0.9rem;
-            }
-            
-            .btn {
-                padding: 0.875rem;
-                font-size: 0.9rem;
-            }
-            
-            .type-btn {
-                padding: 0.875rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Touch-friendly improvements */
-        @media (hover: none) and (pointer: coarse) {
-            .btn,
-            .type-btn,
-            .logout-btn,
-            .back-home-btn {
-                min-height: 44px; /* iOS recommended touch target */
-            }
-            
-            .upload-area {
-                min-height: 120px;
-            }
-            
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                min-height: 44px;
-            }
-        }
-
-        /* Landscape mobile optimization */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .header {
-                flex-direction: row;
-                padding: 0.75rem 1rem;
-            }
-            
-            .header h1 {
-                font-size: 1.4rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-            }
-        }
-
-        /* High DPI displays */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .btn,
-            .type-btn,
-            .logout-btn {
-                border-width: 0.5px;
-            }
-        }
-
-        /* Current Content Display Styles */
-        #currentContent {
-            margin-top: 2rem;
-        }
-
+        
         .content-item {
             background: #1a1a1a;
-            border: 1px solid #444;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 1.5rem;
             margin-bottom: 1rem;
             display: flex;
-            gap: 1rem;
-            align-items: flex-start;
+            gap: 1.5rem;
+            align-items: center;
         }
-
-        .content-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 4px;
+        
+        .content-image {
             flex-shrink: 0;
         }
-
-        .content-info {
-            flex: 1;
-            min-width: 0;
+        
+        .content-image img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
         }
-
-        .content-title {
+        
+        .content-details {
+            flex: 1;
+        }
+        
+        .content-details h4 {
             color: #ff6b6b;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
         }
-
-        .content-description {
+        
+        .content-details p {
             color: #ccc;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            line-height: 1.4;
+            margin-bottom: 1rem;
         }
-
-        .content-price {
-            color: #28a745;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        
+        .content-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
-
+        
+        .content-type,
+        .content-status {
+            background: #333;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .content-status.locked {
+            background: #dc3545;
+        }
+        
+        .content-status.unlocked {
+            background: #28a745;
+        }
+        
         .content-actions {
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
-
+        
         .delete-btn {
             background: #dc3545;
             color: white;
             border: none;
             padding: 0.5rem 1rem;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
-
+        
         .delete-btn:hover {
             background: #c82333;
+            transform: translateY(-1px);
         }
-
-        /* Mobile styles for content display */
-        @media (max-width: 768px) {
-            .content-item {
-                flex-direction: column !important;
-                padding: 1rem !important;
-                gap: 0.75rem !important;
-                margin-bottom: 1rem !important;
-            }
-            
-            .content-item img {
-                width: 100% !important;
-                height: 120px !important;
-                object-fit: cover !important;
-                border-radius: 8px !important;
-            }
-            
-            .content-info {
-                width: 100% !important;
-                order: 2 !important;
-            }
-            
-            .content-title {
-                font-size: 1.1rem !important;
-                margin-bottom: 0.5rem !important;
-                text-align: center !important;
-            }
-            
-            .content-description {
-                font-size: 0.9rem !important;
-                margin-bottom: 0.75rem !important;
-                text-align: center !important;
-                line-height: 1.4 !important;
-            }
-            
-            .content-price {
-                text-align: center !important;
-                margin-bottom: 0.75rem !important;
-                font-size: 1.1rem !important;
-            }
-            
-            .content-meta {
-                text-align: center !important;
-                margin-bottom: 0.75rem !important;
-                font-size: 0.75rem !important;
-            }
-            
-            .content-status {
-                text-align: center !important;
-                margin-bottom: 0.75rem !important;
-                font-size: 0.9rem !important;
-            }
-            
-            .content-actions {
-                justify-content: center !important;
-                order: 3 !important;
-                width: 100% !important;
-            }
-            
-            .delete-btn {
-                width: 100% !important;
-                padding: 1rem !important;
-                font-size: 1rem !important;
-                min-height: 48px !important;
-                border-radius: 8px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .content-item {
-                padding: 0.75rem !important;
-                margin-bottom: 0.75rem !important;
-            }
-            
-            .content-item img {
-                height: 100px !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .content-title {
-                font-size: 1rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .content-description {
-                font-size: 0.85rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .content-price {
-                font-size: 1rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .content-meta {
-                font-size: 0.7rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .content-status {
-                font-size: 0.85rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .delete-btn {
-                padding: 0.875rem !important;
-                font-size: 0.95rem !important;
-                min-height: 44px !important;
-            }
-        }
-
-        /* Enhanced mobile styling for content items */
-        @media (max-width: 768px) {
-            .content-item {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-                border: 2px solid #333 !important;
-                background: linear-gradient(145deg, #1a1a1a, #222) !important;
-            }
-            
-            .content-item:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
-            }
-            
-            .content-section-title {
-                text-align: center !important;
-                margin: 1.5rem 0 1rem 0 !important;
-                font-size: 1.4rem !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .content-item {
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-                border: 1px solid #333 !important;
-            }
-            
-            .content-section-title {
-                font-size: 1.2rem !important;
-                margin: 1rem 0 0.75rem 0 !important;
-            }
-            
-            .content-grid {
-                gap: 0.75rem !important;
-            }
-        }
-
-        /* Additional Content Display Styles */
-        .content-grid {
-            display: grid;
-            gap: 1rem;
-        }
-
+        
         .content-section-title {
             color: #ff6b6b;
             margin: 2rem 0 1rem 0;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             border-bottom: 2px solid #444;
             padding-bottom: 0.5rem;
         }
-
-        .content-meta {
-            color: #888;
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .content-status {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .content-status.locked {
-            color: #ff6b6b;
-        }
-
-        .content-status.public {
-            color: #28a745;
-        }
-
+        
         .no-content-message {
             color: #888;
+            font-style: italic;
             text-align: center;
             padding: 2rem;
-            font-style: italic;
+        }
+        
+        .stats-container {
             background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        
+        .stats-container h3 {
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stats-grid > div {
+            background: #333;
+            padding: 1rem;
             border-radius: 8px;
-            border: 1px solid #444;
+            text-align: center;
+            font-weight: 500;
         }
-
-        /* Mobile optimizations for content grid */
+        
+        .utility-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
         @media (max-width: 768px) {
-            .content-section-title {
-                font-size: 1.3rem;
-                margin: 1.5rem 0 0.75rem 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .content-section-title {
-                font-size: 1.2rem;
-                margin: 1rem 0 0.5rem 0;
+            .form-row {
+                grid-template-columns: 1fr;
             }
             
-            .no-content-message {
-                padding: 1.5rem;
-                font-size: 0.9rem;
+            .content-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .content-image img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .content-meta {
+                justify-content: center;
+            }
+            
+            .content-actions {
+                justify-content: center;
             }
         }
     </style>
@@ -778,65 +400,8 @@
     </div>
 
     <div class="container">
-        <!-- Content Type Selector -->
-        <div class="content-type-selector">
-            <button class="type-btn active" onclick="selectContentType('shop')">🛍️ Add Shop Item</button>
-            <button class="type-btn" onclick="selectContentType('gallery')">🖼️ Add Gallery Item</button>
-        </div>
-
-        <!-- Shop Item Form -->
-        <div id="shopForm" class="section">
-            <h2>Add New Shop Item</h2>
-            
-            <!-- File Upload Area -->
-            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-                <div class="upload-icon">📁</div>
-                <div class="upload-text">Click to select image or drag & drop</div>
-                <div class="upload-hint">Supports: JPG, PNG, GIF, WebP</div>
-                <input type="file" id="fileInput" accept="image/*" style="display: none;">
-            </div>
-            
-            <!-- Form Fields -->
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" placeholder="e.g., Spooky Photo Set" required>
-                </div>
-                <div class="form-group">
-                    <label for="price">Price ($)</label>
-                    <input type="number" id="price" min="0" step="0.01" placeholder="15.00" required>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" rows="3" placeholder="Describe your content..." required></textarea>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="tags">Tags (comma separated)</label>
-                    <input type="text" id="tags" placeholder="photos, spooky, dark">
-                </div>
-                <div class="form-group">
-                    <label for="processorUrl">Payment Link</label>
-                    <input type="url" id="processorUrl" placeholder="https://onlyfans.com/yourprofile" required>
-                </div>
-            </div>
-            
-            <!-- Content Preview -->
-            <div id="contentPreview" class="content-preview hidden">
-                <h3>Preview:</h3>
-                <img id="previewImage" class="preview-image" src="" alt="Preview">
-                <div id="previewInfo"></div>
-            </div>
-            
-            <button type="button" class="btn" onclick="addShopItem()">Add to Shop</button>
-            <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
-        </div>
-
         <!-- Gallery Item Form -->
-        <div id="galleryForm" class="section hidden">
+        <div class="section">
             <h2>Add New Gallery Item</h2>
             
             <!-- File Upload Area -->
@@ -875,25 +440,28 @@
             </div>
             
             <button type="button" class="btn" onclick="addGalleryItem()">Add to Gallery</button>
-            <button type="button" class="btn btn-secondary" onclick="clearGalleryForm()">Clear Form</button>
+            <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
         </div>
 
         <!-- Current Content Display -->
         <div class="section">
             <h2>Current Content</h2>
-            <div id="currentContent">
+            <div id="contentContainer">
                 <p>Loading current content...</p>
             </div>
         </div>
 
-        <!-- Debug Section -->
+        <!-- Utility Section -->
         <div class="section">
-            <h2>🔧 Debug Information</h2>
-            <div id="debugInfo">
-                <p>Loading debug info...</p>
+            <h2>🔧 Utilities</h2>
+            <div class="utility-buttons">
+                <button onclick="testImages()" class="btn btn-secondary">Test All Images</button>
+                <button onclick="showStats()" class="btn btn-secondary">Show Statistics</button>
             </div>
-            <button onclick="adminPanel.testCurrentImages()" class="btn btn-secondary">Test All Image URLs</button>
         </div>
+
+        <!-- Alert Container -->
+        <div id="alertContainer"></div>
     </div>
 
     <script src="/management/auth.js"></script>

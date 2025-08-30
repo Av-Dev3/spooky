@@ -9,35 +9,26 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Not authorized" });
   }
 
-  const { storagePath, title, description, tags, contentType, type, price, processorUrl } = req.body;
-  console.log("Received commit request:", { storagePath, title, description, tags, contentType, type, price, processorUrl });
+  const { title, description, imageUrl, locked } = req.body;
+  console.log("Received commit request:", { title, description, imageUrl, locked });
   
-  if (!storagePath || !title) {
-    console.log("Missing required fields:", { storagePath, title });
+  if (!title || !imageUrl) {
+    console.log("Missing required fields:", { title, imageUrl });
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
     console.log("Attempting to insert into media_asset table...");
     const insertData = {
-      storage_path: storagePath,
+      storage_path: imageUrl,
       title,
       description: description || "",
-      tags: tags || [],
-      content_type: contentType || "unknown",
-      kind: 'image'
+      tags: [],
+      content_type: "image/jpeg",
+      kind: 'image',
+      locked: locked || false
     };
     
-    // For shop items, add additional data to tags or description
-    if (type === 'shop') {
-      const shopData = {
-        price: price,
-        processorUrl: processorUrl,
-        type: 'shop'
-      };
-      // Store shop data as JSON in the description field
-      insertData.description = JSON.stringify(shopData);
-    }
     console.log("Insert data:", insertData);
     
     console.log("About to call Supabase with table: media_asset");

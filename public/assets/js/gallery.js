@@ -122,8 +122,8 @@ function setupLightbox() {
             
             // Check if item is locked
             if (this.classList.contains('locked')) {
-                // Show locked message or redirect to shop
-                alert('This content is locked. Visit the shop to unlock!');
+                        // Show locked message
+        alert('This content is locked. Subscribe to my OnlyFans for exclusive access!');
                 return;
             }
             
