@@ -3215,7 +3215,7 @@ img:not(.logo-large) {
 
 .quick-links-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -3590,7 +3590,7 @@ img:not(.logo-large) {
     }
     
     .quick-links-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
     
@@ -3618,6 +3618,11 @@ img:not(.logo-large) {
     .faq-preview-section,
     .contact-preview-section {
         padding: 2rem 15px;
+    }
+    
+    .quick-links-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
     .section-header {
