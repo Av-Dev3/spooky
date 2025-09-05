@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
   if (password !== process.env.ADMIN_PASSWORD) {
     console.log("Password mismatch - returning error");
-    return res.status(401).json({ error: "Invalid password", redirect: "/management/login.html?error=1" });
+    return res.status(401).json({ error: "Invalid password", redirect: "/auth.html?error=1" });
   }
 
   console.log("Password correct - setting cookie and returning success");
