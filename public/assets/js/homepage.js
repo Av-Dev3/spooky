@@ -158,7 +158,7 @@ function initCustomsModal() {
     }
     
     // Handle form submission
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         // Get form data
@@ -217,10 +217,10 @@ function initCustomsModal() {
                 // Show success message
                 alert('Thank you for your custom content request! I will contact you using your preferred method within 24-48 hours.');
                 
-                // Close modal and reset form
-                closeCustomsModal();
-                form.reset();
-                toggleModalContactFields(); // Reset contact fields visibility
+                        // Close modal and reset form
+        window.closeCustomsModal();
+        form.reset();
+        window.toggleModalContactFields(); // Reset contact fields visibility
                 
                 // Optional: Open OnlyFans for immediate contact
                 if (confirm('Would you like to visit my OnlyFans page to send a direct message as well?')) {
@@ -238,14 +238,14 @@ function initCustomsModal() {
     // Close modal when clicking outside
     modal.addEventListener('click', function(e) {
         if (e.target === modal) {
-            closeCustomsModal();
+            window.closeCustomsModal();
         }
     });
     
     // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeCustomsModal();
+            window.closeCustomsModal();
         }
     });
 }
@@ -299,7 +299,49 @@ function toggleModalContactFields() {
     }
 }
 
-// Make functions globally available
-window.openCustomsModal = openCustomsModal;
-window.closeCustomsModal = closeCustomsModal;
-window.toggleModalContactFields = toggleModalContactFields;
+// Make functions globally available immediately
+window.openCustomsModal = function() {
+    const modal = document.getElementById('customsModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+};
+
+window.closeCustomsModal = function() {
+    const modal = document.getElementById('customsModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+};
+
+window.toggleModalContactFields = function() {
+    const platform = document.getElementById('modalPlatform').value;
+    const twitterField = document.getElementById('modalTwitterField');
+    const onlyfansField = document.getElementById('modalOnlyfansField');
+    const emailField = document.getElementById('modalEmailField');
+    
+    // Hide all fields first
+    twitterField.style.display = 'none';
+    onlyfansField.style.display = 'none';
+    emailField.style.display = 'none';
+    
+    // Clear all inputs
+    document.getElementById('modalHandle').value = '';
+    document.getElementById('modalOnlyfansUsername').value = '';
+    document.getElementById('modalEmail').value = '';
+    
+    // Show relevant field based on selection
+    switch(platform) {
+        case 'twitter':
+            twitterField.style.display = 'block';
+            break;
+        case 'onlyfans':
+            onlyfansField.style.display = 'block';
+            break;
+        case 'email':
+            emailField.style.display = 'block';
+            break;
+    }
+};
