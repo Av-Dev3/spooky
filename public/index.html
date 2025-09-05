@@ -388,26 +388,25 @@
                         <label for="modalPlatform">Preferred Contact Method *</label>
                         <select id="modalPlatform" name="platform" required onchange="toggleModalContactFields()">
                             <option value="">Select preferred contact...</option>
-                            <option value="twitter">Twitter/X DM</option>
+                            <option value="twitter">Twitter/X</option>
+                            <option value="onlyfans">OnlyFans</option>
                             <option value="email">Email</option>
-                            <option value="onlyfans">OnlyFans Message</option>
-                            <option value="other">Other Platform</option>
                         </select>
                     </div>
                     
                     <div id="modalTwitterField" class="form-group" style="display: none;">
-                        <label for="modalHandle">Twitter/X Handle *</label>
+                        <label for="modalHandle">Twitter/X Username *</label>
                         <input type="text" id="modalHandle" name="handle" placeholder="@yourusername">
+                    </div>
+                    
+                    <div id="modalOnlyfansField" class="form-group" style="display: none;">
+                        <label for="modalOnlyfansUsername">OnlyFans Username *</label>
+                        <input type="text" id="modalOnlyfansUsername" name="onlyfansUsername" placeholder="Your OnlyFans username">
                     </div>
                     
                     <div id="modalEmailField" class="form-group" style="display: none;">
                         <label for="modalEmail">Email Address *</label>
                         <input type="email" id="modalEmail" name="email" placeholder="your@email.com">
-                    </div>
-                    
-                    <div id="modalOtherField" class="form-group" style="display: none;">
-                        <label for="modalOtherContact">Contact Details *</label>
-                        <input type="text" id="modalOtherContact" name="otherContact" placeholder="Please specify how to contact you">
                     </div>
 
                     <div class="form-group">

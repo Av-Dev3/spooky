@@ -68,26 +68,25 @@
                     <label for="platform">Preferred Contact Method *</label>
                     <select id="platform" name="platform" required onchange="toggleContactFields()">
                         <option value="">Select preferred contact...</option>
-                        <option value="twitter">Twitter/X DM</option>
+                        <option value="twitter">Twitter/X</option>
+                        <option value="onlyfans">OnlyFans</option>
                         <option value="email">Email</option>
-                        <option value="onlyfans">OnlyFans Message</option>
-                        <option value="other">Other Platform</option>
                     </select>
                 </div>
                 
                 <div id="twitterField" class="form-group" style="display: none;">
-                    <label for="handle">Twitter/X Handle *</label>
+                    <label for="handle">Twitter/X Username *</label>
                     <input type="text" id="handle" name="handle" placeholder="@yourusername">
+                </div>
+                
+                <div id="onlyfansField" class="form-group" style="display: none;">
+                    <label for="onlyfansUsername">OnlyFans Username *</label>
+                    <input type="text" id="onlyfansUsername" name="onlyfansUsername" placeholder="Your OnlyFans username">
                 </div>
                 
                 <div id="emailField" class="form-group" style="display: none;">
                     <label for="email">Email Address *</label>
                     <input type="email" id="email" name="email" placeholder="your@email.com">
-                </div>
-                
-                <div id="otherField" class="form-group" style="display: none;">
-                    <label for="otherContact">Contact Details *</label>
-                    <input type="text" id="otherContact" name="otherContact" placeholder="Please specify how to contact you">
                 </div>
 
                 <div class="form-group">
@@ -160,32 +159,29 @@
         function toggleContactFields() {
             const platform = document.getElementById('platform').value;
             const twitterField = document.getElementById('twitterField');
+            const onlyfansField = document.getElementById('onlyfansField');
             const emailField = document.getElementById('emailField');
-            const otherField = document.getElementById('otherField');
             
             // Hide all fields first
             twitterField.style.display = 'none';
+            onlyfansField.style.display = 'none';
             emailField.style.display = 'none';
-            otherField.style.display = 'none';
             
             // Clear all inputs
             document.getElementById('handle').value = '';
+            document.getElementById('onlyfansUsername').value = '';
             document.getElementById('email').value = '';
-            document.getElementById('otherContact').value = '';
             
             // Show relevant field based on selection
             switch(platform) {
                 case 'twitter':
                     twitterField.style.display = 'block';
                     break;
+                case 'onlyfans':
+                    onlyfansField.style.display = 'block';
+                    break;
                 case 'email':
                     emailField.style.display = 'block';
-                    break;
-                case 'other':
-                    otherField.style.display = 'block';
-                    break;
-                case 'onlyfans':
-                    // No additional field needed for OnlyFans
                     break;
             }
         }
@@ -206,7 +202,13 @@
                 case 'twitter':
                     if (!data.handle || data.handle.trim() === '') {
                         contactValid = false;
-                        errorMessage = 'Please provide your Twitter/X handle.';
+                        errorMessage = 'Please provide your Twitter/X username.';
+                    }
+                    break;
+                case 'onlyfans':
+                    if (!data.onlyfansUsername || data.onlyfansUsername.trim() === '') {
+                        contactValid = false;
+                        errorMessage = 'Please provide your OnlyFans username.';
                     }
                     break;
                 case 'email':
@@ -214,15 +216,6 @@
                         contactValid = false;
                         errorMessage = 'Please provide your email address.';
                     }
-                    break;
-                case 'other':
-                    if (!data.otherContact || data.otherContact.trim() === '') {
-                        contactValid = false;
-                        errorMessage = 'Please provide your contact details.';
-                    }
-                    break;
-                case 'onlyfans':
-                    // No additional validation needed
                     break;
                 default:
                     contactValid = false;

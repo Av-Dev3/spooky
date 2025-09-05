@@ -179,7 +179,13 @@ function initCustomsModal() {
             case 'twitter':
                 if (!data.handle || data.handle.trim() === '') {
                     contactValid = false;
-                    errorMessage = 'Please provide your Twitter/X handle.';
+                    errorMessage = 'Please provide your Twitter/X username.';
+                }
+                break;
+            case 'onlyfans':
+                if (!data.onlyfansUsername || data.onlyfansUsername.trim() === '') {
+                    contactValid = false;
+                    errorMessage = 'Please provide your OnlyFans username.';
                 }
                 break;
             case 'email':
@@ -187,15 +193,6 @@ function initCustomsModal() {
                     contactValid = false;
                     errorMessage = 'Please provide your email address.';
                 }
-                break;
-            case 'other':
-                if (!data.otherContact || data.otherContact.trim() === '') {
-                    contactValid = false;
-                    errorMessage = 'Please provide your contact details.';
-                }
-                break;
-            case 'onlyfans':
-                // No additional validation needed
                 break;
         }
         
@@ -255,32 +252,29 @@ function closeCustomsModal() {
 function toggleModalContactFields() {
     const platform = document.getElementById('modalPlatform').value;
     const twitterField = document.getElementById('modalTwitterField');
+    const onlyfansField = document.getElementById('modalOnlyfansField');
     const emailField = document.getElementById('modalEmailField');
-    const otherField = document.getElementById('modalOtherField');
     
     // Hide all fields first
     twitterField.style.display = 'none';
+    onlyfansField.style.display = 'none';
     emailField.style.display = 'none';
-    otherField.style.display = 'none';
     
     // Clear all inputs
     document.getElementById('modalHandle').value = '';
+    document.getElementById('modalOnlyfansUsername').value = '';
     document.getElementById('modalEmail').value = '';
-    document.getElementById('modalOtherContact').value = '';
     
     // Show relevant field based on selection
     switch(platform) {
         case 'twitter':
             twitterField.style.display = 'block';
             break;
+        case 'onlyfans':
+            onlyfansField.style.display = 'block';
+            break;
         case 'email':
             emailField.style.display = 'block';
-            break;
-        case 'other':
-            otherField.style.display = 'block';
-            break;
-        case 'onlyfans':
-            // No additional field needed for OnlyFans
             break;
     }
 }
