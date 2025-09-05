@@ -171,14 +171,36 @@ function initCustomsModal() {
             return;
         }
         
-        // Validate contact method
-        if (data.platform === 'twitter' && !data.handle) {
-            alert('Please provide your Twitter/X handle for Twitter DM contact.');
-            return;
+        // Validate contact information based on selected method
+        let contactValid = true;
+        let errorMessage = '';
+        
+        switch(data.platform) {
+            case 'twitter':
+                if (!data.handle || data.handle.trim() === '') {
+                    contactValid = false;
+                    errorMessage = 'Please provide your Twitter/X handle.';
+                }
+                break;
+            case 'email':
+                if (!data.email || data.email.trim() === '') {
+                    contactValid = false;
+                    errorMessage = 'Please provide your email address.';
+                }
+                break;
+            case 'other':
+                if (!data.otherContact || data.otherContact.trim() === '') {
+                    contactValid = false;
+                    errorMessage = 'Please provide your contact details.';
+                }
+                break;
+            case 'onlyfans':
+                // No additional validation needed
+                break;
         }
         
-        if (data.platform === 'email' && !data.email) {
-            alert('Please provide your email address for email contact.');
+        if (!contactValid) {
+            alert(errorMessage);
             return;
         }
         
@@ -188,6 +210,7 @@ function initCustomsModal() {
         // Close modal and reset form
         closeCustomsModal();
         form.reset();
+        toggleModalContactFields(); // Reset contact fields visibility
         
         // Optional: Open OnlyFans for immediate contact
         if (confirm('Would you like to visit my OnlyFans page to send a direct message as well?')) {
@@ -228,6 +251,41 @@ function closeCustomsModal() {
     }
 }
 
+// Toggle contact fields in modal based on selection
+function toggleModalContactFields() {
+    const platform = document.getElementById('modalPlatform').value;
+    const twitterField = document.getElementById('modalTwitterField');
+    const emailField = document.getElementById('modalEmailField');
+    const otherField = document.getElementById('modalOtherField');
+    
+    // Hide all fields first
+    twitterField.style.display = 'none';
+    emailField.style.display = 'none';
+    otherField.style.display = 'none';
+    
+    // Clear all inputs
+    document.getElementById('modalHandle').value = '';
+    document.getElementById('modalEmail').value = '';
+    document.getElementById('modalOtherContact').value = '';
+    
+    // Show relevant field based on selection
+    switch(platform) {
+        case 'twitter':
+            twitterField.style.display = 'block';
+            break;
+        case 'email':
+            emailField.style.display = 'block';
+            break;
+        case 'other':
+            otherField.style.display = 'block';
+            break;
+        case 'onlyfans':
+            // No additional field needed for OnlyFans
+            break;
+    }
+}
+
 // Make functions globally available
 window.openCustomsModal = openCustomsModal;
 window.closeCustomsModal = closeCustomsModal;
+window.toggleModalContactFields = toggleModalContactFields;
