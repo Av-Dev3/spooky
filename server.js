@@ -11,11 +11,16 @@ const port = process.env.PORT || 3000;
 app.prepare().then(() => {
   const server = express();
 
-  // Serve static files from public directory
-  server.use(express.static(path.join(__dirname, 'public')));
-  
   // Parse JSON bodies for API routes
   server.use(express.json());
+
+  // Handle auth route specifically
+  server.get('/auth', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'auth.html'));
+  });
+
+  // Serve static files from public directory
+  server.use(express.static(path.join(__dirname, 'public')));
 
   // Handle API routes with Next.js
   server.use('/api', (req, res) => {

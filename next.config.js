@@ -6,6 +6,10 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: '/auth',
+        destination: '/auth.html',
+      },
+      {
         source: '/api/:path*',
         destination: '/api/:path*',
       },
