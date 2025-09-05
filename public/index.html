@@ -212,7 +212,7 @@
                 </div>
                 
                 <div class="customs-cta">
-                    <a href="customs.html" class="btn btn-primary">Request Custom Content</a>
+                    <button onclick="openCustomsModal()" class="btn btn-primary">Request Custom Content</button>
                 </div>
             </div>
         </section>
@@ -364,6 +364,91 @@
             <img src="/assets/bat.png" alt="Bat decoration">
         </div>
     </footer>
+
+    <!-- Customs Modal -->
+    <div id="customsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎭 Custom Content Request</h2>
+                <button class="modal-close" onclick="closeCustomsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="customs-info">
+                    <h3>How It Works</h3>
+                    <ul>
+                        <li>Fill out the form below with your request details</li>
+                        <li>I'll review and provide a quote within 24-48 hours</li>
+                        <li>Payment is required upfront via OnlyFans or other platforms</li>
+                        <li>Delivery typically takes 3-7 business days</li>
+                    </ul>
+                </div>
+
+                <form class="modal-form" id="customsModalForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modalHandle">Twitter/X Handle</label>
+                            <input type="text" id="modalHandle" name="handle" placeholder="@yourusername">
+                        </div>
+                        <div class="form-group">
+                            <label for="modalEmail">Email Address</label>
+                            <input type="email" id="modalEmail" name="email" placeholder="your@email.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modalPlatform">Preferred Contact Method *</label>
+                        <select id="modalPlatform" name="platform" required>
+                            <option value="">Select preferred contact...</option>
+                            <option value="twitter">Twitter/X DM</option>
+                            <option value="email">Email</option>
+                            <option value="onlyfans">OnlyFans Message</option>
+                            <option value="other">Other Platform</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modalRequestType">Request Type *</label>
+                        <select id="modalRequestType" name="requestType" required>
+                            <option value="">Select type...</option>
+                            <option value="photos">Photo Set</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Audio</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modalBudget">Budget Range *</label>
+                        <select id="modalBudget" name="budget" required>
+                            <option value="">Select budget...</option>
+                            <option value="25-50">$25 - $50</option>
+                            <option value="51-100">$51 - $100</option>
+                            <option value="101-200">$101 - $200</option>
+                            <option value="200+">$200+</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modalDetails">Request Details *</label>
+                        <textarea id="modalDetails" name="details" rows="4" placeholder="Describe your custom content request in detail..." required></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="modalAgeConfirm" name="ageConfirm" required>
+                            <span class="checkmark"></span>
+                            I confirm I am 18+ years old and agree to the Terms & Privacy Policy
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeCustomsModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="/assets/js/color.js"></script>
     <script src="/assets/js/splash.js"></script>

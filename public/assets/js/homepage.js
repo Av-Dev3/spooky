@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load FAQ preview
     loadFAQPreview();
+    
+    // Initialize customs modal
+    initCustomsModal();
 });
 
 // Load quick links section
@@ -143,3 +146,88 @@ async function loadFAQPreview() {
         console.error('Error loading FAQ preview:', error);
     }
 }
+
+// Initialize customs modal functionality
+function initCustomsModal() {
+    const modal = document.getElementById('customsModal');
+    const form = document.getElementById('customsModalForm');
+    
+    if (!modal || !form) {
+        console.error('Customs modal elements not found');
+        return;
+    }
+    
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+        
+        // Validate required fields
+        if (!data.platform || !data.requestType || !data.budget || !data.details || !data.ageConfirm) {
+            alert('Please fill in all required fields and confirm you are 18+.');
+            return;
+        }
+        
+        // Validate contact method
+        if (data.platform === 'twitter' && !data.handle) {
+            alert('Please provide your Twitter/X handle for Twitter DM contact.');
+            return;
+        }
+        
+        if (data.platform === 'email' && !data.email) {
+            alert('Please provide your email address for email contact.');
+            return;
+        }
+        
+        // Show success message
+        alert('Thank you for your custom content request! I will contact you using your preferred method within 24-48 hours.');
+        
+        // Close modal and reset form
+        closeCustomsModal();
+        form.reset();
+        
+        // Optional: Open OnlyFans for immediate contact
+        if (confirm('Would you like to visit my OnlyFans page to send a direct message as well?')) {
+            window.open('https://onlyfans.com', '_blank');
+        }
+    });
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeCustomsModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeCustomsModal();
+        }
+    });
+}
+
+// Open customs modal
+function openCustomsModal() {
+    const modal = document.getElementById('customsModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+}
+
+// Close customs modal
+function closeCustomsModal() {
+    const modal = document.getElementById('customsModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+// Make functions globally available
+window.openCustomsModal = openCustomsModal;
+window.closeCustomsModal = closeCustomsModal;

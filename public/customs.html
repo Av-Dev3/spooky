@@ -64,9 +64,26 @@
             </div>
 
             <form class="customs-form" id="customsForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="handle">Twitter/X Handle</label>
+                        <input type="text" id="handle" name="handle" placeholder="@yourusername">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com">
+                    </div>
+                </div>
+                
                 <div class="form-group">
-                    <label for="handle">Platform Handle</label>
-                    <input type="text" id="handle" name="handle" placeholder="Your OnlyFans/X username" required>
+                    <label for="platform">Preferred Contact Method *</label>
+                    <select id="platform" name="platform" required>
+                        <option value="">Select preferred contact...</option>
+                        <option value="twitter">Twitter/X DM</option>
+                        <option value="email">Email</option>
+                        <option value="onlyfans">OnlyFans Message</option>
+                        <option value="other">Other Platform</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
