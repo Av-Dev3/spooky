@@ -363,6 +363,144 @@
             margin-top: 1rem;
         }
         
+        /* Submissions Styles */
+        .submission-item {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .submission-item.status-contacted {
+            border-left-color: #ffa500;
+        }
+        
+        .submission-item.status-completed {
+            border-left-color: #28a745;
+        }
+        
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .submission-info {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .submission-id {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+        
+        .submission-timestamp {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .submission-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .submission-status.new {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .submission-status.contacted {
+            background: #ffa500;
+            color: white;
+        }
+        
+        .submission-status.completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .submission-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .submission-field {
+            background: #333;
+            padding: 0.75rem;
+            border-radius: 5px;
+        }
+        
+        .submission-field strong {
+            display: block;
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .submission-description {
+            grid-column: 1 / -1;
+        }
+        
+        .submission-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .submission-actions button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .status-btn {
+            background: #ffa500;
+            color: white;
+        }
+        
+        .status-btn:hover {
+            background: #ff8c00;
+        }
+        
+        .complete-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .complete-btn:hover {
+            background: #218838;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .no-submissions {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 2rem;
+        }
+        
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -439,6 +577,14 @@
             
             <button type="button" class="btn" onclick="addGalleryItem()">Add to Gallery</button>
             <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+        </div>
+
+        <!-- Custom Content Submissions -->
+        <div class="section">
+            <h2>📝 Custom Content Submissions</h2>
+            <div id="submissionsContainer">
+                <p>Loading submissions...</p>
+            </div>
         </div>
 
         <!-- Current Content Display -->

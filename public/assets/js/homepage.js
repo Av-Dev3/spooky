@@ -201,17 +201,37 @@ function initCustomsModal() {
             return;
         }
         
-        // Show success message
-        alert('Thank you for your custom content request! I will contact you using your preferred method within 24-48 hours.');
-        
-        // Close modal and reset form
-        closeCustomsModal();
-        form.reset();
-        toggleModalContactFields(); // Reset contact fields visibility
-        
-        // Optional: Open OnlyFans for immediate contact
-        if (confirm('Would you like to visit my OnlyFans page to send a direct message as well?')) {
-            window.open('https://onlyfans.com', '_blank');
+        // Submit to API
+        try {
+            const response = await fetch('/api/customs/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Show success message
+                alert('Thank you for your custom content request! I will contact you using your preferred method within 24-48 hours.');
+                
+                // Close modal and reset form
+                closeCustomsModal();
+                form.reset();
+                toggleModalContactFields(); // Reset contact fields visibility
+                
+                // Optional: Open OnlyFans for immediate contact
+                if (confirm('Would you like to visit my OnlyFans page to send a direct message as well?')) {
+                    window.open('https://onlyfans.com', '_blank');
+                }
+            } else {
+                alert('There was an error submitting your request. Please try again or contact me directly.');
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            alert('There was an error submitting your request. Please try again or contact me directly.');
         }
     });
     

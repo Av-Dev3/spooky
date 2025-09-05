@@ -12,6 +12,7 @@ class SimpleAdminPanel {
         this.setupEventListeners();
         this.setupDragAndDrop();
         this.loadCurrentContent();
+        this.loadSubmissions();
     }
     
     async loadConfig() {
@@ -377,6 +378,167 @@ function testImages() {
 
 function showStats() {
     adminPanel.showStats();
+}
+
+// Add submissions methods to the class
+SimpleAdminPanel.prototype.loadSubmissions = async function() {
+    try {
+        const response = await fetch('/api/admin/submissions');
+        const result = await response.json();
+        
+        if (result.success) {
+            this.displaySubmissions(result.submissions);
+        } else {
+            console.error('Failed to load submissions:', result.error);
+            document.getElementById('submissionsContainer').innerHTML = 
+                '<p class="no-submissions">Failed to load submissions</p>';
+        }
+    } catch (error) {
+        console.error('Error loading submissions:', error);
+        document.getElementById('submissionsContainer').innerHTML = 
+            '<p class="no-submissions">Error loading submissions</p>';
+    }
+};
+
+SimpleAdminPanel.prototype.displaySubmissions = function(submissions) {
+    const container = document.getElementById('submissionsContainer');
+    
+    if (!submissions || submissions.length === 0) {
+        container.innerHTML = '<p class="no-submissions">No custom content submissions yet</p>';
+        return;
+    }
+    
+    container.innerHTML = submissions.map(submission => {
+        const timestamp = new Date(submission.timestamp).toLocaleString();
+        const contactInfo = this.getContactInfo(submission);
+        
+        return `
+            <div class="submission-item status-${submission.status}">
+                <div class="submission-header">
+                    <div class="submission-info">
+                        <div class="submission-id">ID: ${submission.id}</div>
+                        <div class="submission-timestamp">${timestamp}</div>
+                    </div>
+                    <div class="submission-status ${submission.status}">${submission.status}</div>
+                </div>
+                
+                <div class="submission-details">
+                    <div class="submission-field">
+                        <strong>Contact Method:</strong>
+                        ${submission.platform}
+                    </div>
+                    <div class="submission-field">
+                        <strong>Contact Info:</strong>
+                        ${contactInfo}
+                    </div>
+                    <div class="submission-field">
+                        <strong>Request Type:</strong>
+                        ${submission.requestType}
+                    </div>
+                    <div class="submission-field">
+                        <strong>Budget:</strong>
+                        $${submission.budget}
+                    </div>
+                    <div class="submission-field submission-description">
+                        <strong>Details:</strong>
+                        ${submission.details}
+                    </div>
+                </div>
+                
+                <div class="submission-actions">
+                    ${submission.status === 'new' ? `
+                        <button class="status-btn" onclick="updateSubmissionStatus('${submission.id}', 'contacted')">
+                            Mark as Contacted
+                        </button>
+                    ` : ''}
+                    ${submission.status !== 'completed' ? `
+                        <button class="complete-btn" onclick="updateSubmissionStatus('${submission.id}', 'completed')">
+                            Mark as Completed
+                        </button>
+                    ` : ''}
+                    <button class="delete-btn" onclick="deleteSubmission('${submission.id}')">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+};
+
+SimpleAdminPanel.prototype.getContactInfo = function(submission) {
+    switch(submission.platform) {
+        case 'twitter':
+            return submission.handle || 'Not provided';
+        case 'onlyfans':
+            return submission.onlyfansUsername || 'Not provided';
+        case 'email':
+            return submission.email || 'Not provided';
+        default:
+            return 'Unknown';
+    }
+};
+
+SimpleAdminPanel.prototype.updateSubmissionStatus = async function(id, status) {
+    try {
+        const response = await fetch('/api/admin/submissions', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, status })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Reload submissions to reflect changes
+            this.loadSubmissions();
+            this.showAlert('Submission status updated successfully', 'success');
+        } else {
+            this.showAlert('Failed to update submission status', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating submission:', error);
+        this.showAlert('Error updating submission status', 'error');
+    }
+};
+
+SimpleAdminPanel.prototype.deleteSubmission = async function(id) {
+    if (!confirm('Are you sure you want to delete this submission? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/admin/submissions', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Reload submissions to reflect changes
+            this.loadSubmissions();
+            this.showAlert('Submission deleted successfully', 'success');
+        } else {
+            this.showAlert('Failed to delete submission', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting submission:', error);
+        this.showAlert('Error deleting submission', 'error');
+    }
+};
+
+// Global functions for onclick handlers
+function updateSubmissionStatus(id, status) {
+    adminPanel.updateSubmissionStatus(id, status);
+}
+
+function deleteSubmission(id) {
+    adminPanel.deleteSubmission(id);
 }
 
 // Initialize admin panel when DOM is loaded
