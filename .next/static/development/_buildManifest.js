@@ -1,1 +1,1 @@
-self.__BUILD_MANIFEST = (function(a){return {__rewrites:{afterFiles:[{has:void 0,source:a,destination:a}],beforeFiles:[],fallback:[]},sortedPages:["\u002F_app"]}}("\u002Fapi\u002F:path*"));self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
+self.__BUILD_MANIFEST = (function(a,b){return {__rewrites:{afterFiles:[{has:a,source:"\u002Fauth",destination:"\u002Fauth.html"},{has:a,source:b,destination:b}],beforeFiles:[],fallback:[]},sortedPages:["\u002F_app"]}}(void 0,"\u002Fapi\u002F:path*"));self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

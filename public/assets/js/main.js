@@ -136,11 +136,11 @@
         if (!container) return;
         
         const fallbackLinks = [
-            { icon: '💕', title: 'OnlyFans', badge: 'Premium', url: 'https://onlyfans.com' },
-            { icon: '🐦', title: 'Twitter/X', badge: 'Updates', url: 'https://twitter.com' },
-            { icon: '🌟', title: 'Fansly', badge: 'Alternative', url: 'https://fansly.com' },
-            { icon: '🎁', title: 'Wishlist', badge: 'Support', url: 'https://amazon.com' },
-            { icon: '💝', title: 'Tip Jar', badge: 'Appreciation', url: 'https://cashapp.com' }
+            { icon: '🔥', title: 'Paid OnlyFans', badge: 'Premium', url: 'https://onlyfans.com/spoookysnsfww' },
+            { icon: '🐦', title: 'Twitter (Main)', badge: 'Updates', url: 'https://x.com/Spoookysnsfww?t=5tMuVXXE9KpW_DCK5WK3mQ&s=09' },
+            { icon: '🌟', title: 'Fansly', badge: 'Posts', url: 'https://fansly.com/Spoookysnsfww/posts' },
+            { icon: '👑', title: 'Throne', badge: 'Wishlist', url: 'https://throne.com/spoookysnsfww' },
+            { icon: '💵', title: 'Cash App', badge: 'Tips', url: 'https://cash.app/$spoookysnsfww' }
         ];
         
         renderLinks(fallbackLinks);
