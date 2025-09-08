@@ -1,3 +1,35 @@
+// Custom Notification System
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('customNotification');
+    const messageElement = notification.querySelector('.notification-message');
+    
+    // Set the message
+    messageElement.textContent = message;
+    
+    // Remove existing type classes
+    notification.classList.remove('success', 'error');
+    
+    // Add the appropriate type class
+    notification.classList.add(type);
+    
+    // Show the notification
+    notification.classList.add('show');
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        closeNotification();
+    }, 5000);
+}
+
+function closeNotification() {
+    const notification = document.getElementById('customNotification');
+    notification.classList.remove('show');
+}
+
+// Make functions globally available
+window.showNotification = showNotification;
+window.closeNotification = closeNotification;
+
 // Homepage functionality for Spoookysnsfww
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Homepage.js loaded, initializing...');
@@ -266,37 +298,37 @@ function initCustomsModal() {
         
         // Validate required fields individually for better debugging
         if (!data.platform) {
-            alert('Please select a contact method.');
+            showNotification('Please select a contact method.', 'error');
             return;
         }
         if (!data.requestType || data.requestType.trim() === '') {
-            alert('Please select a request type.');
+            showNotification('Please select a request type.', 'error');
             return;
         }
         
         // Validate second-level dropdowns based on request type
         if (data.requestType === 'dickrate') {
             if (!data.dickRatePrices) {
-                alert('Please select a dick rate option.');
+                showNotification('Please select a dick rate option.', 'error');
                 return;
             }
         } else if (data.requestType === 'photos') {
             if (!data.nudePictures) {
-                alert('Please select a nude pictures option.');
+                showNotification('Please select a nude pictures option.', 'error');
                 return;
             }
         } else if (data.requestType === 'videos') {
             if (!data.nudeVideos) {
-                alert('Please select a nude videos option.');
+                showNotification('Please select a nude videos option.', 'error');
                 return;
             }
         }
         if (!data.details) {
-            alert('Please provide request details.');
+            showNotification('Please provide request details.', 'error');
             return;
         }
         if (!data.ageConfirm) {
-            alert('Please confirm you are 18+.');
+            showNotification('Please confirm you are 18+.', 'error');
             return;
         }
         
@@ -326,7 +358,7 @@ function initCustomsModal() {
         }
         
         if (!contactValid) {
-            alert(errorMessage);
+            showNotification(errorMessage, 'error');
             return;
         }
         
@@ -349,23 +381,19 @@ function initCustomsModal() {
             
             if (result.success) {
                 // Show success message
-                alert('Thank you for your custom content request! I will contact you using your preferred method within 24-48 hours.');
+                showNotification('Thank you for your custom content request! I will contact you using your preferred method within 24-48 hours.', 'success');
                 
-                        // Close modal and reset form
-        window.closeCustomsModal();
-        form.reset();
-        window.toggleModalContactFields(); // Reset contact fields visibility
-                
-                // Optional: Open OnlyFans for immediate contact
-                if (confirm('Would you like to visit my OnlyFans page to send a direct message as well?')) {
-                    window.open('https://onlyfans.com', '_blank');
-                }
+                // Close modal and reset form
+                window.closeCustomsModal();
+                form.reset();
+                window.toggleModalContactFields(); // Reset contact fields visibility
+                toggleModalRequestOptions(); // Reset request options visibility
             } else {
-                alert('There was an error submitting your request. Please try again or contact me directly.');
+                showNotification('There was an error submitting your request. Please try again or contact me directly.', 'error');
             }
         } catch (error) {
             console.error('Submission error:', error);
-            alert('There was an error submitting your request. Please try again or contact me directly.');
+            showNotification('There was an error submitting your request. Please try again or contact me directly.', 'error');
         }
     });
     

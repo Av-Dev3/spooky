@@ -3762,3 +3762,114 @@ img:not(.logo-large) {
         font-size: 2rem;
     }
 }
+
+/* Custom Notification System */
+.custom-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.custom-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+
+.notification-content {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 300px;
+    max-width: 400px;
+    position: relative;
+}
+
+.custom-notification.success .notification-content {
+    border-color: #28a745;
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(40, 167, 69, 0.1) 100%);
+}
+
+.custom-notification.error .notification-content {
+    border-color: #dc3545;
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(220, 53, 69, 0.1) 100%);
+}
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.notification-icon svg {
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.custom-notification.success .notification-check {
+    display: block;
+    fill: #28a745;
+}
+
+.custom-notification.error .notification-error {
+    display: block;
+    fill: #dc3545;
+}
+
+.notification-message {
+    flex: 1;
+    color: var(--ink);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--ink);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+}
+
+.notification-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .custom-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        transform: translateY(-100px);
+    }
+    
+    .custom-notification.show {
+        transform: translateY(0);
+    }
+    
+    .notification-content {
+        min-width: auto;
+    }
+}
