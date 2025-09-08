@@ -1,39 +1,34 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { supabaseAdmin } from "../../../lib/supabaseServer";
 
 export default async function handler(req, res) {
-  // Check if user is authenticated (simple cookie check)
-  const cookies = req.headers.cookie || '';
-  const adminAuth = cookies.split(';').find(cookie => 
-    cookie.trim().startsWith('admin_auth=')
-  );
-  
-  if (!adminAuth || adminAuth.split('=')[1] !== 'ok') {
-    return res.status(401).json({ error: 'Unauthorized' });
+  // Check authentication directly in the route
+  const cookie = req.cookies.admin_auth;
+  if (!cookie || cookie !== "ok") {
+    return res.status(401).json({ error: "Not authorized" });
   }
 
   if (req.method === 'GET') {
     try {
-      const submissionsFile = path.join(process.cwd(), 'data', 'submissions.json');
-      
-      try {
-        const data = await fs.readFile(submissionsFile, 'utf8');
-        const submissions = JSON.parse(data);
-        
-        res.status(200).json({ 
-          success: true, 
-          submissions: submissions 
-        });
-      } catch (error) {
-        // File doesn't exist yet
-        res.status(200).json({ 
-          success: true, 
-          submissions: [] 
+      const { data, error } = await supabaseAdmin()
+        .from("customs_submissions")
+        .select("*")
+        .order("timestamp", { ascending: false });
+
+      if (error) {
+        console.error("Supabase error fetching submissions:", error);
+        return res.status(500).json({ 
+          error: "Database error",
+          details: error.message 
         });
       }
 
+      res.status(200).json({ 
+        success: true, 
+        submissions: data || [] 
+      });
+
     } catch (error) {
-      console.error('Error reading submissions:', error);
+      console.error('Unexpected error reading submissions:', error);
       res.status(500).json({ 
         error: 'Failed to read submissions',
         message: error.message 
@@ -50,21 +45,27 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'ID and status are required' });
       }
 
-      const submissionsFile = path.join(process.cwd(), 'data', 'submissions.json');
-      const data = await fs.readFile(submissionsFile, 'utf8');
-      let submissions = JSON.parse(data);
-      
-      // Find and update the submission
-      const submissionIndex = submissions.findIndex(sub => sub.id === id);
-      if (submissionIndex === -1) {
+      const { data, error } = await supabaseAdmin()
+        .from("customs_submissions")
+        .update({ 
+          status: status,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Supabase error updating submission:", error);
+        return res.status(500).json({ 
+          error: "Database error",
+          details: error.message 
+        });
+      }
+
+      if (!data) {
         return res.status(404).json({ error: 'Submission not found' });
       }
-      
-      submissions[submissionIndex].status = status;
-      submissions[submissionIndex].updatedAt = new Date().toISOString();
-      
-      // Write back to file
-      await fs.writeFile(submissionsFile, JSON.stringify(submissions, null, 2));
       
       res.status(200).json({ 
         success: true, 
@@ -72,7 +73,7 @@ export default async function handler(req, res) {
       });
 
     } catch (error) {
-      console.error('Error updating submission:', error);
+      console.error('Unexpected error updating submission:', error);
       res.status(500).json({ 
         error: 'Failed to update submission',
         message: error.message 
@@ -89,20 +90,24 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'ID is required' });
       }
 
-      const submissionsFile = path.join(process.cwd(), 'data', 'submissions.json');
-      const data = await fs.readFile(submissionsFile, 'utf8');
-      let submissions = JSON.parse(data);
-      
-      // Filter out the submission to delete
-      const originalLength = submissions.length;
-      submissions = submissions.filter(sub => sub.id !== id);
-      
-      if (submissions.length === originalLength) {
+      const { data, error } = await supabaseAdmin()
+        .from("customs_submissions")
+        .delete()
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Supabase error deleting submission:", error);
+        return res.status(500).json({ 
+          error: "Database error",
+          details: error.message 
+        });
+      }
+
+      if (!data) {
         return res.status(404).json({ error: 'Submission not found' });
       }
-      
-      // Write back to file
-      await fs.writeFile(submissionsFile, JSON.stringify(submissions, null, 2));
       
       res.status(200).json({ 
         success: true, 
@@ -110,7 +115,7 @@ export default async function handler(req, res) {
       });
 
     } catch (error) {
-      console.error('Error deleting submission:', error);
+      console.error('Unexpected error deleting submission:', error);
       res.status(500).json({ 
         error: 'Failed to delete submission',
         message: error.message 

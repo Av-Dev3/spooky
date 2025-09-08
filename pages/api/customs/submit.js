@@ -1,5 +1,4 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { supabaseAdmin } from "../../../lib/supabaseServer";
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -7,47 +6,53 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Check if we have the required environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error("Missing Supabase environment variables");
+      return res.status(500).json({ 
+        error: "Server configuration error",
+        details: "Missing Supabase environment variables"
+      });
+    }
+
     const submissionData = {
-      id: Date.now().toString(),
       timestamp: new Date().toISOString(),
-      ...req.body,
+      platform: req.body.platform,
+      handle: req.body.handle,
+      onlyfans_username: req.body.onlyfansUsername,
+      email: req.body.email,
+      request_type: req.body.requestType,
+      budget: req.body.budget,
+      details: req.body.details,
+      age_confirm: req.body.ageConfirm,
       status: 'new'
     };
 
-    // Ensure the data directory exists
-    const dataDir = path.join(process.cwd(), 'data');
-    try {
-      await fs.access(dataDir);
-    } catch {
-      await fs.mkdir(dataDir, { recursive: true });
+    // Insert submission into Supabase
+    const { data, error } = await supabaseAdmin()
+      .from("customs_submissions")
+      .insert(submissionData)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase error saving submission:", error);
+      return res.status(500).json({ 
+        error: "Database error",
+        details: error.message 
+      });
     }
 
-    // Read existing submissions
-    const submissionsFile = path.join(dataDir, 'submissions.json');
-    let submissions = [];
-    
-    try {
-      const data = await fs.readFile(submissionsFile, 'utf8');
-      submissions = JSON.parse(data);
-    } catch (error) {
-      // File doesn't exist yet, start with empty array
-      submissions = [];
-    }
-
-    // Add new submission
-    submissions.unshift(submissionData); // Add to beginning for newest first
-
-    // Write back to file
-    await fs.writeFile(submissionsFile, JSON.stringify(submissions, null, 2));
+    console.log("Customs submission saved successfully:", data.id);
 
     res.status(200).json({ 
       success: true, 
       message: 'Submission saved successfully',
-      id: submissionData.id
+      id: data.id
     });
 
   } catch (error) {
-    console.error('Error saving submission:', error);
+    console.error('Unexpected error saving submission:', error);
     res.status(500).json({ 
       error: 'Failed to save submission',
       message: error.message 
