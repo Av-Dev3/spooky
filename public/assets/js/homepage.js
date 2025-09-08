@@ -175,6 +175,10 @@ function initCustomsModal() {
         const data = Object.fromEntries(formData);
         
         console.log('Homepage form data:', data);
+        console.log('All form fields:');
+        for (const [key, value] of Object.entries(data)) {
+            console.log(`  ${key}: "${value}" (${typeof value})`);
+        }
         console.log('Request type value:', data.requestType);
         console.log('Request type type:', typeof data.requestType);
         
@@ -183,7 +187,7 @@ function initCustomsModal() {
             alert('Please select a contact method.');
             return;
         }
-        if (!data.requestType) {
+        if (!data.requestType || data.requestType.trim() === '') {
             alert('Please select a request type.');
             return;
         }
