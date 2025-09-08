@@ -14,7 +14,6 @@
     }
 
     function init() {
-        console.log('Main.js init() called');
         setupNavigation();
         setupCurrentYear();
         setupLinksPage();
@@ -83,31 +82,19 @@
 
     // Load and render links from JSON
     function setupLinksPage() {
-        console.log('setupLinksPage() called');
         // Check if we're on the links page by looking for any of the new containers
         const contentContainer = document.getElementById('contentLinksContainer');
         const socialContainer = document.getElementById('socialLinksContainer');
         const supportContainer = document.getElementById('supportLinksContainer');
         const oldContainer = document.getElementById('linksContainer');
         
-        console.log('Link containers found:', {
-            content: !!contentContainer,
-            social: !!socialContainer,
-            support: !!supportContainer,
-            old: !!oldContainer
-        });
-        
         // If any of the containers exist, load the links
         if (contentContainer || socialContainer || supportContainer || oldContainer) {
-            console.log('Loading links...');
             loadLinks();
-        } else {
-            console.log('No link containers found, skipping link loading');
         }
     }
 
     async function loadLinks() {
-        console.log('loadLinks() called');
         try {
             // Check if admin has made changes
             const adminLinksData = localStorage.getItem('spooky_admin_links');
@@ -138,8 +125,6 @@
     }
 
     function renderLinks(links) {
-        console.log('renderLinks called with:', links);
-        
         // Categorize links
         const contentPlatforms = links.filter(link => 
             link.title.toLowerCase().includes('onlyfans') || 
@@ -157,60 +142,40 @@
             link.title.toLowerCase().includes('throne')
         );
         
-        console.log('Categorized links:');
-        console.log('Content platforms:', contentPlatforms);
-        console.log('Social media:', socialMedia);
-        console.log('Support/payment:', supportPayment);
-        
         // Render content platforms
         const contentContainer = document.getElementById('contentLinksContainer');
-        if (contentContainer) {
-            if (contentPlatforms.length > 0) {
-                contentContainer.innerHTML = contentPlatforms.map(link => `
-                    <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
-                        <div class="link-icon">${link.icon}</div>
-                        <h3>${link.title}</h3>
-                        <div class="link-badge">${link.badge}</div>
-                    </a>
-                `).join('');
-                console.log('Rendered', contentPlatforms.length, 'content platform links');
-            } else {
-                console.log('No content platform links found');
-            }
+        if (contentContainer && contentPlatforms.length > 0) {
+            contentContainer.innerHTML = contentPlatforms.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
         }
         
         // Render social media
         const socialContainer = document.getElementById('socialLinksContainer');
-        if (socialContainer) {
-            if (socialMedia.length > 0) {
-                socialContainer.innerHTML = socialMedia.map(link => `
-                    <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
-                        <div class="link-icon">${link.icon}</div>
-                        <h3>${link.title}</h3>
-                        <div class="link-badge">${link.badge}</div>
-                    </a>
-                `).join('');
-                console.log('Rendered', socialMedia.length, 'social media links');
-            } else {
-                console.log('No social media links found');
-            }
+        if (socialContainer && socialMedia.length > 0) {
+            socialContainer.innerHTML = socialMedia.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
         }
         
         // Render support/payment
         const supportContainer = document.getElementById('supportLinksContainer');
-        if (supportContainer) {
-            if (supportPayment.length > 0) {
-                supportContainer.innerHTML = supportPayment.map(link => `
-                    <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
-                        <div class="link-icon">${link.icon}</div>
-                        <h3>${link.title}</h3>
-                        <div class="link-badge">${link.badge}</div>
-                    </a>
-                `).join('');
-                console.log('Rendered', supportPayment.length, 'support/payment links');
-            } else {
-                console.log('No support/payment links found');
-            }
+        if (supportContainer && supportPayment.length > 0) {
+            supportContainer.innerHTML = supportPayment.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
         }
         
         // Handle old linksContainer for backward compatibility

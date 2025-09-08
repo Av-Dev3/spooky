@@ -1470,7 +1470,7 @@ img:not(.logo-large) {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    max-width: 600px;
+    max-width: 1200px;
     margin: 0 auto;
     position: relative;
     z-index: 2;
@@ -2993,7 +2993,7 @@ img:not(.logo-large) {
     }
     
     .links-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
     
     .gallery-grid {
@@ -3880,6 +3880,13 @@ img:not(.logo-large) {
 
 .links-category .links-grid {
     margin-bottom: 0;
+}
+
+/* Medium screens - tablets */
+@media (max-width: 992px) and (min-width: 769px) {
+    .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Responsive adjustments */
