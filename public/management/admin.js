@@ -222,10 +222,15 @@ class SimpleAdminPanel {
             this.galleryItems.forEach((item, index) => {
                 console.log(`Rendering gallery item ${index}:`, item);
                 
+                // Construct the image URL from storage_path
+                const imageUrl = item.storage_path 
+                    ? `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${item.storage_path.split('/').pop()}`
+                    : '/assets/logo.png';
+                
                 const itemHtml = `
                     <div class="content-item" data-id="${item.id}" data-type="gallery">
                         <div class="content-image">
-                            <img src="${item.imageUrl}" alt="${item.title}" onerror="this.src='/assets/logo.png'">
+                            <img src="${imageUrl}" alt="${item.title}" onerror="this.src='/assets/logo.png'">
                         </div>
                         <div class="content-details">
                             <h4>${item.title}</h4>
@@ -265,7 +270,7 @@ class SimpleAdminPanel {
             
             console.log('Sending delete request to /api/admin/media/delete with ID:', id);
             const response = await fetch('/api/admin/media/delete', {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -273,12 +278,23 @@ class SimpleAdminPanel {
             });
             
             if (response.ok) {
-                this.showAlert('Gallery item deleted successfully!', 'success');
-                await this.loadCurrentContent();
+                const result = await response.json();
+                if (result.success) {
+                    this.showAlert('Gallery item deleted successfully!', 'success');
+                    await this.loadCurrentContent();
+                } else {
+                    throw new Error(result.error || 'Failed to delete gallery item');
+                }
             } else {
-                const errorData = await response.json();
-                console.error('Server error response:', errorData);
-                throw new Error(errorData.error || errorData.details || 'Failed to delete gallery item');
+                let errorMessage = 'Unknown error';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorData.details || errorMessage;
+                } catch (e) {
+                    errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                }
+                console.error('Server error response:', errorMessage);
+                throw new Error(errorMessage);
             }
             
         } catch (error) {
