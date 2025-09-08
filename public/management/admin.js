@@ -433,7 +433,7 @@ SimpleAdminPanel.prototype.displaySubmissions = function(submissions) {
                     </div>
                     <div class="submission-field">
                         <strong>Request Type:</strong>
-                        ${submission.requestType}
+                        ${submission.request_type}
                     </div>
                     <div class="submission-field">
                         <strong>Budget:</strong>
@@ -470,7 +470,7 @@ SimpleAdminPanel.prototype.getContactInfo = function(submission) {
         case 'twitter':
             return submission.handle || 'Not provided';
         case 'onlyfans':
-            return submission.onlyfansUsername || 'Not provided';
+            return submission.onlyfans_username || 'Not provided';
         case 'email':
             return submission.email || 'Not provided';
         default:
