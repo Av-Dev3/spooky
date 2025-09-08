@@ -150,7 +150,7 @@ async function loadFAQPreview() {
 // Initialize customs modal functionality
 function initCustomsModal() {
     const modal = document.getElementById('customsModal');
-    const form = document.getElementById('customsModalForm');
+    const form = document.getElementById('customsForm');
     
     if (!modal || !form) {
         console.error('Customs modal elements not found');

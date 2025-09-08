@@ -193,6 +193,30 @@
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
             
+            console.log('Form data being submitted:', data);
+            console.log('Request type:', data.requestType);
+            
+            // Validate required fields first
+            if (!data.requestType) {
+                alert('Please select a request type.');
+                return;
+            }
+            
+            if (!data.budget) {
+                alert('Please select a budget range.');
+                return;
+            }
+            
+            if (!data.details || data.details.trim() === '') {
+                alert('Please provide details about your request.');
+                return;
+            }
+            
+            if (!data.ageConfirm) {
+                alert('Please confirm that you are 18+ years old.');
+                return;
+            }
+            
             // Validate contact information based on selected method
             const platform = data.platform;
             let contactValid = true;
