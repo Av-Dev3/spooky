@@ -3856,6 +3856,32 @@ img:not(.logo-large) {
     background: rgba(255, 255, 255, 0.1);
 }
 
+/* Links Category Styling */
+.links-category {
+    margin-bottom: 3rem;
+}
+
+.category-header {
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+}
+
+.category-description {
+    text-align: center;
+    color: var(--ink-secondary);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.links-category .links-grid {
+    margin-bottom: 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .custom-notification {
@@ -3871,5 +3897,13 @@ img:not(.logo-large) {
     
     .notification-content {
         min-width: auto;
+    }
+    
+    .category-header {
+        font-size: 1.5rem;
+    }
+    
+    .category-description {
+        font-size: 0.9rem;
     }
 }

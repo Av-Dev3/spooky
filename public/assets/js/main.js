@@ -119,27 +119,82 @@
     }
 
     function renderLinks(links) {
-        const container = document.getElementById('linksContainer');
-        if (!container) return;
+        // Categorize links
+        const contentPlatforms = links.filter(link => 
+            link.title.toLowerCase().includes('onlyfans') || 
+            link.title.toLowerCase().includes('fansly')
+        );
         
-        container.innerHTML = links.map(link => `
-            <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
-                <div class="link-icon">${link.icon}</div>
-                <h3>${link.title}</h3>
-                <div class="link-badge">${link.badge}</div>
-            </a>
-        `).join('');
+        const socialMedia = links.filter(link => 
+            link.title.toLowerCase().includes('twitter') || 
+            link.title.toLowerCase().includes('tiktok')
+        );
+        
+        const supportPayment = links.filter(link => 
+            link.title.toLowerCase().includes('youpay') || 
+            link.title.toLowerCase().includes('cash app') || 
+            link.title.toLowerCase().includes('throne')
+        );
+        
+        // Render content platforms
+        const contentContainer = document.getElementById('contentLinksContainer');
+        if (contentContainer && contentPlatforms.length > 0) {
+            contentContainer.innerHTML = contentPlatforms.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
+        }
+        
+        // Render social media
+        const socialContainer = document.getElementById('socialLinksContainer');
+        if (socialContainer && socialMedia.length > 0) {
+            socialContainer.innerHTML = socialMedia.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
+        }
+        
+        // Render support/payment
+        const supportContainer = document.getElementById('supportLinksContainer');
+        if (supportContainer && supportPayment.length > 0) {
+            supportContainer.innerHTML = supportPayment.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
+        }
+        
+        // Handle old linksContainer for backward compatibility
+        const oldContainer = document.getElementById('linksContainer');
+        if (oldContainer) {
+            oldContainer.innerHTML = links.map(link => `
+                <a href="${link.url}" class="link-card" target="_blank" rel="noopener">
+                    <div class="link-icon">${link.icon}</div>
+                    <h3>${link.title}</h3>
+                    <div class="link-badge">${link.badge}</div>
+                </a>
+            `).join('');
+        }
     }
 
     function renderFallbackLinks() {
-        const container = document.getElementById('linksContainer');
-        if (!container) return;
-        
         const fallbackLinks = [
+            { icon: '💕', title: 'Free OnlyFans', badge: 'Free', url: 'https://onlyfans.com/spoookysnsfwwfree' },
             { icon: '🔥', title: 'Paid OnlyFans', badge: 'Premium', url: 'https://onlyfans.com/spoookysnsfww' },
-            { icon: '🐦', title: 'Twitter (Main)', badge: 'Updates', url: 'https://x.com/Spoookysnsfww?t=5tMuVXXE9KpW_DCK5WK3mQ&s=09' },
             { icon: '🌟', title: 'Fansly', badge: 'Posts', url: 'https://fansly.com/Spoookysnsfww/posts' },
+            { icon: '💳', title: 'YouPay.me', badge: 'Payment', url: 'https://youpay.me/Spoookysnsfww' },
             { icon: '👑', title: 'Throne', badge: 'Wishlist', url: 'https://throne.com/spoookysnsfww' },
+            { icon: '🎬', title: 'TikTok', badge: 'Fun', url: 'https://www.tiktok.com/@sspoookysnsfww?_t=8pBPUmdXFZC&_r=1' },
+            { icon: '🐦', title: 'Twitter (Main)', badge: 'Updates', url: 'https://x.com/Spoookysnsfww?t=5tMuVXXE9KpW_DCK5WK3mQ&s=09' },
+            { icon: '🔄', title: 'Twitter (Backup)', badge: 'Backup', url: 'https://x.com/spoooksbackup' },
             { icon: '💵', title: 'Cash App', badge: 'Tips', url: 'https://cash.app/$spoookysnsfww' }
         ];
         
