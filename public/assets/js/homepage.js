@@ -175,10 +175,28 @@ function initCustomsModal() {
         const data = Object.fromEntries(formData);
         
         console.log('Homepage form data:', data);
+        console.log('Request type value:', data.requestType);
+        console.log('Request type type:', typeof data.requestType);
         
-        // Validate required fields
-        if (!data.platform || !data.requestType || !data.budget || !data.details || !data.ageConfirm) {
-            alert('Please fill in all required fields and confirm you are 18+.');
+        // Validate required fields individually for better debugging
+        if (!data.platform) {
+            alert('Please select a contact method.');
+            return;
+        }
+        if (!data.requestType) {
+            alert('Please select a request type.');
+            return;
+        }
+        if (!data.budget) {
+            alert('Please select a budget range.');
+            return;
+        }
+        if (!data.details) {
+            alert('Please provide request details.');
+            return;
+        }
+        if (!data.ageConfirm) {
+            alert('Please confirm you are 18+.');
             return;
         }
         
