@@ -235,7 +235,9 @@ function initCustomsModal() {
         }
         
         // Submit to API
+        console.log('About to submit to API with data:', data);
         try {
+            console.log('Making API call to /api/customs/submit');
             const response = await fetch('/api/customs/submit', {
                 method: 'POST',
                 headers: {
@@ -244,7 +246,10 @@ function initCustomsModal() {
                 body: JSON.stringify(data)
             });
             
+            console.log('API response status:', response.status);
+            console.log('API response ok:', response.ok);
             const result = await response.json();
+            console.log('API response data:', result);
             
             if (result.success) {
                 // Show success message
