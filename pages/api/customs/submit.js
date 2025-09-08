@@ -22,7 +22,10 @@ export default async function handler(req, res) {
       onlyfans_username: req.body.onlyfansUsername,
       email: req.body.email,
       request_type: req.body.requestType,
-      budget: req.body.budget,
+      dick_rate_prices: req.body.dickRatePrices,
+      nude_pictures: req.body.nudePictures,
+      nude_videos: req.body.nudeVideos,
+      extras: req.body.extras,
       details: req.body.details,
       age_confirm: req.body.ageConfirm,
       status: 'new'

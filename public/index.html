@@ -411,23 +411,54 @@
 
                     <div class="form-group">
                         <label for="modalRequestType">Request Type *</label>
-                        <select id="modalRequestType" name="requestType" required>
+                        <select id="modalRequestType" name="requestType" required onchange="toggleModalRequestOptions()">
                             <option value="">Select type...</option>
-                            <option value="photos">Photo Set</option>
-                            <option value="video">Video</option>
-                            <option value="audio">Audio</option>
-                            <option value="other">Other</option>
+                            <option value="dickrate">Dick Rate</option>
+                            <option value="photos">Photos</option>
+                            <option value="videos">Videos</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="modalBudget">Budget Range *</label>
-                        <select id="modalBudget" name="budget" required>
-                            <option value="">Select budget...</option>
-                            <option value="25-50">$25 - $50</option>
-                            <option value="51-100">$51 - $100</option>
-                            <option value="101-200">$101 - $200</option>
-                            <option value="200+">$200+</option>
+                    <!-- Dick Rate Options -->
+                    <div id="modalDickRateField" class="form-group" style="display: none;">
+                        <label for="modalDickRatePrices">Dick Rate Prices *</label>
+                        <select id="modalDickRatePrices" name="dickRatePrices">
+                            <option value="">Select option...</option>
+                            <option value="basic-5">Basic number rate – $5</option>
+                            <option value="description-10">Number rate/description – $10</option>
+                            <option value="video-15">Video of Rate/description – $15</option>
+                            <option value="naked-video-20">Naked video rate/description – $20</option>
+                            <option value="all-above-25">All above / write name across body – $25</option>
+                        </select>
+                    </div>
+
+                    <!-- Photos Options -->
+                    <div id="modalPhotosField" class="form-group" style="display: none;">
+                        <label for="modalNudePictures">Nude Pictures *</label>
+                        <select id="modalNudePictures" name="nudePictures">
+                            <option value="">Select option...</option>
+                            <option value="3-for-10">3 for $10 (Your way)</option>
+                            <option value="5-for-15">5 for $15 (Your way)</option>
+                            <option value="10-for-20">10 for $20 (Your way)</option>
+                        </select>
+                    </div>
+
+                    <!-- Videos Options -->
+                    <div id="modalVideosField" class="form-group" style="display: none;">
+                        <label for="modalNudeVideos">Nude Videos *</label>
+                        <select id="modalNudeVideos" name="nudeVideos">
+                            <option value="">Select option...</option>
+                            <option value="strip-tease-15">Strip tease – $15 (3 minutes only)</option>
+                            <option value="full-nude-666">Full nude – $6.66 a minute (3 minutes min)</option>
+                        </select>
+                    </div>
+
+                    <!-- Extras (for Photos and Videos only) -->
+                    <div id="modalExtrasField" class="form-group" style="display: none;">
+                        <label for="modalExtras">Extras</label>
+                        <select id="modalExtras" name="extras">
+                            <option value="none">None</option>
+                            <option value="kinky-15">Kinky/added elements (dildos, props, clothes, makeup, etc) – $15 extra added per request</option>
                         </select>
                     </div>
 

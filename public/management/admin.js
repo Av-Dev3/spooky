@@ -435,10 +435,30 @@ SimpleAdminPanel.prototype.displaySubmissions = function(submissions) {
                         <strong>Request Type:</strong>
                         ${submission.request_type}
                     </div>
+                    ${submission.dick_rate_prices ? `
                     <div class="submission-field">
-                        <strong>Budget:</strong>
-                        $${submission.budget}
+                        <strong>Dick Rate Option:</strong>
+                        ${submission.dick_rate_prices}
                     </div>
+                    ` : ''}
+                    ${submission.nude_pictures ? `
+                    <div class="submission-field">
+                        <strong>Nude Pictures:</strong>
+                        ${submission.nude_pictures}
+                    </div>
+                    ` : ''}
+                    ${submission.nude_videos ? `
+                    <div class="submission-field">
+                        <strong>Nude Videos:</strong>
+                        ${submission.nude_videos}
+                    </div>
+                    ` : ''}
+                    ${submission.extras && submission.extras !== 'none' ? `
+                    <div class="submission-field">
+                        <strong>Extras:</strong>
+                        ${submission.extras}
+                    </div>
+                    ` : ''}
                     <div class="submission-field submission-description">
                         <strong>Details:</strong>
                         ${submission.details}

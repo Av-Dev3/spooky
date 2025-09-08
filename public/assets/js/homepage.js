@@ -180,6 +180,55 @@ async function loadFAQPreview() {
     }
 }
 
+// Toggle modal request options based on selection
+function toggleModalRequestOptions() {
+    const requestType = document.getElementById('modalRequestType').value;
+    const dickRateField = document.getElementById('modalDickRateField');
+    const photosField = document.getElementById('modalPhotosField');
+    const videosField = document.getElementById('modalVideosField');
+    const extrasField = document.getElementById('modalExtrasField');
+    
+    // Hide all fields first
+    dickRateField.style.display = 'none';
+    photosField.style.display = 'none';
+    videosField.style.display = 'none';
+    extrasField.style.display = 'none';
+    
+    // Clear all selections
+    document.getElementById('modalDickRatePrices').value = '';
+    document.getElementById('modalNudePictures').value = '';
+    document.getElementById('modalNudeVideos').value = '';
+    document.getElementById('modalExtras').value = 'none';
+    
+    // Show relevant fields based on selection
+    switch(requestType) {
+        case 'dickrate':
+            dickRateField.style.display = 'block';
+            document.getElementById('modalDickRatePrices').required = true;
+            document.getElementById('modalNudePictures').required = false;
+            document.getElementById('modalNudeVideos').required = false;
+            break;
+        case 'photos':
+            photosField.style.display = 'block';
+            extrasField.style.display = 'block';
+            document.getElementById('modalDickRatePrices').required = false;
+            document.getElementById('modalNudePictures').required = true;
+            document.getElementById('modalNudeVideos').required = false;
+            break;
+        case 'videos':
+            videosField.style.display = 'block';
+            extrasField.style.display = 'block';
+            document.getElementById('modalDickRatePrices').required = false;
+            document.getElementById('modalNudePictures').required = false;
+            document.getElementById('modalNudeVideos').required = true;
+            break;
+        default:
+            document.getElementById('modalDickRatePrices').required = false;
+            document.getElementById('modalNudePictures').required = false;
+            document.getElementById('modalNudeVideos').required = false;
+    }
+}
+
 // Initialize customs modal functionality
 function initCustomsModal() {
     const modal = document.getElementById('customsModal');
@@ -224,9 +273,23 @@ function initCustomsModal() {
             alert('Please select a request type.');
             return;
         }
-        if (!data.budget) {
-            alert('Please select a budget range.');
-            return;
+        
+        // Validate second-level dropdowns based on request type
+        if (data.requestType === 'dickrate') {
+            if (!data.dickRatePrices) {
+                alert('Please select a dick rate option.');
+                return;
+            }
+        } else if (data.requestType === 'photos') {
+            if (!data.nudePictures) {
+                alert('Please select a nude pictures option.');
+                return;
+            }
+        } else if (data.requestType === 'videos') {
+            if (!data.nudeVideos) {
+                alert('Please select a nude videos option.');
+                return;
+            }
         }
         if (!data.details) {
             alert('Please provide request details.');
