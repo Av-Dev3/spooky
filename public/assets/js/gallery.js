@@ -44,8 +44,18 @@ function renderGalleryItems(items) {
     if (!container) return;
     
     container.innerHTML = items.map(item => {
-        // Build the full image URL from Supabase storage
-        const imageUrl = `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${item.storage_path.split('/').pop()}`;
+        // Build the full image URL - handle both Supabase items and fallback items
+        let imageUrl;
+        if (item.storage_path) {
+            // Supabase storage item
+            imageUrl = `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${item.storage_path.split('/').pop()}`;
+        } else if (item.image) {
+            // Fallback item
+            imageUrl = item.image;
+        } else {
+            // Default fallback
+            imageUrl = '/assets/logo.png';
+        }
         
         console.log('Gallery item:', item);
         console.log('Storage path:', item.storage_path);
