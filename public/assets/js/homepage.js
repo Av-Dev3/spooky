@@ -219,19 +219,22 @@ function toggleModalRequestOptions() {
     const photosField = document.getElementById('modalPhotosField');
     const videosField = document.getElementById('modalVideosField');
     const extrasField = document.getElementById('modalExtrasField');
-    
+    const sextField = document.getElementById('modalSextField');
+
     // Hide all fields first
     dickRateField.style.display = 'none';
     photosField.style.display = 'none';
     videosField.style.display = 'none';
     extrasField.style.display = 'none';
-    
+    sextField.style.display = 'none';
+
     // Clear all selections
     document.getElementById('modalDickRatePrices').value = '';
     document.getElementById('modalNudePictures').value = '';
     document.getElementById('modalNudeVideos').value = '';
     document.getElementById('modalExtras').value = 'none';
-    
+    document.getElementById('modalSextOptions').value = '';
+
     // Show relevant fields based on selection
     switch(requestType) {
         case 'dickrate':
@@ -239,6 +242,7 @@ function toggleModalRequestOptions() {
             document.getElementById('modalDickRatePrices').required = true;
             document.getElementById('modalNudePictures').required = false;
             document.getElementById('modalNudeVideos').required = false;
+            document.getElementById('modalSextOptions').required = false;
             break;
         case 'photos':
             photosField.style.display = 'block';
@@ -246,6 +250,7 @@ function toggleModalRequestOptions() {
             document.getElementById('modalDickRatePrices').required = false;
             document.getElementById('modalNudePictures').required = true;
             document.getElementById('modalNudeVideos').required = false;
+            document.getElementById('modalSextOptions').required = false;
             break;
         case 'videos':
             videosField.style.display = 'block';
@@ -253,11 +258,20 @@ function toggleModalRequestOptions() {
             document.getElementById('modalDickRatePrices').required = false;
             document.getElementById('modalNudePictures').required = false;
             document.getElementById('modalNudeVideos').required = true;
+            document.getElementById('modalSextOptions').required = false;
+            break;
+        case 'sext':
+            sextField.style.display = 'block';
+            document.getElementById('modalDickRatePrices').required = false;
+            document.getElementById('modalNudePictures').required = false;
+            document.getElementById('modalNudeVideos').required = false;
+            document.getElementById('modalSextOptions').required = true;
             break;
         default:
             document.getElementById('modalDickRatePrices').required = false;
             document.getElementById('modalNudePictures').required = false;
             document.getElementById('modalNudeVideos').required = false;
+            document.getElementById('modalSextOptions').required = false;
     }
 }
 
@@ -320,6 +334,11 @@ function initCustomsModal() {
         } else if (data.requestType === 'videos') {
             if (!data.nudeVideos) {
                 showNotification('Please select a nude videos option.', 'error');
+                return;
+            }
+        } else if (data.requestType === 'sext') {
+            if (!data.sextOptions) {
+                showNotification('Please select a sext session option.', 'error');
                 return;
             }
         }

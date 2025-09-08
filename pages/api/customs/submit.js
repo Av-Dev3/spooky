@@ -15,21 +15,22 @@ export default async function handler(req, res) {
       });
     }
 
-    const submissionData = {
-      timestamp: new Date().toISOString(),
-      platform: req.body.platform,
-      handle: req.body.handle,
-      onlyfans_username: req.body.onlyfansUsername,
-      email: req.body.email,
-      request_type: req.body.requestType,
-      dick_rate_prices: req.body.dickRatePrices,
-      nude_pictures: req.body.nudePictures,
-      nude_videos: req.body.nudeVideos,
-      extras: req.body.extras,
-      details: req.body.details,
-      age_confirm: req.body.ageConfirm,
-      status: 'new'
-    };
+        const submissionData = {
+            timestamp: new Date().toISOString(),
+            platform: req.body.platform,
+            handle: req.body.handle,
+            onlyfans_username: req.body.onlyfansUsername,
+            email: req.body.email,
+            request_type: req.body.requestType,
+            dick_rate_prices: req.body.dickRatePrices,
+            nude_pictures: req.body.nudePictures,
+            nude_videos: req.body.nudeVideos,
+            extras: req.body.extras,
+            sext_options: req.body.sextOptions,
+            details: req.body.details,
+            age_confirm: req.body.ageConfirm,
+            status: 'new'
+        };
 
     // Insert submission into Supabase
     const { data, error } = await supabaseAdmin()

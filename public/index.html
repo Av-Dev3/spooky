@@ -241,50 +241,6 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section class="contact-preview-section">
-            <div class="section-header">
-                <h2>Get In Touch</h2>
-                <p>I'd love to hear from you</p>
-            </div>
-            
-            <!-- Spooky decorations -->
-            <div class="bat-decoration" style="top: 55%; left: 18%; animation-delay: 1.5s; animation-duration: 6s;">
-                <img src="/assets/bat.png" alt="Bat decoration">
-            </div>
-            <div class="ghost-decoration" style="top: 65%; right: 25%; animation-delay: 3.1s; animation-duration: 8s;">
-                <img src="/assets/ghost.png" alt="Ghost decoration">
-            </div>
-            
-            <div class="contact-preview-content">
-                <div class="contact-methods">
-                    <h3>Connect With Me</h3>
-                    <div class="contact-preview-grid">
-                        <a href="https://onlyfans.com/spoookysnsfww" class="contact-card" target="_blank" rel="noopener">
-                            <div class="contact-icon">🔥</div>
-                            <h4>Paid OnlyFans</h4>
-                            <p>Premium exclusive content</p>
-                        </a>
-                        
-                        <a href="https://x.com/Spoookysnsfww?t=5tMuVXXE9KpW_DCK5WK3mQ&s=09" class="contact-card" target="_blank" rel="noopener">
-                            <div class="contact-icon">🐦</div>
-                            <h4>Twitter (Main)</h4>
-                            <p>Daily updates & casual chat</p>
-                        </a>
-                        
-                        <a href="https://fansly.com/Spoookysnsfww/posts" class="contact-card" target="_blank" rel="noopener">
-                            <div class="contact-icon">🌟</div>
-                            <h4>Fansly</h4>
-                            <p>Alternative platform & posts</p>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="contact-cta">
-                    <a href="contact.html" class="btn btn-primary">View All Contact Methods</a>
-                </div>
-            </div>
-        </section>
 
         <!-- CTA Section -->
         <section class="cta-section">
@@ -409,15 +365,16 @@
                         <input type="email" id="modalEmail" name="email" placeholder="your@email.com">
                     </div>
 
-                    <div class="form-group">
-                        <label for="modalRequestType">Request Type *</label>
-                        <select id="modalRequestType" name="requestType" required onchange="toggleModalRequestOptions()">
-                            <option value="">Select type...</option>
-                            <option value="dickrate">Dick Rate</option>
-                            <option value="photos">Photos</option>
-                            <option value="videos">Videos</option>
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label for="modalRequestType">Request Type *</label>
+                            <select id="modalRequestType" name="requestType" required onchange="toggleModalRequestOptions()">
+                                <option value="">Select type...</option>
+                                <option value="dickrate">Dick Rate</option>
+                                <option value="photos">Photos</option>
+                                <option value="videos">Videos</option>
+                                <option value="sext">Sext with Me</option>
+                            </select>
+                        </div>
 
                     <!-- Dick Rate Options -->
                     <div id="modalDickRateField" class="form-group" style="display: none;">
@@ -460,6 +417,32 @@
                             <option value="none">None</option>
                             <option value="kinky-15">Kinky/added elements (dildos, props, clothes, makeup, etc) – $15 extra added per request</option>
                         </select>
+                    </div>
+
+                    <!-- Sext Session Options -->
+                    <div id="modalSextField" class="form-group" style="display: none;">
+                        <label for="modalSextOptions">Sext Session Options *</label>
+                        <select id="modalSextOptions" name="sextOptions">
+                            <option value="">Select option...</option>
+                            <option value="per-minute-3">$3/ a minute</option>
+                            <option value="half-hour-80">Half an hour – $80</option>
+                            <option value="extra-pics-4">Add extra pics – $4 each</option>
+                            <option value="extra-videos-6">Add extra videos – $6 each</option>
+                            <option value="requests-15">Requests – $15 extra every request</option>
+                        </select>
+                        
+                        <!-- Helper Text -->
+                        <div class="sext-helper-text" style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border-radius: 6px; border-left: 3px solid var(--accent);">
+                            <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: var(--ink);">
+                                <strong>15 minutes minimum — that's $45 minimum for a sexting session.</strong>
+                            </p>
+                            <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: var(--ink);">
+                                <strong>All sessions are done on Snap, or Telegram.</strong>
+                            </p>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--ink-secondary); opacity: 0.8;">
+                                Every session comes with 5 free pics and 3 free videos during the active session. Anything more will cost more and will be added to total before starting. Once paid for, if a request is made it will be denied or session will be paused while you send new payment.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="form-group">

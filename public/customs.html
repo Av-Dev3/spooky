@@ -89,15 +89,16 @@
                     <input type="email" id="email" name="email" placeholder="your@email.com">
                 </div>
 
-                <div class="form-group">
-                    <label for="requestType">Request Type *</label>
-                    <select id="requestType" name="requestType" required onchange="toggleRequestOptions()">
-                        <option value="">Select type...</option>
-                        <option value="dickrate">Dick Rate</option>
-                        <option value="photos">Photos</option>
-                        <option value="videos">Videos</option>
-                    </select>
-                </div>
+                        <div class="form-group">
+                            <label for="requestType">Request Type *</label>
+                            <select id="requestType" name="requestType" required onchange="toggleRequestOptions()">
+                                <option value="">Select type...</option>
+                                <option value="dickrate">Dick Rate</option>
+                                <option value="photos">Photos</option>
+                                <option value="videos">Videos</option>
+                                <option value="sext">Sext with Me</option>
+                            </select>
+                        </div>
 
                 <!-- Dick Rate Options -->
                 <div id="dickRateField" class="form-group" style="display: none;">
@@ -140,6 +141,32 @@
                         <option value="none">None</option>
                         <option value="kinky-15">Kinky/added elements (dildos, props, clothes, makeup, etc) – $15 extra added per request</option>
                     </select>
+                </div>
+
+                <!-- Sext Session Options -->
+                <div id="sextField" class="form-group" style="display: none;">
+                    <label for="sextOptions">Sext Session Options *</label>
+                    <select id="sextOptions" name="sextOptions">
+                        <option value="">Select option...</option>
+                        <option value="per-minute-3">$3/ a minute</option>
+                        <option value="half-hour-80">Half an hour – $80</option>
+                        <option value="extra-pics-4">Add extra pics – $4 each</option>
+                        <option value="extra-videos-6">Add extra videos – $6 each</option>
+                        <option value="requests-15">Requests – $15 extra every request</option>
+                    </select>
+                    
+                    <!-- Helper Text -->
+                    <div class="sext-helper-text" style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border-radius: 6px; border-left: 3px solid var(--accent);">
+                        <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: var(--ink);">
+                            <strong>15 minutes minimum — that's $45 minimum for a sexting session.</strong>
+                        </p>
+                        <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: var(--ink);">
+                            <strong>All sessions are done on Snap, or Telegram.</strong>
+                        </p>
+                        <p style="margin: 0; font-size: 0.8rem; color: var(--ink-secondary); opacity: 0.8;">
+                            Every session comes with 5 free pics and 3 free videos during the active session. Anything more will cost more and will be added to total before starting. Once paid for, if a request is made it will be denied or session will be paused while you send new payment.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -268,19 +295,22 @@
             const photosField = document.getElementById('photosField');
             const videosField = document.getElementById('videosField');
             const extrasField = document.getElementById('extrasField');
-            
+            const sextField = document.getElementById('sextField');
+
             // Hide all fields first
             dickRateField.style.display = 'none';
             photosField.style.display = 'none';
             videosField.style.display = 'none';
             extrasField.style.display = 'none';
-            
+            sextField.style.display = 'none';
+
             // Clear all selections
             document.getElementById('dickRatePrices').value = '';
             document.getElementById('nudePictures').value = '';
             document.getElementById('nudeVideos').value = '';
             document.getElementById('extras').value = 'none';
-            
+            document.getElementById('sextOptions').value = '';
+
             // Show relevant fields based on selection
             switch(requestType) {
                 case 'dickrate':
@@ -288,6 +318,7 @@
                     document.getElementById('dickRatePrices').required = true;
                     document.getElementById('nudePictures').required = false;
                     document.getElementById('nudeVideos').required = false;
+                    document.getElementById('sextOptions').required = false;
                     break;
                 case 'photos':
                     photosField.style.display = 'block';
@@ -295,6 +326,7 @@
                     document.getElementById('dickRatePrices').required = false;
                     document.getElementById('nudePictures').required = true;
                     document.getElementById('nudeVideos').required = false;
+                    document.getElementById('sextOptions').required = false;
                     break;
                 case 'videos':
                     videosField.style.display = 'block';
@@ -302,11 +334,20 @@
                     document.getElementById('dickRatePrices').required = false;
                     document.getElementById('nudePictures').required = false;
                     document.getElementById('nudeVideos').required = true;
+                    document.getElementById('sextOptions').required = false;
+                    break;
+                case 'sext':
+                    sextField.style.display = 'block';
+                    document.getElementById('dickRatePrices').required = false;
+                    document.getElementById('nudePictures').required = false;
+                    document.getElementById('nudeVideos').required = false;
+                    document.getElementById('sextOptions').required = true;
                     break;
                 default:
                     document.getElementById('dickRatePrices').required = false;
                     document.getElementById('nudePictures').required = false;
                     document.getElementById('nudeVideos').required = false;
+                    document.getElementById('sextOptions').required = false;
             }
         }
 
@@ -352,6 +393,11 @@
             } else if (data.requestType === 'videos') {
                 if (!data.nudeVideos) {
                     showNotification('Please select a nude videos option.', 'error');
+                    return;
+                }
+            } else if (data.requestType === 'sext') {
+                if (!data.sextOptions) {
+                    showNotification('Please select a sext session option.', 'error');
                     return;
                 }
             }

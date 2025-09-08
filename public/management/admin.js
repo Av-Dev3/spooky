@@ -459,6 +459,12 @@ SimpleAdminPanel.prototype.displaySubmissions = function(submissions) {
                         ${this.formatExtrasOption(submission.extras)}
                     </div>
                     ` : ''}
+                    ${submission.sext_options ? `
+                    <div class="submission-field">
+                        <strong>Sext Session Option:</strong>
+                        ${this.formatSextOption(submission.sext_options)}
+                    </div>
+                    ` : ''}
                     <div class="submission-field submission-description">
                         <strong>Details:</strong>
                         ${submission.details}
@@ -530,6 +536,17 @@ SimpleAdminPanel.prototype.formatExtrasOption = function(value) {
     const options = {
         'none': 'None',
         'kinky-15': 'Kinky/added elements (dildos, props, clothes, makeup, etc) – $15 extra added per request'
+    };
+    return options[value] || value;
+};
+
+SimpleAdminPanel.prototype.formatSextOption = function(value) {
+    const options = {
+        'per-minute-3': '$3/ a minute',
+        'half-hour-80': 'Half an hour – $80',
+        'extra-pics-4': 'Add extra pics – $4 each',
+        'extra-videos-6': 'Add extra videos – $6 each',
+        'requests-15': 'Requests – $15 extra every request'
     };
     return options[value] || value;
 };
