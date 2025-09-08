@@ -150,20 +150,31 @@ async function loadFAQPreview() {
 // Initialize customs modal functionality
 function initCustomsModal() {
     const modal = document.getElementById('customsModal');
-    const form = document.getElementById('customsForm');
+    const form = document.getElementById('customsModalForm');
+    
+    console.log('Looking for customs modal elements...');
+    console.log('Modal found:', modal);
+    console.log('Form found:', form);
     
     if (!modal || !form) {
         console.error('Customs modal elements not found');
+        console.error('Modal:', modal);
+        console.error('Form:', form);
         return;
     }
     
+    console.log('Customs modal initialized successfully');
+    
     // Handle form submission
     form.addEventListener('submit', async function(e) {
+        console.log('Homepage customs form submitted!');
         e.preventDefault();
         
         // Get form data
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
+        
+        console.log('Homepage form data:', data);
         
         // Validate required fields
         if (!data.platform || !data.requestType || !data.budget || !data.details || !data.ageConfirm) {
