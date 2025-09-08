@@ -14,11 +14,10 @@ export default async function handler(req, res) {
     }
 
     // Fetch gallery items from Supabase without authentication check
-    // Return all published items for the public gallery
+    // Return all items (or filter by locked status if needed)
     const { data, error } = await supabaseAdmin()
       .from("media_asset")
       .select("*")
-      .eq("published", true) // Only fetch published items
       .order("created_at", { ascending: false });
 
     if (error) {
