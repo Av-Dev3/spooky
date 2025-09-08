@@ -438,25 +438,25 @@ SimpleAdminPanel.prototype.displaySubmissions = function(submissions) {
                     ${submission.dick_rate_prices ? `
                     <div class="submission-field">
                         <strong>Dick Rate Option:</strong>
-                        ${submission.dick_rate_prices}
+                        ${this.formatDickRateOption(submission.dick_rate_prices)}
                     </div>
                     ` : ''}
                     ${submission.nude_pictures ? `
                     <div class="submission-field">
                         <strong>Nude Pictures:</strong>
-                        ${submission.nude_pictures}
+                        ${this.formatNudePicturesOption(submission.nude_pictures)}
                     </div>
                     ` : ''}
                     ${submission.nude_videos ? `
                     <div class="submission-field">
                         <strong>Nude Videos:</strong>
-                        ${submission.nude_videos}
+                        ${this.formatNudeVideosOption(submission.nude_videos)}
                     </div>
                     ` : ''}
                     ${submission.extras && submission.extras !== 'none' ? `
                     <div class="submission-field">
                         <strong>Extras:</strong>
-                        ${submission.extras}
+                        ${this.formatExtrasOption(submission.extras)}
                     </div>
                     ` : ''}
                     <div class="submission-field submission-description">
@@ -496,6 +496,42 @@ SimpleAdminPanel.prototype.getContactInfo = function(submission) {
         default:
             return 'Unknown';
     }
+};
+
+SimpleAdminPanel.prototype.formatDickRateOption = function(value) {
+    const options = {
+        'basic-5': 'Basic number rate – $5',
+        'description-10': 'Number rate/description – $10',
+        'video-15': 'Video of Rate/description – $15',
+        'naked-video-20': 'Naked video rate/description – $20',
+        'all-above-25': 'All above / write name across body – $25'
+    };
+    return options[value] || value;
+};
+
+SimpleAdminPanel.prototype.formatNudePicturesOption = function(value) {
+    const options = {
+        '3-for-10': '3 for $10 (Your way)',
+        '5-for-15': '5 for $15 (Your way)',
+        '10-for-20': '10 for $20 (Your way)'
+    };
+    return options[value] || value;
+};
+
+SimpleAdminPanel.prototype.formatNudeVideosOption = function(value) {
+    const options = {
+        'strip-tease-15': 'Strip tease – $15 (3 minutes only)',
+        'full-nude-666': 'Full nude – $6.66 a minute (3 minutes min)'
+    };
+    return options[value] || value;
+};
+
+SimpleAdminPanel.prototype.formatExtrasOption = function(value) {
+    const options = {
+        'none': 'None',
+        'kinky-15': 'Kinky/added elements (dildos, props, clothes, makeup, etc) – $15 extra added per request'
+    };
+    return options[value] || value;
 };
 
 SimpleAdminPanel.prototype.updateSubmissionStatus = async function(id, status) {
