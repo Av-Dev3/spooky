@@ -62,14 +62,26 @@ async function loadQuickLinks() {
 async function loadGalleryPreview() {
     try {
         console.log('Loading gallery preview...');
-        const response = await fetch('data/gallery.json');
+        // Try to load from API first
+        let response = await fetch('/api/gallery');
         console.log('Gallery response status:', response.status);
         
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        let galleryItems = [];
         
-        const galleryItems = await response.json();
+        if (response.ok) {
+            galleryItems = await response.json();
+            console.log('Loaded gallery items from API:', galleryItems);
+        } else {
+            // Fallback to static JSON if API fails
+            console.log('API failed, trying fallback JSON...');
+            response = await fetch('data/gallery.json');
+            if (response.ok) {
+                galleryItems = await response.json();
+                console.log('Loaded gallery items from JSON fallback:', galleryItems);
+            } else {
+                throw new Error('Both API and JSON fallback failed');
+            }
+        }
         console.log('Loaded gallery items:', galleryItems);
         
         const container = document.getElementById('galleryPreviewContainer');
@@ -84,18 +96,33 @@ async function loadGalleryPreview() {
         const previewItems = galleryItems.slice(0, 3);
         console.log('Preview gallery items:', previewItems);
         
-        container.innerHTML = previewItems.map(item => `
+        container.innerHTML = previewItems.map(item => {
+            // Handle both API format (storage_path) and JSON format (image)
+            let imageUrl;
+            if (item.storage_path) {
+                // API format - build Supabase URL
+                imageUrl = `https://clmzwnhrdxgvdweflqjx.supabase.co/storage/v1/object/public/media/${item.storage_path.split('/').pop()}`;
+            } else if (item.image) {
+                // JSON fallback format
+                imageUrl = item.image;
+            } else {
+                // Default fallback
+                imageUrl = '/assets/logo.png';
+            }
+            
+            return `
             <div class="gallery-preview-item">
                 <div class="gallery-preview-image">
-                    <img src="${item.image}" alt="${item.title}" loading="lazy">
+                    <img src="${imageUrl}" alt="${item.title}" loading="lazy" onerror="this.src='/assets/logo.png'">
                     ${item.locked ? '<div class="gallery-lock-overlay">🔒</div>' : ''}
                 </div>
                 <div class="gallery-preview-info">
                     <h4>${item.title}</h4>
-                    <p>${item.description}</p>
+                    <p>${item.description || item.details || ''}</p>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
         
         console.log('Gallery preview rendered successfully');
         
