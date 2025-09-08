@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Load gallery items from Supabase API
         async function loadGalleryItems() {
             try {
-                // Load from Supabase API
-                const response = await fetch('/api/admin/list/media?type=gallery');
+                // Load from public gallery API
+                const response = await fetch('/api/gallery');
                 if (response.ok) {
                     const galleryItems = await response.json();
                     renderGalleryItems(galleryItems);
