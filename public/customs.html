@@ -186,7 +186,19 @@
             }
         }
 
-        document.getElementById('customsForm').addEventListener('submit', async function(e) {
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Customs form script loaded');
+            const customsForm = document.getElementById('customsForm');
+            console.log('Found customs form:', customsForm);
+            
+            if (!customsForm) {
+                console.error('Customs form not found!');
+                return;
+            }
+            
+            customsForm.addEventListener('submit', async function(e) {
+            console.log('Form submitted!');
             e.preventDefault();
             
             // Get form data
@@ -281,7 +293,8 @@
                 console.error('Submission error:', error);
                 alert('There was an error submitting your request. Please try again or contact me directly.');
             }
-        });
+            });
+        }); // End DOMContentLoaded
     </script>
 </body>
 </html>
