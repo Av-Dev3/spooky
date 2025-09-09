@@ -114,11 +114,8 @@
             });
 
             mobileSplashVideo.addEventListener('canplay', function() {
-                console.log('Mobile splash video can play - starting playback');
-                mobileSplashVideo.play().catch(function(error) {
-                    console.warn('Could not autoplay mobile video:', error);
-                    setTimeout(hideSplash, 2000);
-                });
+                console.log('Mobile splash video can play - but waiting for manual start');
+                // Don't auto-start here, let showMobileVideo() handle the timing
             });
 
             mobileSplashVideo.addEventListener('loadedmetadata', function() {
@@ -257,6 +254,13 @@
             window.ageGate.hide();
         }
         
+        // Disable autoplay on mobile video for manual control
+        if (mobileSplashVideo) {
+            mobileSplashVideo.autoplay = false;
+            mobileSplashVideo.pause();
+            console.log('Mobile video autoplay disabled for manual control');
+        }
+        
         // Check if splash should be shown
         if (checkSplashShown()) {
             console.log('Splash already shown this session, skipping to age gate');
@@ -327,16 +331,32 @@
     
     // Show mobile video after delay
     function showMobileVideo() {
+        console.log('Preparing mobile splash video...');
+        
+        // Make sure autoplay is disabled for manual control
+        mobileSplashVideo.autoplay = false;
+        mobileSplashVideo.pause(); // Ensure it's paused
+        mobileSplashVideo.currentTime = 0; // Reset to beginning
+        
         // Force immediate positioning to prevent sliding
         mobileSplashVideo.style.transform = 'none';
         mobileSplashVideo.style.transition = 'none';
         mobileSplashVideo.style.animation = 'none';
         // Keep the mobile-splash class for proper styling
         mobileSplashVideo.classList.add('mobile-splash');
-        // Show the video
+        // Show the video element but don't start playing yet
         mobileSplashVideo.style.display = 'block';
         
-        console.log('Mobile splash video displayed after 1.5 second delay');
+        console.log('Mobile video element shown, waiting 1.5 seconds before playing...');
+        
+        // Wait 1.5 seconds before actually starting the video
+        setTimeout(() => {
+            console.log('Starting mobile splash video after 1.5 second delay');
+            mobileSplashVideo.play().catch(function(error) {
+                console.warn('Could not autoplay mobile video:', error);
+                // If autoplay fails, still show the video element
+            });
+        }, 1500);
     }
 
     // Auto-initialize when DOM is ready
