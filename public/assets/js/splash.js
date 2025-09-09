@@ -347,16 +347,16 @@
         // Show the video element but don't start playing yet
         mobileSplashVideo.style.display = 'block';
         
-        console.log('Mobile video element shown, waiting 1.5 seconds before playing...');
+        console.log('Mobile video element shown, waiting 0.5 seconds before playing...');
         
-        // Wait 1.5 seconds before actually starting the video
+        // Wait 0.5 seconds before actually starting the video
         setTimeout(() => {
-            console.log('Starting mobile splash video after 1.5 second delay');
+            console.log('Starting mobile splash video after 0.5 second delay');
             mobileSplashVideo.play().catch(function(error) {
                 console.warn('Could not autoplay mobile video:', error);
                 // If autoplay fails, still show the video element
             });
-        }, 1500);
+        }, 500);
     }
 
     // Auto-initialize when DOM is ready
