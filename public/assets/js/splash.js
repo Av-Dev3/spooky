@@ -160,9 +160,39 @@
         if (skipBtn) {
             skipBtn.addEventListener('click', function() {
                 console.log('Splash skipped by user');
-                hideSplash();
+                forceHideSplash();
             });
         }
+    }
+    
+    // Force hide splash (used for skip button)
+    function forceHideSplash() {
+        // Stop any playing videos
+        const mobileVideo = document.getElementById('mobileSplashVideo');
+        const desktopVideo = document.getElementById('splashVideo');
+        
+        if (mobileVideo) {
+            mobileVideo.pause();
+            mobileVideo.currentTime = 0;
+        }
+        if (desktopVideo) {
+            desktopVideo.pause();
+            desktopVideo.currentTime = 0;
+        }
+        
+        // Hide splash screen immediately
+        splashScreen.classList.add('hidden');
+        splashScreen.style.display = 'none';
+        document.body.style.overflow = 'hidden'; // Keep body locked for age gate
+        
+        console.log('Splash screen force hidden by skip button');
+        
+        // Show age gate after splash is hidden
+        setTimeout(() => {
+            if (window.ageGate && window.ageGate.show) {
+                window.ageGate.show();
+            }
+        }, 100);
     }
 
     // Initialize splash screen
@@ -191,8 +221,16 @@
             console.log('Mobile device detected - showing mobile splash video');
             if (splashVideo) splashVideo.style.display = 'none';
             
-            // Simple 1.5 second delay for mobile video
-            setTimeout(() => showMobileVideo(), 1500);
+            // Wait for page to fully load before showing mobile video
+            if (document.readyState === 'complete') {
+                // Page is already loaded, add small delay
+                setTimeout(() => showMobileVideo(), 1000);
+            } else {
+                // Wait for page to load, then add delay
+                window.addEventListener('load', () => {
+                    setTimeout(() => showMobileVideo(), 1000);
+                });
+            }
         } else if (splashVideo) {
             console.log('Desktop device detected - showing desktop splash video');
             if (mobileSplashVideo) {
