@@ -287,8 +287,8 @@
             waitForFullPageLoad(() => {
                 if (!videoShown) {
                     videoShown = true;
-                    console.log('Page fully loaded - showing mobile video after 0.1 second delay');
-                    setTimeout(() => showMobileVideo(), 100);
+                    console.log('Page fully loaded - showing mobile video immediately');
+                    showMobileVideo();
                 }
             });
             
