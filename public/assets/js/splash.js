@@ -165,6 +165,61 @@
         }
     }
     
+    // Wait for complete page load including images, CSS, and rendering
+    function waitForFullPageLoad(callback) {
+        console.log('Waiting for full page load...');
+        
+        // Check multiple conditions for complete loading
+        function checkLoadComplete() {
+            const conditions = [
+                document.readyState === 'complete',
+                document.fonts ? document.fonts.ready : Promise.resolve(),
+                // Wait for images to load
+                Array.from(document.images).every(img => img.complete),
+                // Wait for any pending CSS
+                !document.querySelector('link[rel="stylesheet"]:not([media="print"])') || 
+                Array.from(document.querySelectorAll('link[rel="stylesheet"]:not([media="print"])')).every(link => link.sheet)
+            ];
+            
+            return Promise.all([
+                conditions[1], // fonts
+                Promise.resolve(conditions[0] && conditions[2] && conditions[3])
+            ]).then(results => results.every(Boolean));
+        }
+        
+        // If already loaded, wait a bit more for rendering
+        if (document.readyState === 'complete') {
+            checkLoadComplete().then(isComplete => {
+                if (isComplete) {
+                    console.log('Page already fully loaded');
+                    // Extra delay for mobile rendering
+                    setTimeout(callback, 1500);
+                } else {
+                    console.log('Page complete but resources still loading, waiting...');
+                    setTimeout(() => waitForFullPageLoad(callback), 500);
+                }
+            });
+        } else {
+            // Wait for load event first
+            console.log('Waiting for load event...');
+            window.addEventListener('load', () => {
+                console.log('Load event fired, checking complete state...');
+                // Then check if everything is really ready
+                setTimeout(() => {
+                    checkLoadComplete().then(isComplete => {
+                        if (isComplete) {
+                            console.log('Page fully loaded and ready');
+                            callback();
+                        } else {
+                            console.log('Load event fired but resources still loading, waiting more...');
+                            setTimeout(callback, 1000);
+                        }
+                    });
+                }, 500);
+            }, { once: true });
+        }
+    }
+    
     // Force hide splash (used for skip button)
     function forceHideSplash() {
         // Stop any playing videos
@@ -221,16 +276,26 @@
             console.log('Mobile device detected - showing mobile splash video');
             if (splashVideo) splashVideo.style.display = 'none';
             
-            // Wait for page to fully load before showing mobile video
-            if (document.readyState === 'complete') {
-                // Page is already loaded, add small delay
-                setTimeout(() => showMobileVideo(), 1000);
-            } else {
-                // Wait for page to load, then add delay
-                window.addEventListener('load', () => {
+            // Wait for page to be completely loaded and rendered before showing mobile video
+            let videoShown = false;
+            
+            // Primary method: wait for full load
+            waitForFullPageLoad(() => {
+                if (!videoShown) {
+                    videoShown = true;
+                    console.log('Page fully loaded - showing mobile video');
                     setTimeout(() => showMobileVideo(), 1000);
-                });
-            }
+                }
+            });
+            
+            // Fallback: don't wait more than 8 seconds total
+            setTimeout(() => {
+                if (!videoShown) {
+                    videoShown = true;
+                    console.log('Fallback timeout reached - showing mobile video');
+                    showMobileVideo();
+                }
+            }, 8000);
         } else if (splashVideo) {
             console.log('Desktop device detected - showing desktop splash video');
             if (mobileSplashVideo) {
