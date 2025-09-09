@@ -189,8 +189,8 @@
             checkLoadComplete().then(isComplete => {
                 if (isComplete) {
                     console.log('Page already fully loaded');
-                    // Extra delay for mobile rendering
-                    setTimeout(callback, 1500);
+                    // No delay for mobile rendering
+                    callback();
                 } else {
                     console.log('Page complete but resources still loading, waiting...');
                     setTimeout(() => waitForFullPageLoad(callback), 500);
@@ -208,8 +208,8 @@
                             console.log('Page fully loaded and ready');
                             callback();
                         } else {
-                            console.log('Load event fired but resources still loading, waiting more...');
-                            setTimeout(callback, 1000);
+                            console.log('Load event fired but resources still loading, proceeding anyway...');
+                            callback();
                         }
                     });
                 }, 500);
@@ -287,8 +287,8 @@
             waitForFullPageLoad(() => {
                 if (!videoShown) {
                     videoShown = true;
-                    console.log('Page fully loaded - showing mobile video');
-                    setTimeout(() => showMobileVideo(), 1000);
+                    console.log('Page fully loaded - showing mobile video after 0.5 second delay');
+                    setTimeout(() => showMobileVideo(), 500);
                 }
             });
             
